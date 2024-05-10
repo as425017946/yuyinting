@@ -892,7 +892,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 width: ScreenUtil().setWidth(1),
                                 color: MyColors.roomTCWZ3,
                               ),
-                              GestureDetector(
+                              sp.getInt('user_grLevel')! >= 4 ? GestureDetector(
                                 onTap: (() {
                                   setState(() {
                                     gzTitle = '送礼';
@@ -928,12 +928,12 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                               ? ScreenUtil().setSp(28)
                                               : ScreenUtil().setSp(25))),
                                 ),
-                              ),
-                              Container(
+                              ) : WidgetUtils.commonSizedBox(0, 0),
+                              sp.getInt('user_grLevel')! >= 4 ? Container(
                                 height: ScreenUtil().setHeight(10),
                                 width: ScreenUtil().setWidth(1),
                                 color: MyColors.roomTCWZ3,
-                              ),
+                              ) : WidgetUtils.commonSizedBox(0, 0),
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {

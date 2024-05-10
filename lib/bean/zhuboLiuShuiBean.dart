@@ -56,6 +56,8 @@ class Lists {
   String? packSpend;
   String? nickname;
   int? streamerNumber;
+  int? msgPeople;
+  int? msgNum;
 
   Lists(
       {this.id,
@@ -67,7 +69,9 @@ class Lists {
         this.gbDirectSpend,
         this.packSpend,
         this.nickname,
-        this.streamerNumber});
+        this.streamerNumber,
+        this.msgPeople,
+        this.msgNum});
 
   Lists.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -80,6 +84,8 @@ class Lists {
     packSpend = json['pack_spend'];
     nickname = json['nickname'];
     streamerNumber = json['streamer_number'];
+    msgPeople = json['msg_people'];
+    msgNum = json['msg_num'];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +100,8 @@ class Lists {
     data['pack_spend'] = this.packSpend;
     data['nickname'] = this.nickname;
     data['streamer_number'] = this.streamerNumber;
+    data['msg_people'] = this.msgPeople;
+    data['msg_num'] = this.msgNum;
     return data;
   }
 }

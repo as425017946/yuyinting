@@ -27,8 +27,9 @@ class Data {
   List<Gifts>? gifts;
   int? total;
   int? curType;
+  int? balance;
 
-  Data({this.gifts, this.total});
+  Data({this.gifts, this.total,this.balance});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['gifts'] != null) {
@@ -39,6 +40,7 @@ class Data {
     }
     total = json['total'];
     curType = json['cur_type'];
+    balance = json['balance'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +50,7 @@ class Data {
     }
     data['total'] = this.total;
     data['cur_type'] = this.curType;
+    data['balance'] = this.balance;
     return data;
   }
 }

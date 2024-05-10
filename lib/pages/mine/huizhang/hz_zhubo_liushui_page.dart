@@ -163,6 +163,32 @@ class _HZZhuBoLiuShuiPageState extends State<HZZhuBoLiuShuiPage> {
               ],
             ),
             WidgetUtils.commonSizedBox(10, 10),
+            Row(
+              children: [
+                WidgetUtils.onlyText(
+                    '私信人数：',
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+                WidgetUtils.onlyText(
+                    listInfo[i].msgPeople.toString(),
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g2,
+                        fontSize: ScreenUtil().setSp(25),
+                        fontWeight: FontWeight.w600)),
+                const Expanded(child: Text('')),
+                WidgetUtils.onlyText(
+                    '私信条数：',
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+                WidgetUtils.onlyText(
+                    listInfo[i].msgNum.toString(),
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g2,
+                        fontSize: ScreenUtil().setSp(25),
+                        fontWeight: FontWeight.w600)),
+              ],
+            ),
+            WidgetUtils.commonSizedBox(10, 10),
             // WidgetUtils.onlyTextCenter('查明细>', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
             // WidgetUtils.commonSizedBox(10, 10),
           ],

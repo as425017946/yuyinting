@@ -6,6 +6,7 @@ import 'package:yuyinting/pages/mine/tequan/guowang_page.dart';
 import 'package:yuyinting/pages/mine/tequan/houjue_page.dart';
 import 'package:yuyinting/pages/mine/tequan/qishi_page.dart';
 import 'package:yuyinting/pages/mine/tequan/shenhuang_page.dart';
+import 'package:yuyinting/pages/mine/tequan/tequan_guize_page.dart';
 import 'package:yuyinting/pages/mine/tequan/tequan_listofgods.dart';
 import 'package:yuyinting/pages/mine/tequan/tequan_shuoming_page.dart';
 import 'package:yuyinting/pages/mine/tequan/tianzun_page.dart';
@@ -16,7 +17,6 @@ import '../../../bean/gzBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
-import '../../../main.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_utils.dart';
@@ -96,7 +96,7 @@ class _TequanPageState extends State<TequanPage> {
 
                       ///头部信息
                       Container(
-                        padding: const EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
                         height: ScreenUtil().setHeight(60),
                         width: double.infinity,
                         alignment: Alignment.bottomLeft,
@@ -123,28 +123,22 @@ class _TequanPageState extends State<TequanPage> {
                                     fontWeight: FontWeight.w600)),
                             const Expanded(child: Text('')),
                             GestureDetector(
-                              onTap: () {
-                                if (MyUtils.checkClick()) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const TequanListofgodsPage(),
-                                    ),
-                                  );
-                                }
-                              },
+                              onTap: ((){
+                                MyUtils.goTransparentPage(context, const TeQuanGuiZePage());
+                              }),
                               child: Container(
-                                width: ScreenUtil().setWidth(150),
+                                width: ScreenUtil().setHeight(150),
                                 alignment: Alignment.centerRight,
-                                child: Image.asset(
-                                  'assets/images/tequan_fengshen.png',
-                                  width: 43 * 3.w,
-                                  height: 15 * 3.w,
+                                color: Colors.transparent,
+                                child: Text(
+                                  '规则',
+                                  style: TextStyle(
+                                    fontSize: 28.sp,
+                                    color: MyColors.mineOrange,
+                                  ),
                                 ),
                               ),
                             ),
-                            WidgetUtils.commonSizedBox(0, 20.w),
                           ],
                         ),
                       ),
@@ -544,16 +538,36 @@ class _TequanPageState extends State<TequanPage> {
                             });
                           },
                           children: [
-                            YongshiPage(zhi: list[0].upValue!,),
-                            QishiPage(zhi: list[1].upValue!,),
-                            BojuePage(zhi: list[2].upValue!,),
-                            HoujuePage(zhi: list[3].upValue!,),
-                            GongjuePage(zhi: list[4].upValue!,),
-                            GuowangPage(zhi: list[5].upValue!,),
-                            DiwangPage(zhi: list[6].upValue!,),
-                            ShenHuangPage(zhi: list[7].upValue!,),
-                            TianZunPage(zhi: list[8].upValue!,),
-                            ChuanShuoPage(zhi: list[9].upValue!,),
+                            YongshiPage(
+                              zhi: list[0].upValue!,
+                            ),
+                            QishiPage(
+                              zhi: list[1].upValue!,
+                            ),
+                            BojuePage(
+                              zhi: list[2].upValue!,
+                            ),
+                            HoujuePage(
+                              zhi: list[3].upValue!,
+                            ),
+                            GongjuePage(
+                              zhi: list[4].upValue!,
+                            ),
+                            GuowangPage(
+                              zhi: list[5].upValue!,
+                            ),
+                            DiwangPage(
+                              zhi: list[6].upValue!,
+                            ),
+                            ShenHuangPage(
+                              zhi: list[7].upValue!,
+                            ),
+                            TianZunPage(
+                              zhi: list[8].upValue!,
+                            ),
+                            ChuanShuoPage(
+                              zhi: list[9].upValue!,
+                            ),
                           ],
                         ),
                       ),
@@ -598,19 +612,19 @@ class _TequanPageState extends State<TequanPage> {
                           const Spacer(),
                           GestureDetector(
                             onTap: (() {
-                              if(MyUtils.checkClick()) {
-                                if(int.parse(gzID) < 7){
-                                    MyToastUtils.showToastBottom('贵族等级达到神王即可开启专属客服功能~');
-                                }else{
+                              if (MyUtils.checkClick()) {
+                                if (int.parse(gzID) < 7) {
+                                  MyToastUtils.showToastBottom(
+                                      '贵族等级达到神王即可开启专属客服功能~');
+                                } else {
                                   MyUtils.goTransparentRFPage(
                                       context,
                                       ChatPage(
                                           nickName: '专属客服',
                                           otherUid: kefuUid,
                                           otherImg: kefuAvatar));
-
                                 }
-                              }                              
+                              }
                             }),
                             child: WidgetUtils.onlyText(
                                 '专属客服',
@@ -648,20 +662,20 @@ class _TequanPageState extends State<TequanPage> {
                                   fontSize: ScreenUtil().setSp(26))),
                           const Spacer(),
                           GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  MyUtils.goTransparentPage(
-                                      context,
-                                      TeQuanShuoMingPage(
-                                        title: '剩余时间说明',
-                                      ));
-                                }
-                              }),
-                              child: WidgetUtils.onlyText(
-                                  ' 剩余时间',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.black_1,
-                                      fontSize: ScreenUtil().setSp(26))),
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    TeQuanShuoMingPage(
+                                      title: '剩余时间说明',
+                                    ));
+                              }
+                            }),
+                            child: WidgetUtils.onlyText(
+                                ' 剩余时间',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.black_1,
+                                    fontSize: ScreenUtil().setSp(26))),
                           ),
                           GestureDetector(
                             onTap: (() {
@@ -690,7 +704,7 @@ class _TequanPageState extends State<TequanPage> {
                                     ));
                               }
                             }),
-                            child:  WidgetUtils.showImages(
+                            child: WidgetUtils.showImages(
                                 'assets/images/tequan_wen1.png', 20.h, 20.h),
                           ),
                           WidgetUtils.commonSizedBox(0, 20),
@@ -698,6 +712,31 @@ class _TequanPageState extends State<TequanPage> {
                       ),
                       const Spacer(),
                     ],
+                  ),
+                ),
+                Positioned(
+                  right: 20.w,
+                  top: (180 * 1.25).w,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (MyUtils.checkClick()) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TequanListofgodsPage(),
+                          ),
+                        );
+                      }
+                    },
+                    child: Container(
+                      width: ScreenUtil().setWidth(150),
+                      alignment: Alignment.centerRight,
+                      child: Image.asset(
+                        'assets/images/tequan_fengshen.png',
+                        width: 43 * 3.w,
+                        height: 15 * 3.w,
+                      ),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -723,6 +762,7 @@ class _TequanPageState extends State<TequanPage> {
       kefuUid = '',
       kefuAvatar = '';
   List<Ls> list = [];
+
   /// 我的贵族
   Future<void> doPostMyNoble() async {
     Loading.show();
@@ -801,14 +841,14 @@ class _TequanPageState extends State<TequanPage> {
               } else {
                 gzTitle = '当前：传说';
               }
-            }else {
+            } else {
               _currentIndex = 0;
               _controller = PageController(
                 initialPage: _currentIndex,
               );
               gzNextTitle = '玄仙';
               gzCha = (int.parse(bean.data!.ls![0].upValue!) -
-                  int.parse(bean.data!.my!.nobleValue!))
+                      int.parse(bean.data!.my!.nobleValue!))
                   .toString();
             }
           });

@@ -1075,57 +1075,73 @@ class _MofangLanPageState extends State<MofangLanPage>
             });
           }
           // 更新余额
-          if (bean.data!.curType == 1) {
-            if (double.parse(jinbi) > 10000) {
-              jinbi = sp.getString('mofangJBY').toString();
-              // 减去花费的金豆
-              jinbi = '${(double.parse(jinbi) - int.parse(number) * 20)}';
-              if (double.parse(jinbi) > 10000) {
-                //保留2位小数
-                jinbi2 = '${(double.parse(jinbi) / 10000)}';
-                if (jinbi2.split('.')[1].length >= 2) {
-                  jinbi2 =
-                      '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0, 2)}w';
-                } else {
-                  jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
-                }
-              } else {
-                jinbi2 = jinbi;
-              }
+          jinbi = bean.data!.balance.toString();
+          if (double.parse(jinbi) > 10000) {
+            //保留2位小数
+            jinbi2 = '${(double.parse(jinbi) / 10000)}';
+            if (jinbi2.split('.')[1].length >= 2) {
+              jinbi2 =
+              '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0, 2)}w';
             } else {
-              jinbi = sp.getString('mofangJBY').toString();
-              jinbi = (double.parse(jinbi) - int.parse(number) * 20).toString();
-              jinbi2 = jinbi;
+              jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
             }
-            sp.setString('mofangJBY', jinbi);
-            sp.setString('mofangJB', jinbi2);
-          } else if (bean.data!.curType == 2) {
-            if (double.parse(zuanshi) > 10000) {
-              zuanshi = sp.getString('mofangZSY').toString();
-              // 减去花费的金豆
-              zuanshi = '${(double.parse(zuanshi) - int.parse(number) * 20)}';
-              if (double.parse(zuanshi) > 10000) {
-                //保留2位小数
-                zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
-                if (zuanshi2.split('.')[1].length >= 2) {
-                  zuanshi2 =
-                      '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0, 2)}w';
-                } else {
-                  zuanshi2 =
-                      '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
-                }
-              } else {
-                zuanshi2 = zuanshi;
-              }
-            } else {
-              zuanshi = sp.getString('mofangZSY').toString();
-              zuanshi =
-                  (double.parse(zuanshi) - int.parse(number) * 20).toString();
-              zuanshi2 = zuanshi;
-            }
-            sp.setString('mofangZSY', zuanshi);
-            sp.setString('mofangZS', zuanshi2);
+          } else {
+            jinbi2 = jinbi;
           }
+          sp.setString('mofangJBY', jinbi);
+          sp.setString('mofangJB', jinbi2);
+
+          // if (bean.data!.curType == 1) {
+          //   if (double.parse(jinbi) > 10000) {
+          //     jinbi = sp.getString('mofangJBY').toString();
+          //     // 减去花费的金豆
+          //     jinbi = '${(double.parse(jinbi) - int.parse(number) * 20)}';
+          //     if (double.parse(jinbi) > 10000) {
+          //       //保留2位小数
+          //       jinbi2 = '${(double.parse(jinbi) / 10000)}';
+          //       if (jinbi2.split('.')[1].length >= 2) {
+          //         jinbi2 =
+          //             '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0, 2)}w';
+          //       } else {
+          //         jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+          //       }
+          //     } else {
+          //       jinbi2 = jinbi;
+          //     }
+          //   } else {
+          //     jinbi = sp.getString('mofangJBY').toString();
+          //     jinbi = (double.parse(jinbi) - int.parse(number) * 20).toString();
+          //     jinbi2 = jinbi;
+          //   }
+          //   sp.setString('mofangJBY', jinbi);
+          //   sp.setString('mofangJB', jinbi2);
+          // } else if (bean.data!.curType == 2) {
+          //   if (double.parse(zuanshi) > 10000) {
+          //     zuanshi = sp.getString('mofangZSY').toString();
+          //     // 减去花费的金豆
+          //     zuanshi = '${(double.parse(zuanshi) - int.parse(number) * 20)}';
+          //     if (double.parse(zuanshi) > 10000) {
+          //       //保留2位小数
+          //       zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
+          //       if (zuanshi2.split('.')[1].length >= 2) {
+          //         zuanshi2 =
+          //             '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0, 2)}w';
+          //       } else {
+          //         zuanshi2 =
+          //             '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+          //       }
+          //     } else {
+          //       zuanshi2 = zuanshi;
+          //     }
+          //   } else {
+          //     zuanshi = sp.getString('mofangZSY').toString();
+          //     zuanshi =
+          //         (double.parse(zuanshi) - int.parse(number) * 20).toString();
+          //     zuanshi2 = zuanshi;
+          //   }
+          //   sp.setString('mofangZSY', zuanshi);
+          //   sp.setString('mofangZS', zuanshi2);
+          // }
 
           break;
         case MyHttpConfig.errorloginCode:

@@ -644,7 +644,7 @@ class MyUtils {
                         'readStatus': 0,
                         'liveStatus': 0,
                         'loginStatus': 0,
-                        'weight': msg.from.toString() == '1' ? 1 : 0,
+                        'weight': info['weight'],
                         'msgId': msg.msgId,
                         'msgRead': 2,
                         'msgJson': jsonEncode(msg.toJson()),
