@@ -39,7 +39,7 @@ class _TeQuanGuiZePageState extends State<TeQuanGuiZePage> {
                     fontWeight: FontWeight.w600)),
             WidgetUtils.commonSizedBox((10 * 1.25).w, 0),
             WidgetUtils.onlyTextGZ(
-                '贵族是平台的特殊身份，身份类型包括:玄仙，上仙，金仙，仙帝，主神，天神，神王，神皇，天尊，传说。获得贵族身份后即可享用贵族专属特权。',
+                '贵族是平台的特殊身份，身份类型包括:玄仙，上仙，金仙，仙帝，主神，天神，神王，神皇，天尊，传说。\n获得贵族身份后即可享用贵族专属特权。',
                 StyleUtils.getCommonGZTextStyle(
                     color: Colors.black, fontSize: 26.sp, height: 1.5)),
             WidgetUtils.commonSizedBox((40 * 1.25).w, 0),
@@ -63,7 +63,7 @@ class _TeQuanGuiZePageState extends State<TeQuanGuiZePage> {
                     fontWeight: FontWeight.w600)),
             WidgetUtils.commonSizedBox((10 * 1.25).w, 0),
             WidgetUtils.onlyTextGZ(
-                '贵族有效期:自获得贵族等级起算30天有效期，有效期内可享用贵族特权，可升级贵族身份，有效期结束将不可使用特权，并自动进行保级或降级。保级值:赠送1经典、礼盒或贵族礼物(不包括背包礼物)可获得保级值,1金豆=1保级值，保级值用于贵族身份保级和降级的判断。',
+                '贵族有效期:自获得贵族等级起算30天有效期，有效期内可享用贵族特权，可升级贵族身份，有效期结束将不可使用特权，并自动进行保级或降级。\n保级值:赠送1经典、礼盒或贵族礼物(不包括背包礼物)可获得保级值,1金豆=1保级值，保级值用于贵族身份保级和降级的判断。',
                 StyleUtils.getCommonGZTextStyle(
                     color: Colors.black, fontSize: 26.sp, height: 1.5)),
             WidgetUtils.commonSizedBox((40 * 1.25).w, 0),
@@ -121,7 +121,7 @@ class _TeQuanGuiZePageState extends State<TeQuanGuiZePage> {
                     fontWeight: FontWeight.w600)),
             WidgetUtils.commonSizedBox((10 * 1.25).w, 0),
             WidgetUtils.onlyTextGZ(
-                '1月1号玩家的贵族值达到22W，则获得神王身份和对应特权。①若玩家在1月31号前贵族值达到50W，则立即获得神皇身份和对应特权，此时保级值置零，30天有效期重置。②若玩家在1月31号前没有升级，但保级值达到神王的保级值6W，则在31号之后可继续保持神王身份和特权30天，此时保级值置零，贵族值降至20W。③若玩家在1月31号保级值为3000,则在31号后,身份降至玄仙，此时保级值置零，贵族值降至5000，30天有效期重置。',
+                '1月1号玩家的贵族值达到22W，则获得神王身份和对应特权。\n①若玩家在1月31号前贵族值达到50W，则立即获得神皇身份和对应特权，此时保级值置零，30天有效期重置。\n②若玩家在1月31号前没有升级，但保级值达到神王的保级值6W，则在31号之后可继续保持神王身份和特权30天，此时保级值置零，贵族值降至20W。\n③若玩家在1月31号保级值为3000,则在31号后,身份降至玄仙，此时保级值置零，贵族值降至5000，30天有效期重置。',
                 StyleUtils.getCommonGZTextStyle(
                     color: Colors.black, fontSize: 26.sp, height: 1.5)),
             WidgetUtils.commonSizedBox((40 * 1.25).w, 0),
