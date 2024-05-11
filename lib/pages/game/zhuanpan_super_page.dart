@@ -13,6 +13,7 @@ import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_guize_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jilu_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_new_jc2_page.dart';
 import '../../bean/CommonIntBean.dart';
+import '../../bean/balanceBean.dart';
 import '../../bean/luckInfoBean.dart';
 import '../../bean/playRouletteBean.dart';
 import '../../http/data_utils.dart';
@@ -25,6 +26,7 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/xiazhu_queren_page.dart';
+import '../mine/qianbao/dou_pay_page.dart';
 /// 超级转盘
 class ZhuanPanSuperPage extends StatefulWidget {
   String roomId;
@@ -77,6 +79,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
     setState(() {
       isClose = sp.getBool('zp_super')!;
     });
+    doPostBalance();
     doPostGameRanking();
     doPostGetGameLuck();
     animationController = AnimationController(
@@ -230,14 +233,60 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       children: [
         // 转盘模块
         SizedBox(
-          height: ScreenUtil().setHeight(700),
+          height: ScreenUtil().setHeight(800),
           width: double.infinity,
           child: Stack(
             alignment: Alignment.center,
             children: [
+              // 余额
+              Positioned(
+                top: (25*1.25).w,
+                right: 20.w,
+                child: GestureDetector(
+                  onTap: ((){
+                    MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: jinbi,));
+                  }),
+                  child: Container(
+                    height: ScreenUtil().setHeight(45),
+                    padding: const EdgeInsets.only(
+                        left: 5, right: 5, top: 1, bottom: 1),
+                    //边框设置
+                    decoration: const BoxDecoration(
+                      //背景
+                      color: MyColors.zpBG,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    ),
+                    child: Row(
+                      children: [
+                        WidgetUtils.commonSizedBox(0, 5),
+                        WidgetUtils.showImages(
+                            'assets/images/mine_wallet_dd.png',
+                            ScreenUtil().setHeight(26),
+                            ScreenUtil().setHeight(24)),
+                        WidgetUtils.commonSizedBox(0, 5),
+                        WidgetUtils.onlyTextCenter(
+                            jinbi2,
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenUtil().setSp(23),
+                                fontWeight: FontWeight.w600)),
+                        WidgetUtils.commonSizedBox(0, 5.w),
+                        Image(
+                          image: const AssetImage(
+                              'assets/images/wallet_more.png'),
+                          width: 15.h,
+                          height: 15.h,
+                        ),
+                        WidgetUtils.commonSizedBox(0, 5),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               // 宝箱
               Positioned(
-                  top: ScreenUtil().setHeight(30),
+                  top: (100*1.25).w,
                   left: ScreenUtil().setHeight(20),
                   child: GestureDetector(
                     onTap: ((){
@@ -250,7 +299,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   )),
               // 中奖信息
               Positioned(
-                top: 40.h,
+                top: (100*1.25).w,
                 child: // 中奖信息滚动
                 luckInfo.isNotEmpty ? Stack(
                   children: [
@@ -316,7 +365,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                 ) :  WidgetUtils.commonSizedBox(0, 0),),
               // 转盘
               Positioned(
-                top: ScreenUtil().setHeight(70),
+                top: (170*1.25).w,
                 width: ScreenUtil().setHeight(590),
                 height: ScreenUtil().setHeight(590),
                 child: Container(
@@ -391,7 +440,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
               // 规则说明
               Positioned(
                   right: 0,
-                  top: ScreenUtil().setHeight(15),
+                  top: (100*1.25).w,
                   child: GestureDetector(
                     onTap: ((){
                       MyUtils.goTransparentPageCom(context, ZhuanPanGuiZePage(type: 1,));
@@ -422,7 +471,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
               // 我的记录
               Positioned(
                   right: 0,
-                  top: ScreenUtil().setHeight(70),
+                  top: (150*1.25).w,
                   child: GestureDetector(
                     onTap: ((){
                       MyUtils.goTransparentPageCom(context, ZhuanPanJiLuPage(type: 1,));
@@ -453,7 +502,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
               // 关闭音效
               Positioned(
                   right: 0,
-                  top: ScreenUtil().setHeight(130),
+                  top: (200*1.25).w,
                   child: GestureDetector(
                     onTap: ((){
                       setState(() {
@@ -488,7 +537,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   )),
               // 榜单
               Positioned(
-                  top: ScreenUtil().setHeight(120),
+                  top: (180*1.25).w,
                   left: ScreenUtil().setHeight(20),
                   child: GestureDetector(
                     onTap: (() {
@@ -704,7 +753,19 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           // 通知用户游戏开始不能离开
           eventBus.fire(GameBack(isBack: true));
           // 发送要减多少金豆
-          eventBus.fire(XiaZhuBack(jine: bean.data!.balance as int, type: bean.data!.curType as int));
+          jinbi = bean.data!.balance.toString();
+          if(double.parse(jinbi) > 10000){
+            //保留2位小数
+            jinbi2 = '${(double.parse(jinbi) / 10000)}';
+            if(jinbi2.split('.')[1].length >=2){
+              jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+            }else{
+              jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+            }
+          }else{
+            jinbi2 = jinbi;
+          }
+          sp.setString('zp_jinbi', jinbi);
           // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;
@@ -798,6 +859,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
             isXiazhu = true;
           });
           MyToastUtils.showToastBottom(bean.msg!);
+          doPostBalance();
           break;
       }
     } catch (e) {
@@ -852,6 +914,53 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                 }
               }
               LogE('记录=== $luckInfo');
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  // 金币 钻石
+  String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';
+  /// 钱包余额
+  Future<void> doPostBalance() async {
+    try {
+      balanceBean bean = await DataUtils.postBalance();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            jinbi = bean.data!.goldBean!;
+            sp.setString('zp_jinbi', jinbi);
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000)}';
+              if(jinbi2.split('.')[1].length >=2){
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+              }else{
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+              }
+            }else{
+              jinbi2 = bean.data!.goldBean!;
+            }
+            zuanshi = bean.data!.diamond!;
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000)}';
+              if(zuanshi2.split('.')[1].length >=2){
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
+              }else{
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+              }
+            }else{
+              zuanshi2 = bean.data!.diamond!;
             }
           });
           break;

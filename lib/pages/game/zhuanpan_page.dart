@@ -28,7 +28,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
   int isCheck = 1;
   int _currentIndex = 0;
   late final PageController _controller;
-  var listen, listen2;
+  var  listen2;
   bool isBack = false;
   @override
   void initState() {
@@ -37,59 +37,6 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
     _controller = PageController(
       initialPage: 0,
     );
-    doPostBalance();
-    listen = eventBus.on<XiaZhuBack>().listen((event) {
-      setState(() {
-        jinbi = event.jine.toString();
-        if(double.parse(jinbi) > 10000){
-          //保留2位小数
-          jinbi2 = '${(double.parse(jinbi) / 10000)}';
-          if(jinbi2.split('.')[1].length >=2){
-            jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
-          }else{
-            jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
-          }
-        }else{
-          jinbi2 = jinbi;
-        }
-        sp.setString('zp_jinbi', jinbi);
-
-        //cur_type 1金豆 2钻石 3蘑菇
-        // if(event.type == 1){
-        //   if(double.parse(jinbi) > 10000){
-        //     //保留2位小数
-        //     jinbi2 = '${(double.parse(jinbi) / 10000)}';
-        //     if(jinbi2.split('.')[1].length >=2){
-        //       jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
-        //     }else{
-        //       jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
-        //     }
-        //   }else{
-        //     jinbi2 = jinbi;
-        //   }
-        //   sp.setString('zp_jinbi', jinbi);
-        // }else if(event.type == 2){
-        //   if(double.parse(zuanshi) > 10000){
-        //     // 减去花费的金豆
-        //     zuanshi = '${(double.parse(zuanshi) - event.jine)}';
-        //     if(double.parse(zuanshi) > 10000){
-        //       zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
-        //       if(zuanshi2.split('.')[1].length >=2){
-        //         zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
-        //       }else{
-        //         zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
-        //       }
-        //     }else{
-        //       zuanshi2 = zuanshi;
-        //     }
-        //   }else{
-        //     zuanshi = (double.parse(zuanshi) - event.jine).toString();
-        //     zuanshi2 = zuanshi;
-        //   }
-        // }
-      });
-    });
-
     listen2 = eventBus.on<GameBack>().listen((event) {
       setState(() {
         isBack = event.isBack;
@@ -100,7 +47,6 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    listen.cancel();
     listen2.cancel();
   }
 
@@ -145,8 +91,28 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                   fit: BoxFit.fill, //覆盖
                 ),
               ),
-              child: Column(
+              child: Stack(
                 children: [
+                  // 页面信息
+                  Container(
+                    height: 950.h,
+                    color: Colors.transparent,
+                    child: PageView(
+                      reverse: false,
+                      physics: isBack ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
+                      controller: _controller,
+                      onPageChanged: (index) {
+                        setState(() {
+                          // 更新当前的索引值
+                          _currentIndex = index;
+                        });
+                      },
+                      children: [
+                        ZhuanPanXinPage(roomId: widget.roomId,),
+                        ZhuanPanSuperPage(roomId: widget.roomId,),
+                      ],
+                    ),
+                  ),
                   // 头部信息
                   Container(
                     height: ScreenUtil().setHeight(61),
@@ -301,90 +267,10 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                           ),
                         ),
                         const Spacer(),
-                        GestureDetector(
-                          onTap: ((){
-                            MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: jinbi,));
-                          }),
-                          child: Container(
-                            height: ScreenUtil().setHeight(45),
-                            padding: const EdgeInsets.only(
-                                left: 5, right: 5, top: 1, bottom: 1),
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.zpBG,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                            ),
-                            child: Row(
-                              children: [
-                                WidgetUtils.commonSizedBox(0, 5),
-                                WidgetUtils.showImages(
-                                    'assets/images/mine_wallet_dd.png',
-                                    ScreenUtil().setHeight(26),
-                                    ScreenUtil().setHeight(24)),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                WidgetUtils.onlyTextCenter(
-                                    jinbi2,
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil().setSp(23),
-                                        fontWeight: FontWeight.w600)),
-                                WidgetUtils.commonSizedBox(0, 5.w),
-                                Image(
-                                  image: const AssetImage(
-                                      'assets/images/wallet_more.png'),
-                                  width: 15.h,
-                                  height: 15.h,
-                                ),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                // 钻石处先隐藏
-                                // Opacity(
-                                //   opacity: 0.8,
-                                //   child: Container(
-                                //     height: ScreenUtil().setHeight(20),
-                                //     width: ScreenUtil().setHeight(1),
-                                //     color: MyColors.home_hx,
-                                //   ),
-                                // ),
-                                // WidgetUtils.commonSizedBox(0, 10),
-                                // WidgetUtils.showImages(
-                                //     'assets/images/mine_wallet_zz.png',
-                                //     ScreenUtil().setHeight(26),
-                                //     ScreenUtil().setHeight(24)),
-                                // WidgetUtils.commonSizedBox(0, 5),
-                                // WidgetUtils.onlyTextCenter(
-                                //     zuanshi2,
-                                //     StyleUtils.getCommonTextStyle(
-                                //         color: Colors.white,
-                                //         fontSize: ScreenUtil().setSp(23),
-                                //         fontWeight: FontWeight.w600)),
-                                // WidgetUtils.commonSizedBox(0, 5),
-                              ],
-                            ),
-                          ),
-                        ),
                         WidgetUtils.commonSizedBox(0, 10),
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: PageView(
-                      reverse: false,
-                      physics: isBack ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
-                      controller: _controller,
-                      onPageChanged: (index) {
-                        setState(() {
-                          // 更新当前的索引值
-                          _currentIndex = index;
-                        });
-                      },
-                      children: [
-                        ZhuanPanXinPage(roomId: widget.roomId,),
-                        ZhuanPanSuperPage(roomId: widget.roomId,),
-                      ],
-                    ),
-                  )
                 ],
               ),
             )
@@ -394,51 +280,4 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
     );
   }
 
-
-  // 金币 钻石
-  String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';
-  /// 钱包余额
-  Future<void> doPostBalance() async {
-    try {
-      balanceBean bean = await DataUtils.postBalance();
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          setState(() {
-            jinbi = bean.data!.goldBean!;
-            sp.setString('zp_jinbi', jinbi);
-            if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000)}';
-              if(jinbi2.split('.')[1].length >=2){
-                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
-              }else{
-                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
-              }
-            }else{
-              jinbi2 = bean.data!.goldBean!;
-            }
-            zuanshi = bean.data!.diamond!;
-            if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000)}';
-              if(zuanshi2.split('.')[1].length >=2){
-                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
-              }else{
-                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
-              }
-            }else{
-              zuanshi2 = bean.data!.diamond!;
-            }
-          });
-          break;
-        case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
-      }
-    } catch (e) {
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
-    }
-  }
 }
