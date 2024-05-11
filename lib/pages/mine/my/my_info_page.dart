@@ -309,7 +309,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              nobleID > 4
+                              isPretty == 1
                                   ? ShaderMask(
                                 shaderCallback: (Rect bounds) {
                                   return const LinearGradient(

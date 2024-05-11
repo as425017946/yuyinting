@@ -281,10 +281,10 @@ class _MinePageContent extends StatelessWidget {
                       Image(
                         width: 30,
                         height: 30,
-                        image: AssetImage(c.isGuizu.value > 4 ? 'assets/images/mine_icon_id2.png' : 'assets/images/mine_icon_id.png'),
+                        image: AssetImage(c.isPretty.value ? 'assets/images/mine_icon_id2.png' : 'assets/images/mine_icon_id.png'),
                       ),
                       const SizedBox(width: 3),
-                      c.isGuizu.value > 4
+                      c.isPretty.value
                           ? ShaderMask(
                               shaderCallback: (Rect bounds) {
                                 return const LinearGradient(
