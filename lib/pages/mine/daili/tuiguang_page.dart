@@ -55,7 +55,7 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
   Widget _bottomItem(String title, String content, String img) {
     return Expanded(
       child: Container(
-        height: 173.w,
+        height: 240.w,
         margin: EdgeInsets.all(31.w),
         decoration: BoxDecoration(
           // color: bg,
@@ -105,7 +105,8 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
           ),
           child: Text(
             title,
-            style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 33.sp),
+            style: StyleUtils.getCommonTextStyle(
+                color: Colors.white, fontSize: 33.sp),
           ),
         ),
       ),
@@ -154,13 +155,18 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
                   gridItem('推广总人数', allPeople),
                   gridItem('今日推广人数', dayPeople),
                   gridItem('今日礼物打赏额', dayZSMoney),
-                  gridItem('今日实时分润', daySjMoney, child: GestureDetector(
+                  gridItem(
+                    '今日实时分润',
+                    daySjMoney,
+                    child: GestureDetector(
                       onTap: (() {
                         if (MyUtils.checkClick()) {
-                          MyUtils.goTransparentPageCom(context, const FenRunTSPage());
+                          MyUtils.goTransparentPageCom(
+                              context, const FenRunTSPage());
                         }
                       }),
-                      child: WidgetUtils.showImages('assets/images/daili_wenti.png', 30.w, 30.w),
+                      child: WidgetUtils.showImages(
+                          'assets/images/daili_wenti.png', 30.w, 30.w),
                     ),
                   ),
                 ],
@@ -175,6 +181,8 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
             ],
           ),
         ),
+        WidgetUtils.commonSizedBox(20.h, 0),
+
         ///历史总分润
         Row(
           children: [
@@ -182,28 +190,34 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
             _bottomItem('可领取金币', lqVMoney, 'right'),
           ],
         ),
+        WidgetUtils.commonSizedBox(60.h, 0),
 
         /// 立即推广按钮
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 11.w),
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                _btn('立即推广', () { 
-                  if (MyUtils.checkClick()) {
-                    Navigator.pushNamed(context, 'ShareTuiguangPage');
-                  }
-                }),
-                if (isShow) _btn('领取金币', () {
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 11.w),
+          alignment: Alignment.center,
+          child: Row(
+            children: [
+              _btn('立即推广', () {
+                if (MyUtils.checkClick()) {
+                  Navigator.pushNamed(context, 'ShareTuiguangPage');
+                }
+              }),
+              if (isShow)
+                _btn('领取金币', () {
                   if (MyUtils.checkClick()) {
                     doPostRoomUserInfo(1);
                   }
                 })
-              ],
-            ),
+            ],
           ),
         ),
+        const Spacer(),
+        WidgetUtils.onlyTextGZ(
+            '提示：\n礼物股份=下级新人赠送礼物总额x分成比例，分润将在第二日以金币形式发放至您的后台，可随时领取至钱包。\n例如：\n若下级新人A今日礼物打赏额为1000金豆，若您的股份比例为0.1%，您第二日可在本页领取1金币的收益。',
+            StyleUtils.getCommonGZTextStyle(
+                color: Colors.black, fontSize: 26.sp, height: 1.5)),
+        const Spacer(),
         /*
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20),
@@ -352,14 +366,15 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
 }
 
 mixin YQYLItem {
-  Widget gridItem(String title, String content, { Widget? child}) { // 328 x 122 35 16
+  Widget gridItem(String title, String content, {Widget? child}) {
+    // 328 x 122 35 16
     Widget top = WidgetUtils.onlyTextCenter(
-          title,
-          StyleUtils.getCommonTextStyle(
-            color: Colors.black,
-            fontSize: 28.sp,
-          ),
-        );
+      title,
+      StyleUtils.getCommonTextStyle(
+        color: Colors.black,
+        fontSize: 28.sp,
+      ),
+    );
     if (child != null) {
       top = Row(
         mainAxisAlignment: MainAxisAlignment.center,

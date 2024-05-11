@@ -25,7 +25,7 @@ class _DailiHomePageState extends State<DailiHomePage> {
     super.initState();
     appBar = WidgetUtils.getAppBar('邀请有礼', true, context, false, 0);
 
-    _currentIndex = 0;
+    _currentIndex = 1;
     _controller = PageController(
       initialPage: _currentIndex,
     );
