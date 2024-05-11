@@ -1393,6 +1393,22 @@ class WidgetUtils {
     );
   }
 
+  /// 贵族使用
+  static Widget onlyTextGZ(
+      String title,
+      TextStyle style,
+      ) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(left: (20*1.25).w, right: (20*1.25).w),
+      child: Text(
+        title,
+        maxLines: 20,
+        style: style,
+      ),
+    );
+  }
+
   ///自定义圆角背景框
   static Widget myContainer(double height, double width, Color boxColors,
       Color borderColors, String title, double size, Color txtColors) {

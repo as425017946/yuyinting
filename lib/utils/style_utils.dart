@@ -132,4 +132,19 @@ class StyleUtils {
         decoration: decoration ?? TextDecoration.none,
         overflow: textOverflow);
   }
+
+  //自己定义自己修改颜色样式字体大小
+  static TextStyle getCommonGZTextStyle(
+      {Color color = Colors.black,
+        double? fontSize,
+        FontWeight? fontWeight,
+        TextDecoration? decoration,
+        double? height = 1.2,}) {
+    return TextStyle(
+        color: color,
+        decorationColor: color,
+        height: height,
+        fontSize: fontSize ?? ConfigScreenUtil.autoSize36,
+        decoration: decoration ?? TextDecoration.none,);
+  }
 }

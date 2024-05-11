@@ -704,7 +704,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           // 通知用户游戏开始不能离开
           eventBus.fire(GameBack(isBack: true));
           // 发送要减多少金豆
-          eventBus.fire(XiaZhuBack(jine: int.parse(number)*500, type: bean.data!.curType as int));
+          eventBus.fire(XiaZhuBack(jine: bean.data!.balance as int, type: bean.data!.curType as int));
           // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;

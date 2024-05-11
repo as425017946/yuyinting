@@ -278,10 +278,10 @@ class _MinePageContent extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Image(
+                      Image(
                         width: 30,
                         height: 30,
-                        image: AssetImage('assets/images/mine_icon_id.png'),
+                        image: AssetImage(c.isGuizu.value > 4 ? 'assets/images/mine_icon_id2.png' : 'assets/images/mine_icon_id.png'),
                       ),
                       const SizedBox(width: 3),
                       c.isGuizu.value > 4

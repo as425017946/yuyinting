@@ -40,47 +40,53 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
     doPostBalance();
     listen = eventBus.on<XiaZhuBack>().listen((event) {
       setState(() {
-        //cur_type 1金豆 2钻石 3蘑菇
-        if(event.type == 1){
-          if(double.parse(jinbi) > 10000){
-            // 减去花费的金豆
-            jinbi = '${(double.parse(jinbi) - event.jine)}';
-            if(double.parse(jinbi) > 10000){
-              //保留2位小数
-              jinbi2 = '${(double.parse(jinbi) / 10000)}';
-              if(jinbi2.split('.')[1].length >=2){
-                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
-              }else{
-                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
-              }
-            }else{
-              jinbi2 = jinbi;
-            }
-
+        jinbi = event.jine.toString();
+        if(double.parse(jinbi) > 10000){
+          //保留2位小数
+          jinbi2 = '${(double.parse(jinbi) / 10000)}';
+          if(jinbi2.split('.')[1].length >=2){
+            jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
           }else{
-            jinbi = (double.parse(jinbi) - event.jine).toString();
-            jinbi2 = jinbi;
+            jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
           }
-          sp.setString('zp_jinbi', jinbi);
-        }else if(event.type == 2){
-          if(double.parse(zuanshi) > 10000){
-            // 减去花费的金豆
-            zuanshi = '${(double.parse(zuanshi) - event.jine)}';
-            if(double.parse(zuanshi) > 10000){
-              zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
-              if(zuanshi2.split('.')[1].length >=2){
-                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
-              }else{
-                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
-              }
-            }else{
-              zuanshi2 = zuanshi;
-            }
-          }else{
-            zuanshi = (double.parse(zuanshi) - event.jine).toString();
-            zuanshi2 = zuanshi;
-          }
+        }else{
+          jinbi2 = jinbi;
         }
+        sp.setString('zp_jinbi', jinbi);
+
+        //cur_type 1金豆 2钻石 3蘑菇
+        // if(event.type == 1){
+        //   if(double.parse(jinbi) > 10000){
+        //     //保留2位小数
+        //     jinbi2 = '${(double.parse(jinbi) / 10000)}';
+        //     if(jinbi2.split('.')[1].length >=2){
+        //       jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+        //     }else{
+        //       jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+        //     }
+        //   }else{
+        //     jinbi2 = jinbi;
+        //   }
+        //   sp.setString('zp_jinbi', jinbi);
+        // }else if(event.type == 2){
+        //   if(double.parse(zuanshi) > 10000){
+        //     // 减去花费的金豆
+        //     zuanshi = '${(double.parse(zuanshi) - event.jine)}';
+        //     if(double.parse(zuanshi) > 10000){
+        //       zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
+        //       if(zuanshi2.split('.')[1].length >=2){
+        //         zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
+        //       }else{
+        //         zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+        //       }
+        //     }else{
+        //       zuanshi2 = zuanshi;
+        //     }
+        //   }else{
+        //     zuanshi = (double.parse(zuanshi) - event.jine).toString();
+        //     zuanshi2 = zuanshi;
+        //   }
+        // }
       });
     });
 

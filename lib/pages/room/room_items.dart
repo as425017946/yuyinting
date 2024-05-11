@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/pages/room/room_youxi_page.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:get/get.dart';
@@ -335,7 +334,7 @@ class RoomItems {
                               : int.parse(list[i]['newLv'].toString()) >= 10 &&
                               int.parse(list[i]['newLv'].toString()) <= 15
                               ? Transform.translate(
-                            offset: Offset(0, 5.h),
+                            offset: Offset(0, 0.h),
                             child: WidgetUtils.showImages(
                                 'assets/images/room_icon_2.png',
                                 28.h,
@@ -725,7 +724,7 @@ class RoomItems {
                           : int.parse(list[i]['newLv'].toString()) >= 10 &&
                           int.parse(list[i]['newLv'].toString()) <= 15
                           ? Transform.translate(
-                        offset: Offset(0, 5.h),
+                        offset: Offset(0, 0.h),
                         child: WidgetUtils.showImages(
                             'assets/images/room_icon_2.png',
                             28.h,
@@ -1564,7 +1563,7 @@ class RoomItems {
                                 10 &&
                                 int.parse(list[i]['newLv'].toString()) <= 15
                                 ? Transform.translate(
-                              offset: Offset(0, 5.h),
+                              offset: Offset(0, 0.h),
                               child: WidgetUtils.showImages(
                                   'assets/images/room_icon_2.png',
                                   28.h,

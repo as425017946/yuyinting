@@ -4696,7 +4696,7 @@ class _RoomPageState extends State<RoomPage>
                           : const Text(''),
 
                       /// 厅内送礼物显示动画使用
-                      (isShowSVGA == true && roomDX == true)
+                      (isShowSVGA == true && roomDX == true && listUrl.isNotEmpty)
                           ? IgnorePointer(
                               ignoring: true,
                               child: SizedBox(
@@ -6423,7 +6423,7 @@ class _RoomPageState extends State<RoomPage>
 
   Widget _lunbotu() {
     final hasGame =
-        (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3);
+        (sp.getInt('user_grLevel')! >= 4);
     final isSc = sp.getString('scIsOk').toString() == '1';
     final list1 = [
       if (!isSc)
