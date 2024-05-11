@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
@@ -37,12 +37,14 @@ mixin GetAntiCombo {
   //   }
   //   _action.value++;
   // }
-
-  bool canTapAction = true;
+  bool get canTap => _canTap && _canTapAction;
+  set canTap(bool value) => _canTap = value;
+  bool _canTap = true;
+  bool _canTapAction = true;
   void action(void Function() a) {
-    if (canTapAction) {
-      canTapAction = false;
-      Future.delayed(const Duration(milliseconds: 500), () => canTapAction = true);
+    if (canTap) {
+      _canTapAction = false;
+      Future.delayed(const Duration(milliseconds: 500), () => _canTapAction = true);
       a();
     }
   }
@@ -164,6 +166,13 @@ mixin GetAntiCombo {
           MyToastUtils.showToastBottom(bean.msg);
         }
         throw bean;
+    }
+  }
+
+  void hideKeyboard() {
+    final context = Get.context;
+    if (context != null) {
+      MyUtils.hideKeyboard(context);
     }
   }
 }
@@ -494,6 +503,22 @@ class UserGenderCircle extends StatelessWidget {
 mixin GetBean {
   late int code;
   late String msg;
+  fromJson(Map<String, dynamic>? map, [void Function(dynamic)? callback]) {
+    if (map == null) {
+      throw '数据错误';
+    }
+    code = map['code'] ?? -1;
+    msg = map['msg'] ?? '';
+    if (callback != null) {
+      callback(map['data']);
+    }
+  }
+}
+class GetXBean with GetBean {
+  GetXBean._private();
+  factory GetXBean.fromJson(Map<String, dynamic>? map) {
+    return GetXBean._private()..fromJson(map);
+  }
 }
 
 class VoiceCardBtn extends StatelessWidget {
@@ -531,3 +556,56 @@ class VoiceCardBtn extends StatelessWidget {
 }
 
 EdgeInsets get getxWindowPadding => MediaQueryData.fromWindow(window).padding;
+
+class GetPickSheetItem {
+  final String title;
+  final Color? color;
+  final void Function() action;
+  GetPickSheetItem({required this.title, required this.action, this.color});
+}
+class GetPickSheet extends StatelessWidget {
+  final List<GetPickSheetItem> list;
+  const GetPickSheet({super.key, required this.list});
+  @override
+  Widget build(BuildContext context) {
+    final radius = Radius.circular(30.w);
+    final line = SizedBox(height: 5.h);
+    List<Widget> children = [];
+    for (var i = 0; i < list.length; i++) {
+      if (i > 0) {
+        children.add(line);
+      }
+      children.add(_btn(list[i]));
+    }
+    return Container(
+      width: double.infinity,
+      height: Get.bottomBarHeight + 200.h,
+      decoration: BoxDecoration(
+        color: const Color(0xFFFAFAFA),
+        borderRadius: BorderRadius.only(topLeft: radius, topRight: radius),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Column(children: children),
+    );
+  }
+
+  Widget _btn(GetPickSheetItem item) {
+    return GestureDetector(
+      onTap: item.action,
+      child: Container(
+        width: double.infinity,
+        height: 60.h,
+        color: Colors.white,
+        child: Center(
+          child: Text(
+            item.title.split('').join('  '),
+            style: TextStyle(
+              color: item.color ?? Colors.black,
+              fontSize: 26.h,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

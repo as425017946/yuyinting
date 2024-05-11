@@ -140,7 +140,7 @@ class HappyWallPage extends StatelessWidget {
       ),
       body: WillPopScope(
          onWillPop: () async {
-          return c.canTapAction && !Loading.isShow;
+          return c.canTap && !Loading.isShow;
          },
         child: _body(),
       ),

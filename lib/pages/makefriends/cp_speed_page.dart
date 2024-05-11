@@ -5,15 +5,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
 import '../../main.dart';
 import '../../utils/getx_tools.dart';
 import 'makefriends_model.dart';
 
-class CPSpeedPage extends StatelessWidget {
-  final MakefriendsController c = Get.find();
-  CPSpeedPage({super.key});
+class CPSpeedPage extends StatefulWidget {
+  const CPSpeedPage({Key? key}) : super(key: key);
 
+  @override
+  State<CPSpeedPage> createState() => _CPSpeedPageState();
+}
+
+class _CPSpeedPageState extends State<CPSpeedPage> with SingleTickerProviderStateMixin {
+  final MakefriendsController c = Get.find();
+
+  @override
+  void initState() {
+    c.animationController = SVGAAnimationController(vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    c.animationController.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,8 +48,10 @@ class CPSpeedPage extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       child: Stack(
         children: [
-          _positioned(Rect.fromLTWH(135.w, 364.h - 35, 480.w, 495.h), img: 'cp_gift.png'),
-          _positioned(Rect.fromLTWH(155.w, 220.h - 35, 422.w, 73.h), img: 'cp_success.png'),
+          // _positioned(Rect.fromLTWH(135.w, 364.h - 35, 480.w, 495.h), img: 'cp_gift'),
+          // _positioned(Rect.fromLTWH(155.w, 220.h - 35, 422.w, 73.h), img: 'cp_success'),
+          _success(),
+          Obx(() => _positioned(Rect.fromLTWH(0, -35, 750.w, 1334.h), img: 'cp_svga', child: _svga())),
           _btnMine(),
           Positioned(
             height: 407.h,
@@ -85,6 +106,42 @@ class CPSpeedPage extends StatelessWidget {
     );
   }
 
+  Widget _success() {
+    final fontSize = 36.h;
+    return Positioned(
+      left: 0,
+      right: 0,
+      top: 220.h - 35,
+      height: 73.h,
+      child: Center(
+        child: Text(
+          c.cpNum,
+          style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  color: Colors.yellow,
+                  blurRadius: fontSize,
+                ),
+                Shadow(
+                  color: Colors.yellow,
+                  blurRadius: fontSize,
+                ),
+              ]),
+        ),
+      ),
+    );
+  }
+
+  Widget? _svga() {
+    if (c.isSvga) {
+      return SVGAImage(c.animationController);
+    }
+    return null;
+  }
+
   Widget _positioned(Rect rect, {Widget? child, String img = ''}) {
     return Positioned(
       left: rect.left,
@@ -92,7 +149,7 @@ class CPSpeedPage extends StatelessWidget {
       width: rect.width,
       height: rect.height,
       child: child == null
-          ? Image.asset("assets/images/$img", fit: BoxFit.contain)
+          ? Image.asset("assets/images/$img.png", fit: BoxFit.contain)
           : FittedBox(
               fit: BoxFit.contain,
               child: child,
@@ -162,11 +219,13 @@ class CPSpeedPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
           ),
           alignment: Alignment.center,
-          child: const Text(
-            '50金豆/次',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 28,
+          child: Obx(
+            () => Text(
+              c.getNum,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+              ),
             ),
           ),
         ),
@@ -179,15 +238,18 @@ class CPSpeedPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () => c.action(() {
+          onTap: () => c.action(() async {
+            await c.runOpen();
             Get.dialog(_DialogReceive());
           }),
           child: _btn('cp_btn_chouqu.png'),
         ),
         SizedBox(width: 37.w),
         GestureDetector(
-          onTap: () => c.action(() {
-            Get.dialog(_DialogSend());
+          onTap: () => c.action(() async {
+            if (await Get.dialog(_DialogSend())) {
+              c.runSend();
+            }
           }),
           child: _btn('cp_btn_fangru.png'),
         ),
@@ -452,13 +514,18 @@ class _DialogReceive extends StatelessWidget with _DialogMixin {
 }
 
 class _DialogSend extends StatelessWidget with _DialogMixin {
-  final TextEditingController controller = TextEditingController();
+  final MakefriendsController c = Get.find();
   @override
   Widget build(BuildContext context) {
     return content(
       height: 652.w,
       bg: 'cp_fangru',
       btn: '确认放入',
+      action: () => c.action(() async {
+        if (await c.postActivityPutPaper()) {
+          Get.back(result: true);
+        }
+      }),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -490,7 +557,7 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
         borderRadius: BorderRadius.circular(20.w),
       ),
       child: TextField(
-        controller: controller,
+        controller: c.textController,
         maxLength: 30,
         maxLines: 8,
         style: TextStyle(color: const Color(0xFF666666), fontSize: 30.sp),
@@ -509,7 +576,15 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
   }
 
   Widget _content() {
-    return Container(
+    return GestureDetector(
+      onTap: () => c.action(() {
+        Get.bottomSheet(GetPickSheet(list: [
+          GetPickSheetItem(title: '拍照', action: () {}),
+          GetPickSheetItem(title: '相册', action: () {}),
+          GetPickSheetItem(title: '视频', action: () {}),
+        ]));
+      }),
+      child: Container(
       width: 120.w,
       height: 120.w,
       padding: EdgeInsets.all(37.w),
@@ -518,6 +593,7 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
         borderRadius: BorderRadius.circular(20.w),
       ),
       child: Image.asset('assets/images/cp_add.png'),
+    ),
     );
   }
 }
