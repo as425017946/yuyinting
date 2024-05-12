@@ -988,7 +988,7 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (type == 0) _head(),
+          if (type == 0) _head(item),
           Padding(
             padding: EdgeInsets.only(top: 18.w),
             child: Text(
@@ -1036,10 +1036,10 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
     );
   }
 
-  Widget _head() {
+  Widget _head(ActivityGetPaperBeanData item) {
     return Row(
       children: [
-        UserFrameHead(size: 80.w, avatar: sp.getString('user_headimg').toString()),
+        UserFrameHead(size: 80.w, avatar: item.avatar),
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 13.w),
@@ -1047,7 +1047,7 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '小美',
+                  item.nickname,
                   style: TextStyle(
                     color: const Color(0xFF212121),
                     fontSize: 30.sp,
@@ -1056,7 +1056,7 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
                 SizedBox(height: 8.w),
                 Row(
                   children: [
-                    UserGenderCircle(size: 24.w, gender: 0),
+                    UserGenderCircle(size: 24.w, gender: item.gender),
                     Container(
                       width: 59.w,
                       height: 26.w,
@@ -1067,7 +1067,7 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
                         borderRadius: BorderRadius.circular(13.w),
                       ),
                       child: Text(
-                        '22岁',
+                        '${item.age}岁',
                         style: TextStyle(
                           color: const Color(0xFFFF1313),
                           fontSize: 18.sp,
