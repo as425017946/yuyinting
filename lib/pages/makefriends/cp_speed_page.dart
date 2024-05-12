@@ -11,7 +11,6 @@ import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../bean/activity_paper_index_bean.dart';
-import '../../main.dart';
 import '../../utils/getx_tools.dart';
 import '../../utils/my_utils.dart';
 import '../../widget/SwiperPage.dart';

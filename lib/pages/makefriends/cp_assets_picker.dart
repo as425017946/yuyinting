@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -19,7 +17,6 @@ import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import 'makefriends_model.dart';
 
 enum _UploadType {
   image,
