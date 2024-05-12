@@ -112,7 +112,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(
-                    listInfo[i].streamerUid.toString(),
+                    listInfo[i].streamerNumber.toString(),
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g2, fontSize: ScreenUtil().setSp(25))),
                 // WidgetUtils.onlyText('已结算', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25))),

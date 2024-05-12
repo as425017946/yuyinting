@@ -38,9 +38,7 @@ class MofangLanPage extends StatefulWidget {
 }
 
 class _MofangLanPageState extends State<MofangLanPage>
-    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
-  @override
-  bool get wantKeepAlive => true;
+    with  TickerProviderStateMixin {
 
   int isCheck = 1;
 

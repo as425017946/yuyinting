@@ -402,7 +402,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                           ScreenUtil().setHeight(26),
                                           ScreenUtil().setHeight(18)),
                                       WidgetUtils.commonSizedBox(0, 2),
-                                      nobleID > 4
+                                      isPretty == 1
                                           ? ShaderMask(
                                               shaderCallback: (Rect bounds) {
                                                 return const LinearGradient(

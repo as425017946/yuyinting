@@ -892,48 +892,58 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 width: ScreenUtil().setWidth(1),
                                 color: MyColors.roomTCWZ3,
                               ),
-                              sp.getInt('user_grLevel')! >= 4 ? GestureDetector(
-                                onTap: (() {
-                                  setState(() {
-                                    gzTitle = '送礼';
-                                    isTS = false;
-                                    shuliang = 1;
-                                    isReduce = false;
-                                    url = '';
-                                    svga = '';
-                                    leixing = 3;
-                                    giftId = '';
-                                    for (int i = 0; i < listPV.length; i++) {
-                                      listPVBool[i] = false;
-                                    }
-                                    for (int i = 0; i < listC.length; i++) {
-                                      listCBool[i] = false;
-                                    }
-                                    for (int i = 0; i < listPl.length; i++) {
-                                      listPlBool[i] = false;
-                                    }
-                                  });
-                                }),
-                                child: Container(
-                                  color: Colors.transparent,
-                                  width: 80.h,
-                                  height: 40.h,
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '礼盒',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: leixing == 3
-                                              ? MyColors.roomTCWZ2
-                                              : MyColors.roomTCWZ3,
-                                          fontSize: leixing == 3
-                                              ? ScreenUtil().setSp(28)
-                                              : ScreenUtil().setSp(25))),
-                                ),
-                              ) : WidgetUtils.commonSizedBox(0, 0),
-                              sp.getInt('user_grLevel')! >= 4 ? Container(
-                                height: ScreenUtil().setHeight(10),
-                                width: ScreenUtil().setWidth(1),
-                                color: MyColors.roomTCWZ3,
-                              ) : WidgetUtils.commonSizedBox(0, 0),
+                              sp.getInt('user_grLevel')! >= 4
+                                  ? GestureDetector(
+                                      onTap: (() {
+                                        setState(() {
+                                          gzTitle = '送礼';
+                                          isTS = false;
+                                          shuliang = 1;
+                                          isReduce = false;
+                                          url = '';
+                                          svga = '';
+                                          leixing = 3;
+                                          giftId = '';
+                                          for (int i = 0;
+                                              i < listPV.length;
+                                              i++) {
+                                            listPVBool[i] = false;
+                                          }
+                                          for (int i = 0;
+                                              i < listC.length;
+                                              i++) {
+                                            listCBool[i] = false;
+                                          }
+                                          for (int i = 0;
+                                              i < listPl.length;
+                                              i++) {
+                                            listPlBool[i] = false;
+                                          }
+                                        });
+                                      }),
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        width: 80.h,
+                                        height: 40.h,
+                                        child: WidgetUtils.onlyTextCenter(
+                                            '礼盒',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: leixing == 3
+                                                    ? MyColors.roomTCWZ2
+                                                    : MyColors.roomTCWZ3,
+                                                fontSize: leixing == 3
+                                                    ? ScreenUtil().setSp(28)
+                                                    : ScreenUtil().setSp(25))),
+                                      ),
+                                    )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              sp.getInt('user_grLevel')! >= 4
+                                  ? Container(
+                                      height: ScreenUtil().setHeight(10),
+                                      width: ScreenUtil().setWidth(1),
+                                      color: MyColors.roomTCWZ3,
+                                    )
+                                  : WidgetUtils.commonSizedBox(0, 0),
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
@@ -977,46 +987,54 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 width: ScreenUtil().setWidth(1),
                                 color: MyColors.roomTCWZ3,
                               ),
-                              GestureDetector(
-                                onTap: (() {
-                                  setState(() {
-                                    gzTitle = '送礼';
-                                    isTS = false;
-                                    shuliang = 1;
-                                    isReduce = false;
-                                    url = '';
-                                    svga = '';
-                                    leixing = 2;
-                                    giftId = '';
-                                    for (int i = 0; i < listPV.length; i++) {
-                                      listPVBool[i] = false;
-                                    }
-                                    for (int i = 0; i < listC.length; i++) {
-                                      listCBool[i] = false;
-                                    }
-                                    for (int i = 0; i < listPl.length; i++) {
-                                      listPlBool[i] = false;
-                                    }
-                                  });
-                                  if (listPl.isEmpty) {
-                                    doPostGiftListBB();
-                                  }
-                                }),
-                                child: Container(
-                                  color: Colors.transparent,
-                                  width: 80.h,
-                                  height: 40.h,
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '背包',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: leixing == 2
-                                              ? MyColors.roomTCWZ2
-                                              : MyColors.roomTCWZ3,
-                                          fontSize: leixing == 2
-                                              ? ScreenUtil().setSp(28)
-                                              : ScreenUtil().setSp(25))),
-                                ),
-                              ),
+                              sp.getInt('user_grLevel')! >= 4
+                                  ? GestureDetector(
+                                      onTap: (() {
+                                        setState(() {
+                                          gzTitle = '送礼';
+                                          isTS = false;
+                                          shuliang = 1;
+                                          isReduce = false;
+                                          url = '';
+                                          svga = '';
+                                          leixing = 2;
+                                          giftId = '';
+                                          for (int i = 0;
+                                              i < listPV.length;
+                                              i++) {
+                                            listPVBool[i] = false;
+                                          }
+                                          for (int i = 0;
+                                              i < listC.length;
+                                              i++) {
+                                            listCBool[i] = false;
+                                          }
+                                          for (int i = 0;
+                                              i < listPl.length;
+                                              i++) {
+                                            listPlBool[i] = false;
+                                          }
+                                        });
+                                        if (listPl.isEmpty) {
+                                          doPostGiftListBB();
+                                        }
+                                      }),
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        width: 80.h,
+                                        height: 40.h,
+                                        child: WidgetUtils.onlyTextCenter(
+                                            '背包',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: leixing == 2
+                                                    ? MyColors.roomTCWZ2
+                                                    : MyColors.roomTCWZ3,
+                                                fontSize: leixing == 2
+                                                    ? ScreenUtil().setSp(28)
+                                                    : ScreenUtil().setSp(25))),
+                                      ),
+                                    )
+                                  : WidgetUtils.commonSizedBox(0, 0),
                               WidgetUtils.commonSizedBox(0, 10.w),
                               leixing == 2
                                   ? WidgetUtils.onlyTextCenter(
