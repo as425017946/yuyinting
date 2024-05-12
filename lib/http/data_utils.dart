@@ -1788,6 +1788,30 @@ class DataUtils {
     return GetXBean.fromJson(respons!);
   }
   ///放入纸条记录
+  static Future<ActivityPutPaperListBean> postActivityPutPaperList(int page, [int pageSize = 10]) async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/putPaperList', {}, {
+      'page' : page,
+      'pageSize' : pageSize,
+    });
+    print("放入纸条记录 /activity/putPaperList $respons");
+    return ActivityPutPaperListBean.fromJson(respons!);
+  }
   ///抽取纸条
+  static Future<ActivityGetPaperBean> postActivityGetPaper() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/getPaper', {}, {});
+    print("抽取纸条 /activity/getPaper $respons");
+    return ActivityGetPaperBean.fromJson(respons!);
+  }
   ///抽取纸条记录
+  static Future<ActivityGetPaperListBean> postActivityGetPaperList(int page, [int pageSize = 10]) async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/getPaperList', {}, {
+      'page' : page,
+      'pageSize' : pageSize,
+    });
+    print("抽取纸条记录 /activity/getPaperList $respons");
+    return ActivityGetPaperListBean.fromJson(respons!);
+  }
 }

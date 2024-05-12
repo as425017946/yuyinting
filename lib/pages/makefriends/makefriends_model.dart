@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:appinio_swiper/appinio_swiper.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:video_player/video_player.dart';
 
+import '../../bean/activity_paper_index_bean.dart';
 import '../../bean/find_mate_bean.dart';
 import '../../http/data_utils.dart';
 import '../../main.dart';
@@ -15,6 +19,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../widget/SwiperPage.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
+import 'cp_assets_picker.dart';
 
 typedef FindMateItem = FindMateBeanData;
 
@@ -173,7 +178,6 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
 
   final _cpSelect = 0.obs;
   int get cpSelect => _cpSelect.value;
-  set cpSelect(int value) => _cpSelect.value = value;
   Map<String, Widget> cpBanners = {};
   final _getNum = 0.obs; //已抽取次数
   String get getNum => _getNum.value < 3 ? '免费抽取 ${3 - _getNum.value} 次' : '50金豆/次';
@@ -210,7 +214,16 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
     bool result = false;
     try {
       Loading.show();
-      await doRequest(() => DataUtils.postActivityPutPaper(content, '', '0'));
+      final pickerItem = _pickerItem.value;
+      final String id, type;
+      if (pickerItem == null) {
+        id = '';
+        type = '0';
+      } else {
+        id = pickerItem.id;
+        type = pickerItem.type;
+      }
+      await doRequest(() => DataUtils.postActivityPutPaper(content, id, type));
       result = true;
     } catch (e) {
       if (e is GetBean) {
@@ -229,11 +242,29 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
   late SVGAAnimationController animationController;
   void runSend() {
     _loadAnimation('cp_send');
+    textController.text = '';
+    pickClear();
   }
-  Future<void> runOpen() async {
+  Future<bool> runOpen() async {
+    try {
+      Loading.show();
+      final bean = await doRequest(() => DataUtils.postActivityGetPaper());
+      getPaperItem = bean.data;
+      _getNum.value += 1;
+    } catch (e) {
+      if (e is GetBean) {
+        Get.log(e.msg);
+      } else {
+        Get.log(e.toString());
+      }
+      return false;
+    } finally {
+      Loading.dismiss();
+    }
     canTap = false;
     await _loadAnimation('cp_open');
     Future.delayed(const Duration(milliseconds: 200), () => canTap = true);
+    return true;
   }
   Future<void> _loadAnimation(String name) async {
     final videoItem = await SVGAParser.shared.decodeFromAssets('assets/svga/$name.svga');
@@ -257,4 +288,154 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
         });
 
   }
+  final picker = CPAssetsPicker();
+  VideoPlayerController? videoController;
+  final _pickerItem = Rxn<CPPickerItem>();
+  CPPickerItem? get pickerItem => _pickerItem.value;
+  void pick(String id, File file, bool isVideo) {
+    videoController = isVideo ? VideoPlayerController.file(file) : null;
+    _pickerItem(CPPickerItem(id, isVideo, file));
+  }
+  void pickClear() {
+    videoController = null;
+    _pickerItem.trigger(null);
+  }
+
+  late ActivityGetPaperBeanData getPaperItem;
+
+  int _getPage = 0;
+  final List<ActivityGetPaperBeanData> _getList = [];
+  final _getLength = 0.obs;
+  int _putPage = 0;
+  final List<ActivityGetPaperBeanData> _putList = [];
+  final _putLength = 0.obs;
+  bool _setPage(int next, int type, bool isFirst) {
+    if (isFirst || next == (type == 1 ? _putPage : _getPage) + 1) {
+      _nextPage(next, type);
+      return true;
+    }
+    return false;
+  }
+  void _nextPage(int next, int type) {
+    switch (type) {
+      case 1:
+        _putPage = next;
+        break;
+      default:
+        _getPage = next;
+    }
+  }
+  int getLength(int type) => type == 1 ? _putLength.value : _getLength.value;
+  Future<LoadStatus> postActivityPaperList(int type, bool isFirst) async {
+    LoadStatus status = LoadStatus.idle;
+    // ignore: prefer_typing_uninitialized_variables
+    final list, post, getLength, next;
+    switch (type) {
+      case 1:
+        list = _putList;
+        post = DataUtils.postActivityPutPaperList;
+        getLength = _putLength;
+        next = isFirst ? 1 :( _putPage + 1);
+        break;
+      default:
+        list = _getList;
+        post = DataUtils.postActivityGetPaperList;
+        getLength = _getLength;
+        next = isFirst ? 1 :( _getPage + 1);
+    }
+    try {
+      const pageSize = 10;
+      final bean = await doRequest(() => post(next, pageSize));
+      if (_setPage(next, type, isFirst)) {
+        if (next == 1) list.clear();
+        if (bean.data.isNotEmpty) list.addAll(bean.data);
+        if (bean.data.length < pageSize) status = LoadStatus.noMore;
+        getLength.value = list.length;
+      }
+    } catch (e) {
+      if (e is GetBean) {
+        Get.log(e.msg);
+      } else {
+        Get.log(e.toString());
+      }
+      status = LoadStatus.failed;
+    }
+    return status;
+  }
+  Future<void> onMine() async {
+    _getPage = 0;
+    _getLength.value = 0;
+    _paperGetController.refreshCompleted();
+    _paperGetController.loadComplete();
+    _putPage = 0;
+    _putLength.value = 0;
+    _paperPutController.refreshCompleted();
+    _paperPutController.loadComplete();
+    await setCpSelect(0);
+  }
+  Future<void> setCpSelect(int type) async {
+    bool needLoad = false;
+    switch (type) {
+      case 0:
+        if (_getPage == 0) needLoad = true;
+        break;
+      case 1:
+        if (_putPage == 0) needLoad = true;
+        break;
+      default:
+        return;
+    }
+    if (needLoad) {
+      Loading.show();
+      await onRefresh(type);
+      Loading.dismiss();
+    }
+    _cpSelect.value = type;
+  }
+  List<ActivityGetPaperBeanData> paperList(int type) => type == 1 ? _putList : _getList;
+  final _paperGetController = RefreshController(initialRefresh: false, initialRefreshStatus: RefreshStatus.idle);
+  final _paperPutController = RefreshController(initialRefresh: false, initialRefreshStatus: RefreshStatus.idle);
+  RefreshController paperController(int type) => type == 1 ? _paperPutController : _paperGetController;
+  void onLoading(int type) async {
+    final c = paperController(type);
+    c.refreshCompleted();
+    switch (await postActivityPaperList(type, false)) {
+      case LoadStatus.noMore:
+        c.loadNoData();
+        break;
+      case LoadStatus.failed:
+        c.loadFailed();
+        break;
+      default:
+        c.loadComplete();
+    }
+  }
+  Future<void> onRefresh(int type) async {
+    final c = paperController(type);
+    switch (await postActivityPaperList(type, true)) {
+      case LoadStatus.noMore:
+        c.loadNoData();
+        c.refreshCompleted();
+        break;
+      case LoadStatus.failed:
+        c.refreshFailed();
+        if (getLength(type) == 0) c.loadNoData();
+        break;
+      default:
+        c.resetNoData();
+        c.loadComplete();
+        c.refreshCompleted();
+    }
+  }
+  void onItemDelete(int id) {
+    action(() { });
+  }
+}
+
+class CPPickerItem {
+  String id;
+  bool isVideo;
+  File file;
+  CPPickerItem(this.id, this.isVideo, this.file);
+  String get type => isVideo ? '2' : '1';
 }

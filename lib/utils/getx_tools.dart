@@ -487,15 +487,16 @@ class UserGenderCircle extends StatelessWidget {
   const UserGenderCircle({super.key, required this.size, required this.gender});
   @override
   Widget build(BuildContext context) {
+    final isNv = gender != 1;
     return Container(
       width: size,
       height: size,
       padding: EdgeInsets.all(size / 6.0),
       decoration: BoxDecoration(
-        color: gender == 0 ? MyColors.dtPink : MyColors.dtBlue,
+        color: isNv ? MyColors.dtPink : MyColors.dtBlue,
         borderRadius: BorderRadius.all(Radius.circular(size / 2.0)),
       ),
-      child: Image.asset(gender == 0 ? 'assets/images/nv.png' : 'assets/images/nan.png'),
+      child: Image.asset(isNv ? 'assets/images/nv.png' : 'assets/images/nan.png'),
     );
   }
 }
@@ -510,7 +511,10 @@ mixin GetBean {
     code = map['code'] ?? -1;
     msg = map['msg'] ?? '';
     if (callback != null) {
-      callback(map['data']);
+      final data = map['data'];
+      if (data != null) {
+        callback(map['data']);
+      }
     }
   }
 }
