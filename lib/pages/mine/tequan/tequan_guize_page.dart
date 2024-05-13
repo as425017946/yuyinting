@@ -63,7 +63,7 @@ class _TeQuanGuiZePageState extends State<TeQuanGuiZePage> {
                     fontWeight: FontWeight.w600)),
             WidgetUtils.commonSizedBox((10 * 1.25).w, 0),
             WidgetUtils.onlyTextGZ(
-                '贵族有效期:自获得贵族等级起算30天有效期，有效期内可享用贵族特权，可升级贵族身份，有效期结束将不可使用特权，并自动进行保级或降级。\n保级值:赠送经典、礼盒或贵族礼物(不包括背包礼物)可获得保级值,1金豆=1保级值，保级值用于贵族身份保级和降级的判断。',
+                '贵族有效期:\n自获得贵族等级起算30天有效期，有效期内可享用贵族特权，可升级贵族身份，有效期结束将不可使用特权，并自动进行保级或降级。\n保级值:\n成就新的贵族等级后，在有效期内赠送经典、礼盒或贵族礼物(不包括背包礼物)可获得保级值,\n1金豆=1保级值，保级值用于贵族身份保级和降级的判断。计算方式为保级值 = 当前贵族值 - 成就等级最低贵族值。',
                 StyleUtils.getCommonGZTextStyle(
                     color: Colors.black, fontSize: 26.sp, height: 1.5)),
             WidgetUtils.commonSizedBox((40 * 1.25).w, 0),

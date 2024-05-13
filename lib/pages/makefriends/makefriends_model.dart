@@ -8,14 +8,17 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../bean/activity_paper_index_bean.dart';
 import '../../bean/find_mate_bean.dart';
 import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
 import '../../utils/getx_tools.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../widget/SwiperPage.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
@@ -428,7 +431,25 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
     }
   }
   void onItemDelete(int id) {
-    action(() { });
+    action(() {
+      doPostDelPaper(id.toString());
+    });
+  }
+
+  /// 删除纸条
+  Future<void> doPostDelPaper(String id) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'id': id,
+    };
+    CommonBean bean = await DataUtils.postDelPaper(params);
+    switch (bean.code) {
+      case MyHttpConfig.successCode:
+        await postActivityPaperList(1, true);
+        break;
+      default:
+        MyToastUtils.showToastBottom(bean.msg!);
+        break;
+    }
   }
 }
 

@@ -186,13 +186,15 @@ class _MessagePageState extends State<MessagePage>
           children: [
             GestureDetector(
               onTap: (() {
-                // 点击头像进入个人主页
-                MyUtils.goTransparentRFPage(
-                    context,
-                    PeopleInfoPage(
-                      otherId: listMessage[i]['otherUid'],
-                      title: '其他',
-                    ));
+                if(MyUtils.checkClick()){
+                  // 点击头像进入个人主页
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      PeopleInfoPage(
+                        otherId: listMessage[i]['otherUid'],
+                        title: '其他',
+                      ));
+                }
               }),
               child: Stack(
                 alignment: Alignment.center,

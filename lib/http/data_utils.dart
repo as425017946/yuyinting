@@ -1814,4 +1814,12 @@ class DataUtils {
     print("抽取纸条记录 /activity/getPaperList $respons");
     return ActivityGetPaperListBean.fromJson(respons!);
   }
+
+  /// 删除纸条
+  static Future<CommonBean> postDelPaper(Map<String, dynamic> params) async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.delPaper, {}, params);
+    print("删除纸条 $respons");
+    return CommonBean.fromJson(respons!);
+  }
 }

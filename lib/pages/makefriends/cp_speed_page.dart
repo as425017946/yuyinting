@@ -10,11 +10,17 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../bean/activity_paper_index_bean.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
 import '../../utils/getx_tools.dart';
+import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../widget/SwiperPage.dart';
 import '../message/chat_page.dart';
+import '../message/geren/people_info_page.dart';
+import '../room/room_messages_more_page.dart';
 import '../trends/PagePreviewVideo.dart';
 import 'makefriends_model.dart';
 
@@ -25,7 +31,8 @@ class CPSpeedPage extends StatefulWidget {
   State<CPSpeedPage> createState() => _CPSpeedPageState();
 }
 
-class _CPSpeedPageState extends State<CPSpeedPage> with SingleTickerProviderStateMixin {
+class _CPSpeedPageState extends State<CPSpeedPage>
+    with SingleTickerProviderStateMixin {
   final MakefriendsController c = Get.find();
 
   @override
@@ -58,7 +65,8 @@ class _CPSpeedPageState extends State<CPSpeedPage> with SingleTickerProviderStat
           // _positioned(Rect.fromLTWH(135.w, 364.h - 35, 480.w, 495.h), img: 'cp_gift'),
           // _positioned(Rect.fromLTWH(155.w, 220.h - 35, 422.w, 73.h), img: 'cp_success'),
           _success(),
-          Obx(() => _positioned(Rect.fromLTWH(0, -35, 750.w, 1334.h), img: 'cp_svga', child: _svga())),
+          Obx(() => _positioned(Rect.fromLTWH(0, -35, 750.w, 1334.h),
+              img: 'cp_svga', child: _svga())),
           _btnMine(),
           Positioned(
             height: 407.h,
@@ -106,7 +114,8 @@ class _CPSpeedPageState extends State<CPSpeedPage> with SingleTickerProviderStat
             onTap: () => c.action(() {
               Get.dialog(_DialogHelp());
             }),
-            child: Image.asset('assets/images/cp_help.png', width: 30.w, height: 30.w),
+            child: Image.asset('assets/images/cp_help.png',
+                width: 30.w, height: 30.w),
           ),
         ],
       ),
@@ -123,16 +132,20 @@ class _CPSpeedPageState extends State<CPSpeedPage> with SingleTickerProviderStat
       child: Center(
         child: Text(
           c.cpNum,
-          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.white, shadows: [
-            Shadow(
-              color: Colors.yellow,
-              blurRadius: fontSize,
-            ),
-            Shadow(
-              color: Colors.yellow,
-              blurRadius: fontSize,
-            ),
-          ]),
+          style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  color: Colors.yellow,
+                  blurRadius: fontSize,
+                ),
+                Shadow(
+                  color: Colors.yellow,
+                  blurRadius: fontSize,
+                ),
+              ]),
         ),
       ),
     );
@@ -178,11 +191,13 @@ class _CPSpeedPageState extends State<CPSpeedPage> with SingleTickerProviderStat
           padding: EdgeInsets.only(top: 11.w, left: 6.w),
           decoration: BoxDecoration(
             color: Colors.white30,
-            borderRadius: BorderRadius.only(topLeft: radius, bottomLeft: radius),
+            borderRadius:
+                BorderRadius.only(topLeft: radius, bottomLeft: radius),
           ),
           child: Column(
             children: [
-              Image.asset('assets/images/cp_heart.png', width: 28.w, height: 24.w),
+              Image.asset('assets/images/cp_heart.png',
+                  width: 28.w, height: 24.w),
               SizedBox(height: 7.w),
               Text(
                 '我\n的\n纸\n条',
@@ -277,6 +292,32 @@ class _CPSpeedPageState extends State<CPSpeedPage> with SingleTickerProviderStat
       child: _Banner(),
     );
   }
+
+
+  /// 删除纸条
+  Future<void> doPostDelPaper(String id) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'id': id,
+    };
+    try {
+      CommonBean bean = await DataUtils.postDelPaper(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+    }
+  }
 }
 
 class _Banner extends StatelessWidget {
@@ -295,7 +336,9 @@ class _Banner extends StatelessWidget {
 // ignore: must_be_immutable
 class _Barrage extends StatelessWidget {
   final String myKey;
+
   _Barrage(this.myKey);
+
   final _isFirst = true.obs;
   final _items = [
     _BarrageType.empty().obs,
@@ -305,6 +348,7 @@ class _Barrage extends StatelessWidget {
   ];
   double _total = 0;
   double _width = 0;
+
   void _callBack(double total, double width) {
     _total = total;
     _width = width;
@@ -316,11 +360,13 @@ class _Barrage extends StatelessWidget {
     item(_BarrageType(index, t));
     await Future.delayed(const Duration(milliseconds: 500));
     final interval = t.toDouble() * (_width + 20.h) / (_width + _total);
-    await Future.delayed(Duration(milliseconds: interval.toInt() + 1000 + Random().nextInt(500)));
+    await Future.delayed(Duration(
+        milliseconds: interval.toInt() + 1000 + Random().nextInt(500)));
     _run((index + 1), (itemIndex + 1) % _items.length, time);
   }
 
   final _all = '清风晨曦诗意独步琴瑟浮生梦幻繁星烟雨飘渺落花流水蝴蝶倾城晨曦彼岸柔情倚楼漫步清风听风茉莉蓝天蒙蒙如梦忆梦西游无悔醉舞青春';
+
   String _getName() {
     if (Random().nextInt(3) == 1) {
       return '萌***';
@@ -355,7 +401,9 @@ class _Barrage extends StatelessWidget {
         height: 49.h,
         child: Stack(
           alignment: Alignment.centerLeft,
-          children: _items.map((element) => Obx(() => _item(element.value, _callBack))).toList(),
+          children: _items
+              .map((element) => Obx(() => _item(element.value, _callBack)))
+              .toList(),
         ),
       ),
     );
@@ -374,7 +422,9 @@ class _Barrage extends StatelessWidget {
 class _BarrageType {
   final int index;
   final int time;
+
   _BarrageType(this.index, this.time);
+
   factory _BarrageType.empty() {
     return _BarrageType(-1, 0);
   }
@@ -386,7 +436,13 @@ class _BarrageItem extends StatelessWidget {
   final String text;
   final int time;
   final void Function(double, double) callBack;
-  const _BarrageItem({required this.aniKey, required this.text, required this.time, required this.callBack});
+
+  const _BarrageItem(
+      {required this.aniKey,
+      required this.text,
+      required this.time,
+      required this.callBack});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, type) {
@@ -406,7 +462,8 @@ class _BarrageItem extends StatelessWidget {
   Widget _switcher(double total, Rx<double> width) {
     final key = Key(aniKey.toString());
     return Obx(() {
-      var tween = Tween<Offset>(begin: Offset.zero, end: Offset(-(total / width.value + 1), 0));
+      var tween = Tween<Offset>(
+          begin: Offset.zero, end: Offset(-(total / width.value + 1), 0));
       return Transform.translate(
         offset: Offset(total, 0),
         child: AnimatedSwitcher(
@@ -455,6 +512,7 @@ class _BarrageItem extends StatelessWidget {
 
 class _DialogReceive extends StatelessWidget with _DialogMixin, _ItemContent {
   ActivityGetPaperBeanData get model => c.getPaperItem;
+
   @override
   Widget build(BuildContext context) {
     final isShort = model.img_url.isEmpty;
@@ -485,7 +543,11 @@ class _DialogReceive extends StatelessWidget with _DialogMixin, _ItemContent {
               maxLines: 2,
             ),
           ),
-          if (!isShort) Expanded(child: Align(alignment: Alignment.bottomLeft, child: itemContent(model))),
+          if (!isShort)
+            Expanded(
+                child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: itemContent(model))),
         ],
       ),
     );
@@ -540,6 +602,7 @@ class _DialogReceive extends StatelessWidget with _DialogMixin, _ItemContent {
 
 class _DialogSend extends StatelessWidget with _DialogMixin {
   final MakefriendsController c = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return content(
@@ -572,7 +635,8 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
   }
 
   Widget _textField() {
-    const border = OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent));
+    const border =
+        OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent));
     return Container(
       width: double.infinity,
       height: 180.w,
@@ -673,7 +737,8 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
             if (pickerItem.isVideo)
               GestureDetector(
                 onTap: () => c.action(() {
-                  Get.to(PagePreviewVideo(url: pickerItem.file.path), opaque: false);
+                  Get.to(PagePreviewVideo(url: pickerItem.file.path),
+                      opaque: false);
                 }),
                 child: Icon(
                   Icons.play_circle_fill_outlined,
@@ -713,7 +778,12 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
 }
 
 mixin _DialogMixin {
-  Widget content({required double height, required String bg, required String btn, void Function()? action, required Widget child}) {
+  Widget content(
+      {required double height,
+      required String bg,
+      required String btn,
+      void Function()? action,
+      required Widget child}) {
     return Center(
       child: Container(
         width: 620.w,
@@ -783,18 +853,20 @@ class _DialogHelp extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(30.w),
         ),
-        child: Column(
-          children: [
-            _nav(),
-            SizedBox(height: 20.w),
-            Text(
-              _text,
-              style: TextStyle(
-                fontSize: 17.sp,
-                height: 1.6,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _nav(),
+              SizedBox(height: 20.w),
+              Text(
+                _text,
+                style: TextStyle(
+                  fontSize: 26.sp,
+                  height: 1.6,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -815,7 +887,8 @@ class _DialogHelp extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () => Get.back(),
-          child: Image.asset('assets/images/cp_close.png', width: 27.w, height: 27.w),
+          child: Image.asset('assets/images/cp_close.png',
+              width: 27.w, height: 27.w),
         ),
       ],
     );
@@ -859,7 +932,8 @@ class _BottomSheet extends StatelessWidget {
   }
 }
 
-class _BottomSheetItem0 extends StatelessWidget with _BottomSheetPositionedMixin {
+class _BottomSheetItem0 extends StatelessWidget
+    with _BottomSheetPositionedMixin {
   @override
   Widget build(BuildContext context) {
     final MakefriendsController c = Get.find();
@@ -867,8 +941,10 @@ class _BottomSheetItem0 extends StatelessWidget with _BottomSheetPositionedMixin
       alignment: Alignment.center,
       clipBehavior: Clip.none,
       children: [
-        positioned('cp_btn_shoudao_1', Rect.fromLTWH(42.w, -31.w, 335.w, 154.w)),
-        positioned('cp_btn_fangru_0', Rect.fromLTWH(449.w, 21.w, 196.w, 29.w), () => c.setCpSelect(1)),
+        positioned(
+            'cp_btn_shoudao_1', Rect.fromLTWH(42.w, -31.w, 335.w, 154.w)),
+        positioned('cp_btn_fangru_0', Rect.fromLTWH(449.w, 21.w, 196.w, 29.w),
+            () => c.setCpSelect(1)),
         Positioned(
           top: 123.w,
           left: 0,
@@ -881,7 +957,8 @@ class _BottomSheetItem0 extends StatelessWidget with _BottomSheetPositionedMixin
   }
 }
 
-class _BottomSheetItem1 extends StatelessWidget with _BottomSheetPositionedMixin {
+class _BottomSheetItem1 extends StatelessWidget
+    with _BottomSheetPositionedMixin {
   @override
   Widget build(BuildContext context) {
     final MakefriendsController c = Get.find();
@@ -889,8 +966,10 @@ class _BottomSheetItem1 extends StatelessWidget with _BottomSheetPositionedMixin
       alignment: Alignment.center,
       clipBehavior: Clip.none,
       children: [
-        positioned('cp_btn_fangru_1', Rect.fromLTWH(377.w, -31.w, 335.w, 154.w)),
-        positioned('cp_btn_shoudao_0', Rect.fromLTWH(114.w, 21.w, 196.w, 29.w), () => c.setCpSelect(0)),
+        positioned(
+            'cp_btn_fangru_1', Rect.fromLTWH(377.w, -31.w, 335.w, 154.w)),
+        positioned('cp_btn_shoudao_0', Rect.fromLTWH(114.w, 21.w, 196.w, 29.w),
+            () => c.setCpSelect(0)),
         Positioned(
           top: 123.w,
           left: 0,
@@ -920,7 +999,9 @@ mixin _BottomSheetPositionedMixin {
 
 class _BottomSheetList extends StatelessWidget with _ItemContent {
   final int type;
+
   _BottomSheetList(this.type);
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -938,7 +1019,8 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
             onRefresh: () => c.onRefresh(type),
             child: length > 0
                 ? ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 41.w),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.w, horizontal: 41.w),
                     itemBuilder: _builder,
                     itemCount: length,
                   )
@@ -987,7 +1069,7 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (type == 0) _head(item),
+          if (type == 0) _head(item,context),
           Padding(
             padding: EdgeInsets.only(top: 18.w),
             child: Text(
@@ -1020,12 +1102,12 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
                   GestureDetector(
                     onTap: () => c.onItemDelete(item.id),
                     child: Text(
-                    '删除',
-                    style: TextStyle(
-                      color: const Color(0xFFFF6666),
-                      fontSize: 20.sp,
+                      '删除',
+                      style: TextStyle(
+                        color: const Color(0xFFFF6666),
+                        fontSize: 20.sp,
+                      ),
                     ),
-                  ),
                   ),
               ],
             ),
@@ -1035,10 +1117,22 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
     );
   }
 
-  Widget _head(ActivityGetPaperBeanData item) {
+  Widget _head(ActivityGetPaperBeanData item, BuildContext context) {
     return Row(
       children: [
-        UserFrameHead(size: 80.w, avatar: item.avatar),
+        GestureDetector(
+            onTap: (() {
+              if(MyUtils.checkClick()){
+                // 点击头像进入个人主页
+                MyUtils.goTransparentRFPage(
+                    context,
+                    PeopleInfoPage(
+                      otherId: item.uid.toString(),
+                      title: '其他',
+                    ));
+              }
+            }),
+            child: UserFrameHead(size: 80.w, avatar: item.avatar)),
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 13.w),
@@ -1080,6 +1174,15 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
           ),
         ),
         GestureDetector(
+          onTap: (() {
+            if (MyUtils.checkClick()) {
+              Get.off(ChatPage(
+                nickName: item.nickname,
+                otherUid: item.uid.toString(),
+                otherImg: item.avatar,
+              ));
+            }
+          }),
           child: Container(
             width: 120.w,
             height: 54.w,
@@ -1104,6 +1207,7 @@ class _BottomSheetList extends StatelessWidget with _ItemContent {
 
 mixin _ItemContent {
   final MakefriendsController c = Get.find();
+
   Widget itemContent(ActivityGetPaperBeanData model) {
     return Container(
       width: 180.w,
@@ -1117,9 +1221,10 @@ mixin _ItemContent {
       child: model.type == 2 ? _showVideo(model) : _showImag(model),
     );
   }
-  
+
   Widget _showVideo(ActivityGetPaperBeanData model) {
-    final videoController = VideoPlayerController.networkUrl(Uri.parse(model.img_url));
+    final videoController =
+        VideoPlayerController.networkUrl(Uri.parse(model.img_url));
     videoController.initialize();
     return Stack(
       alignment: Alignment.center,
@@ -1144,7 +1249,7 @@ mixin _ItemContent {
         )
       ],
     );
-    }
+  }
 
   ///显示图片
   Widget _showImag(ActivityGetPaperBeanData model) {

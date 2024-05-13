@@ -381,6 +381,7 @@ class MyHttpConfig{
   static  String rankListGZ = "$baseURL/noble/rankList";
   // 设置隐身
   static  String setStealth = "$baseURL/mine/setStealth";
-
+  // 删除纸条
+  static  String delPaper = "$baseURL/activity/delPaper";
 
 }
