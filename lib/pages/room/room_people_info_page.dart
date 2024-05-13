@@ -949,6 +949,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
       }
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      LogE('错误信息   ${e.toString()}');
     }
   }
 

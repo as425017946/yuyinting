@@ -32,7 +32,7 @@ class Data {
   String? city;
   int? level;
   int? birthday;
-  String? age;
+  int? age;
   int? isHi;
   String? followStatus;
   String? avatarFrameImg;

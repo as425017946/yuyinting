@@ -313,14 +313,14 @@ class _BigClientPageTop extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                   ),
                   children: [
-                    const TextSpan(text: '获得下一级财富徽章还需 '),
+                    const TextSpan(text: '距获得更高称号勋章还需 '),
                     TextSpan(
                       text: c.data.next_title_value,
                       style: const TextStyle(
                         color: Color(0xFFFFDD61),
                       ),
                     ),
-                    const TextSpan(text: ' 财富值\n当前等级可领取 '),
+                    const TextSpan(text: ' 财富值\n当前数字等级可领取 '),
                     TextSpan(
                       text: '${c.data.day_salary}',
                       style: const TextStyle(

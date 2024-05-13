@@ -94,11 +94,11 @@ class XCMineController extends GetxController with GetAntiCombo {
               sp.setString('user_identity', identity.value);
             }
             // 等级变了
-            if (bean.data!.level! >= 3) {
+            if (bean.data!.level! >= 4) {
               eventBus.fire(SubmitButtonBack(title: '等级大于3级'));
             }
             // 等级变了
-            if (bean.data!.grLevel! >= 3) {
+            if (bean.data!.grLevel! >= 4) {
               eventBus.fire(SubmitButtonBack(title: '财富等级大于3级'));
             }
             if (data.avatarFrameGifImg == null || data.avatarFrameGifImg!.isEmpty) {
