@@ -1,15 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../../bean/tgMyShareBean.dart';
-import '../../../bean/tgmBean.dart';
-import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
@@ -38,68 +33,6 @@ class _ShareTuiguangPageState extends State<ShareTuiguangPage> {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   appBar: appBar,
-    //   backgroundColor: MyColors.homeBG,
-    //   body: Column(
-    //     children: [
-    //       WidgetUtils.commonSizedBox(20, 20),
-    //       Container(
-    //         height: 650.h,
-    //         width: double.infinity,
-    //         margin: EdgeInsets.all(20.h),
-    //         child: WidgetUtils.CircleImageNet(
-    //             650.h,
-    //             double.infinity,
-    //             ScreenUtil().setHeight(20),
-    //             imgUrl),
-    //       ),
-    //       WidgetUtils.commonSizedBox(20, 20),
-    //       /// 保存按钮
-    //       Container(
-    //         margin: const EdgeInsets.only(left: 20, right: 20),
-    //         child: Row(
-    //           children: [
-    //             GestureDetector(
-    //               onTap: (() {
-    // if(MyUtils.checkClick()) {
-    //   MyUtils.saveNetworkImageToGallery(imgUrl);
-    // }
-    //               }),
-    //               child: WidgetUtils.myContainer(
-    //                   ScreenUtil().setHeight(70),
-    //                   ScreenUtil().setHeight(200),
-    //                   MyColors.dailiShare,
-    //                   MyColors.dailiShare,
-    //                   '保存图片',
-    //                   ScreenUtil().setSp(33),
-    //                   Colors.black),
-    //             ),
-    //             WidgetUtils.commonSizedBox(0, 20),
-    //             Expanded(
-    //               child: GestureDetector(
-    //                 onTap: (() {
-    //                   Clipboard.setData(ClipboardData(
-    //                     text: address,
-    //                   ));
-    //                   MyToastUtils.showToastBottom('已成功复制到剪切板');
-    //                 }),
-    //                 child: WidgetUtils.myContainer(
-    //                     ScreenUtil().setHeight(70),
-    //                     double.infinity,
-    //                     MyColors.homeTopBG,
-    //                     MyColors.homeTopBG,
-    //                     '复制推广网址',
-    //                     ScreenUtil().setSp(33),
-    //                     Colors.white),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
     return Scaffold(
       appBar: appBar,
       body: Stack(
@@ -147,7 +80,7 @@ class _ShareTuiguangPageState extends State<ShareTuiguangPage> {
                   ],
                 ),
               ),
-              WidgetUtils.commonSizedBox(70.h, 0),
+              WidgetUtils.commonSizedBox(120.h, 0),
               Container(
                 width: double.infinity.h,
                 color: Colors.transparent,
@@ -186,7 +119,7 @@ class _ShareTuiguangPageState extends State<ShareTuiguangPage> {
                   ],
                 ),
               ),
-              WidgetUtils.commonSizedBox(30.h, 0),
+              WidgetUtils.commonSizedBox(50.h, 0),
             ],
           )
         ],

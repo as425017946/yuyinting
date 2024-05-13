@@ -670,19 +670,13 @@ class _DouPayPageState extends State<DouPayPage> {
       orderPayBean bean = await DataUtils.postOrderCreate(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          // ignore: use_build_context_synchronously
-          MyUtils.goTransparentPage(
-              context,
-              PayTSWZPage(
-                payUrl: bean.data!.payUrl!,
-              ));
           // // // ignore: use_build_context_synchronously
           // // MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
-          // if (bean.data!.payUrl!.isNotEmpty) {
-          //   await launch(bean.data!.payUrl!, forceSafariVC: false);
-          // } else {
-          //   throw 'Could not launch $bean.data!.payUrl!';
-          // }
+          if (bean.data!.payUrl!.isNotEmpty) {
+            await launch(bean.data!.payUrl!);
+          } else {
+            throw 'Could not launch $bean.data!.payUrl!';
+          }
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
