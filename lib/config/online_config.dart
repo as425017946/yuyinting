@@ -36,7 +36,7 @@ class OnlineConfig {
         // return "http://${sp.getString('isDian').toString()}:8081/api";
       case OnlineConfigType.online:
         //正式环境
-        return "http://119.45.100.48:8080/api";
+        return "http://43.143.252.226:8080/api";
 
       // 正式环境
       // return "http://www.aa986.com:8080/api";
