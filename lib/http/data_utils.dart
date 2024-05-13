@@ -7,6 +7,7 @@ import '../bean/CommonMyIntBean.dart';
 import '../bean/DTListBean.dart';
 import '../bean/DTMoreBean.dart';
 import '../bean/DTTuiJianListBean.dart';
+import '../bean/activity_paper_index_bean.dart';
 import '../bean/addressIPBean.dart';
 import '../bean/allGiftBean.dart';
 import '../bean/balanceBean.dart';
@@ -101,6 +102,7 @@ import '../bean/zhuboLiuShuiBean.dart';
 import '../bean/zonglanBean.dart';
 import '../main.dart';
 import '../utils/event_utils.dart';
+import '../utils/getx_tools.dart';
 import 'my_http_config.dart';
 import 'my_http_request.dart';
 
@@ -1765,5 +1767,51 @@ class DataUtils {
     await MyHttpRequest.post(MyHttpConfig.setStealth, {}, params);
     print("设置隐身：$respons");
     return CommonBean.fromJson(respons!);
+  }
+
+  ///告白纸条首页
+  static Future<ActivityPaperIndexBean> postActivityPaperIndex() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/paperIndex', {}, {});
+    print("告白纸条首页 /activity/paperIndex $respons");
+    return ActivityPaperIndexBean.fromJson(respons!);
+  }
+  ///放入纸条
+  static Future<GetBean> postActivityPutPaper(String content, String id, String type) async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/putPaper', {}, {
+      'content' : content,
+      'img_id' : id,
+      'type' : type,
+    });
+    print("放入纸条 /activity/putPaper $respons");
+    return GetXBean.fromJson(respons!);
+  }
+  ///放入纸条记录
+  static Future<ActivityPutPaperListBean> postActivityPutPaperList(int page, [int pageSize = 10]) async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/putPaperList', {}, {
+      'page' : page,
+      'pageSize' : pageSize,
+    });
+    print("放入纸条记录 /activity/putPaperList $respons");
+    return ActivityPutPaperListBean.fromJson(respons!);
+  }
+  ///抽取纸条
+  static Future<ActivityGetPaperBean> postActivityGetPaper() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/getPaper', {}, {});
+    print("抽取纸条 /activity/getPaper $respons");
+    return ActivityGetPaperBean.fromJson(respons!);
+  }
+  ///抽取纸条记录
+  static Future<ActivityGetPaperListBean> postActivityGetPaperList(int page, [int pageSize = 10]) async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/getPaperList', {}, {
+      'page' : page,
+      'pageSize' : pageSize,
+    });
+    print("抽取纸条记录 /activity/getPaperList $respons");
+    return ActivityGetPaperListBean.fromJson(respons!);
   }
 }

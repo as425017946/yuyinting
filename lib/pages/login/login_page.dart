@@ -427,7 +427,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                 WidgetUtils.commonSizedBox(0, 20),
                 Expanded(
                   child: Container(
-                    height: ScreenUtil().setHeight(60),
+                    // height: ScreenUtil().setHeight(60),
+                    height: double.infinity,
                     width: double.infinity,
                     alignment: Alignment.center,
                     child: TextField(

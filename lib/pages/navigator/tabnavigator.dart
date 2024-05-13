@@ -784,7 +784,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       onWillPop: () async {
         if (!_visible) {
           final MakefriendsController c = Get.find();
-          c.select = 0;
+          if (c.canTap && !Loading.isShow) {
+            c.select = 0;
+          }
           return false;
         }
         if (lastPopTime == null ||

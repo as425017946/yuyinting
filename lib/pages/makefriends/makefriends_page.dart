@@ -30,7 +30,7 @@ class _DatingPageState extends State<DatingPage> {
       final MakefriendsController c = Get.find();
       switch (c.select) {
         case 1:
-          return CPSpeedPage();
+          return const CPSpeedPage();
         default:
           return MakefriendsPage();
       }

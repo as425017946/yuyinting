@@ -1,18 +1,44 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:video_player/video_player.dart';
 
-import '../../main.dart';
+import '../../bean/activity_paper_index_bean.dart';
 import '../../utils/getx_tools.dart';
+import '../../utils/my_utils.dart';
+import '../../widget/SwiperPage.dart';
+import '../message/chat_page.dart';
+import '../trends/PagePreviewVideo.dart';
 import 'makefriends_model.dart';
 
-class CPSpeedPage extends StatelessWidget {
+class CPSpeedPage extends StatefulWidget {
+  const CPSpeedPage({Key? key}) : super(key: key);
+
+  @override
+  State<CPSpeedPage> createState() => _CPSpeedPageState();
+}
+
+class _CPSpeedPageState extends State<CPSpeedPage> with SingleTickerProviderStateMixin {
   final MakefriendsController c = Get.find();
-  CPSpeedPage({super.key});
+
+  @override
+  void initState() {
+    c.animationController = SVGAAnimationController(vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    c.animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +55,10 @@ class CPSpeedPage extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       child: Stack(
         children: [
-          _positioned(Rect.fromLTWH(135.w, 364.h - 35, 480.w, 495.h), img: 'cp_gift.png'),
-          _positioned(Rect.fromLTWH(155.w, 220.h - 35, 422.w, 73.h), img: 'cp_success.png'),
+          // _positioned(Rect.fromLTWH(135.w, 364.h - 35, 480.w, 495.h), img: 'cp_gift'),
+          // _positioned(Rect.fromLTWH(155.w, 220.h - 35, 422.w, 73.h), img: 'cp_success'),
+          _success(),
+          Obx(() => _positioned(Rect.fromLTWH(0, -35, 750.w, 1334.h), img: 'cp_svga', child: _svga())),
           _btnMine(),
           Positioned(
             height: 407.h,
@@ -85,6 +113,38 @@ class CPSpeedPage extends StatelessWidget {
     );
   }
 
+  Widget _success() {
+    final fontSize = 36.h;
+    return Positioned(
+      left: 0,
+      right: 0,
+      top: 220.h - 35,
+      height: 73.h,
+      child: Center(
+        child: Text(
+          c.cpNum,
+          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.white, shadows: [
+            Shadow(
+              color: Colors.yellow,
+              blurRadius: fontSize,
+            ),
+            Shadow(
+              color: Colors.yellow,
+              blurRadius: fontSize,
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget? _svga() {
+    if (c.isSvga) {
+      return SVGAImage(c.animationController);
+    }
+    return null;
+  }
+
   Widget _positioned(Rect rect, {Widget? child, String img = ''}) {
     return Positioned(
       left: rect.left,
@@ -92,7 +152,7 @@ class CPSpeedPage extends StatelessWidget {
       width: rect.width,
       height: rect.height,
       child: child == null
-          ? Image.asset("assets/images/$img", fit: BoxFit.contain)
+          ? Image.asset("assets/images/$img.png", fit: BoxFit.contain)
           : FittedBox(
               fit: BoxFit.contain,
               child: child,
@@ -108,7 +168,8 @@ class CPSpeedPage extends StatelessWidget {
       width: 44.w,
       height: 156.w,
       child: GestureDetector(
-        onTap: () => c.action(() {
+        onTap: () => c.action(() async {
+          await c.onMine();
           Get.bottomSheet(_BottomSheet());
         }),
         child: Container(
@@ -149,6 +210,7 @@ class CPSpeedPage extends StatelessWidget {
       ],
     );
   }
+
   Widget _price() {
     return SizedBox(
       width: 224.w,
@@ -162,11 +224,13 @@ class CPSpeedPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
           ),
           alignment: Alignment.center,
-          child: const Text(
-            '50金豆/次',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 28,
+          child: Obx(
+            () => Text(
+              c.getNum,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+              ),
             ),
           ),
         ),
@@ -179,23 +243,31 @@ class CPSpeedPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () => c.action(() {
-            Get.dialog(_DialogReceive());
+          onTap: () => c.action(() async {
+            if (await c.runOpen()) Get.dialog(_DialogReceive());
           }),
           child: _btn('cp_btn_chouqu.png'),
         ),
         SizedBox(width: 37.w),
         GestureDetector(
-          onTap: () => c.action(() {
-            Get.dialog(_DialogSend());
+          onTap: () => c.action(() async {
+            if (await Get.dialog(_DialogSend())) {
+              c.runSend();
+            }
           }),
           child: _btn('cp_btn_fangru.png'),
         ),
       ],
     );
   }
+
   Widget _btn(String img) {
-    return Image.asset('assets/images/$img', width: 280.w, height: 82.h, fit: BoxFit.contain,);
+    return Image.asset(
+      'assets/images/$img',
+      width: 280.w,
+      height: 82.h,
+      fit: BoxFit.contain,
+    );
   }
 
   Widget _banner() {
@@ -237,6 +309,7 @@ class _Barrage extends StatelessWidget {
     _total = total;
     _width = width;
   }
+
   void _run(int index, int itemIndex, int time) async {
     final item = _items[itemIndex];
     int t = 7000 + Random().nextInt(3000);
@@ -244,8 +317,9 @@ class _Barrage extends StatelessWidget {
     await Future.delayed(const Duration(milliseconds: 500));
     final interval = t.toDouble() * (_width + 20.h) / (_width + _total);
     await Future.delayed(Duration(milliseconds: interval.toInt() + 1000 + Random().nextInt(500)));
-    _run((index + 1), (itemIndex  + 1)%_items.length, time);
+    _run((index + 1), (itemIndex + 1) % _items.length, time);
   }
+
   final _all = '清风晨曦诗意独步琴瑟浮生梦幻繁星烟雨飘渺落花流水蝴蝶倾城晨曦彼岸柔情倚楼漫步清风听风茉莉蓝天蒙蒙如梦忆梦西游无悔醉舞青春';
   String _getName() {
     if (Random().nextInt(3) == 1) {
@@ -255,6 +329,7 @@ class _Barrage extends StatelessWidget {
     final name = _all.substring(start, start + 1);
     return '$name***';
   }
+
   String _text() {
     final String sex;
     if (Random().nextInt(3) == 1) {
@@ -264,7 +339,7 @@ class _Barrage extends StatelessWidget {
     }
     return '${_getName()}  抽到了  纸条$sex友  ${_getName()}';
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final MakefriendsController c = Get.find();
@@ -280,13 +355,12 @@ class _Barrage extends StatelessWidget {
         height: 49.h,
         child: Stack(
           alignment: Alignment.centerLeft,
-          children: _items
-              .map((element) => Obx(() => _item(element.value, _callBack)))
-              .toList(),
+          children: _items.map((element) => Obx(() => _item(element.value, _callBack))).toList(),
         ),
       ),
     );
   }
+
   Widget _item(_BarrageType type, void Function(double, double) callBack) {
     return _BarrageItem(
       aniKey: type.index,
@@ -296,6 +370,7 @@ class _Barrage extends StatelessWidget {
     );
   }
 }
+
 class _BarrageType {
   final int index;
   final int time;
@@ -327,25 +402,26 @@ class _BarrageItem extends StatelessWidget {
       );
     });
   }
+
   Widget _switcher(double total, Rx<double> width) {
     final key = Key(aniKey.toString());
     return Obx(() {
-      var tween = Tween<Offset>(begin: Offset.zero, end: Offset(-(total/width.value + 1), 0));
+      var tween = Tween<Offset>(begin: Offset.zero, end: Offset(-(total / width.value + 1), 0));
       return Transform.translate(
         offset: Offset(total, 0),
         child: AnimatedSwitcher(
-        duration: Duration(milliseconds: time),
-        transitionBuilder: (child, animation) {
-          if (child.key != key || aniKey < 0) {
-            return const SizedBox();
-          }
-          return SlideTransition(
-            position: tween.animate(animation),
-            child: child,
-          );
-        },
-        child: _item(key),
-      ),
+          duration: Duration(milliseconds: time),
+          transitionBuilder: (child, animation) {
+            if (child.key != key || aniKey < 0) {
+              return const SizedBox();
+            }
+            return SlideTransition(
+              position: tween.animate(animation),
+              child: child,
+            );
+          },
+          child: _item(key),
+        ),
       );
     });
   }
@@ -377,13 +453,22 @@ class _BarrageItem extends StatelessWidget {
   }
 }
 
-class _DialogReceive extends StatelessWidget with _DialogMixin {
+class _DialogReceive extends StatelessWidget with _DialogMixin, _ItemContent {
+  ActivityGetPaperBeanData get model => c.getPaperItem;
   @override
   Widget build(BuildContext context) {
+    final isShort = model.img_url.isEmpty;
     return content(
-      height: 620.w,
-      bg: 'cp_choudao',
+      height: isShort ? 620.w : 804.w,
+      bg: isShort ? 'cp_choudao' : 'cp_choudao2',
       btn: '立即私聊',
+      action: () => c.action(() async {
+        Get.off(ChatPage(
+          nickName: model.nickname,
+          otherUid: model.uid.toString(),
+          otherImg: model.avatar,
+        ));
+      }),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -392,13 +477,15 @@ class _DialogReceive extends StatelessWidget with _DialogMixin {
           Padding(
             padding: EdgeInsets.only(top: 55.w),
             child: Text(
-              '家人们啊....快来找我玩啊',
+              model.content,
               style: TextStyle(
                 color: const Color(0xFF212121),
                 fontSize: 30.sp,
               ),
+              maxLines: 2,
             ),
           ),
+          if (!isShort) Expanded(child: Align(alignment: Alignment.bottomLeft, child: itemContent(model))),
         ],
       ),
     );
@@ -407,14 +494,14 @@ class _DialogReceive extends StatelessWidget with _DialogMixin {
   Widget _head() {
     return Row(
       children: [
-        UserFrameHead(size: 120.w, avatar: sp.getString('user_headimg').toString()),
+        UserFrameHead(size: 120.w, avatar: model.avatar),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '小美',
+                model.nickname,
                 style: TextStyle(
                   color: const Color(0xFF212121),
                   fontSize: 30.sp,
@@ -423,7 +510,7 @@ class _DialogReceive extends StatelessWidget with _DialogMixin {
               SizedBox(height: 16.w),
               Row(
                 children: [
-                  UserGenderCircle(size: 24.w, gender: 0),
+                  UserGenderCircle(size: 24.w, gender: model.gender),
                   Container(
                     width: 59.w,
                     height: 26.w,
@@ -434,7 +521,7 @@ class _DialogReceive extends StatelessWidget with _DialogMixin {
                       borderRadius: BorderRadius.circular(13.w),
                     ),
                     child: Text(
-                      '22岁',
+                      '${model.age}岁',
                       style: TextStyle(
                         color: const Color(0xFFFF1313),
                         fontSize: 18.sp,
@@ -452,13 +539,18 @@ class _DialogReceive extends StatelessWidget with _DialogMixin {
 }
 
 class _DialogSend extends StatelessWidget with _DialogMixin {
-  final TextEditingController controller = TextEditingController();
+  final MakefriendsController c = Get.find();
   @override
   Widget build(BuildContext context) {
     return content(
       height: 652.w,
       bg: 'cp_fangru',
       btn: '确认放入',
+      action: () => c.action(() async {
+        if (await c.postActivityPutPaper()) {
+          Get.back(result: true);
+        }
+      }),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -478,7 +570,7 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
       ),
     );
   }
-  
+
   Widget _textField() {
     const border = OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent));
     return Container(
@@ -490,7 +582,7 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
         borderRadius: BorderRadius.circular(20.w),
       ),
       child: TextField(
-        controller: controller,
+        controller: c.textController,
         maxLength: 30,
         maxLines: 8,
         style: TextStyle(color: const Color(0xFF666666), fontSize: 30.sp),
@@ -512,12 +604,110 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
     return Container(
       width: 120.w,
       height: 120.w,
-      padding: EdgeInsets.all(37.w),
       decoration: BoxDecoration(
         color: const Color(0xFFE7E7E7),
         borderRadius: BorderRadius.circular(20.w),
       ),
-      child: Image.asset('assets/images/cp_add.png'),
+      clipBehavior: Clip.hardEdge,
+      child: Obx(() {
+        final pickerItem = c.pickerItem;
+        if (pickerItem == null) {
+          return GestureDetector(
+            onTap: () => c.action(() {
+              Get.bottomSheet(GetPickSheet(list: [
+                GetPickSheetItem(
+                  title: '拍照',
+                  action: () => c.action(() {
+                    Get.back();
+                    c.picker.onTapPickFromCamera((id, file) {
+                      c.pick(id, file, false);
+                    });
+                  }),
+                ),
+                GetPickSheetItem(
+                  title: '相册',
+                  action: () => c.action(() {
+                    Get.back();
+                    c.picker.onTapPickFromGallery(1, (ids, files) {
+                      if (ids.isEmpty || files.isEmpty) return;
+                      c.pick(ids.first, files.first, false);
+                    });
+                  }),
+                ),
+                GetPickSheetItem(
+                  title: '视频',
+                  action: () => c.action(() {
+                    Get.back();
+                    c.picker.onTapVideoFromGallery((id, file) {
+                      c.pick(id, file, true);
+                    });
+                  }),
+                ),
+              ]));
+            }),
+            child: Container(
+              width: 120.w,
+              height: 120.w,
+              padding: EdgeInsets.all(37.w),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE7E7E7),
+                borderRadius: BorderRadius.circular(20.w),
+              ),
+              child: Image.asset('assets/images/cp_add.png'),
+            ),
+          );
+        }
+        final videoController = c.videoController?..initialize();
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            if (videoController != null)
+              SizedBox(
+                width: 120.w,
+                height: 120.w,
+                child: AspectRatio(
+                  aspectRatio: videoController.value.aspectRatio,
+                  child: VideoPlayer(videoController),
+                ),
+              ),
+            if (pickerItem.isVideo)
+              GestureDetector(
+                onTap: () => c.action(() {
+                  Get.to(PagePreviewVideo(url: pickerItem.file.path), opaque: false);
+                }),
+                child: Icon(
+                  Icons.play_circle_fill_outlined,
+                  color: Colors.white,
+                  size: 50.w,
+                ),
+              )
+            else
+              Image.file(
+                pickerItem.file,
+                width: 120.w,
+                height: 120.w,
+                fit: BoxFit.cover,
+              ),
+            Positioned(
+              right: 3.w,
+              top: 3.w,
+              child: GestureDetector(
+                onTap: c.pickClear,
+                child: ClipOval(
+                  child: Container(
+                    color: Colors.white.withOpacity(0.7),
+                    padding: EdgeInsets.all(5.w),
+                    child: Icon(
+                      Icons.close,
+                      size: 20.w,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 }
@@ -560,10 +750,7 @@ mixin _DialogMixin {
                 ),
                 child: Text(
                   btn,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30.sp
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 30.sp),
                 ),
               ),
             ),
@@ -654,25 +841,25 @@ class _BottomSheet extends StatelessWidget {
     final radius = Radius.circular(30.w);
     final MakefriendsController c = Get.find();
     return Container(
-        width: double.infinity,
-        height: 854.h,
-        decoration: BoxDecoration(
-          color: const Color(0xFFFAFAFA),
-          borderRadius: BorderRadius.only(topLeft: radius, topRight: radius),
-        ),
-        child: Obx(() {
-          switch (c.cpSelect) {
-            case 1:
-              return _BottomSheetItem1();
-            default:
-              return _BottomSheetItem0();
-          }
-        }),
-      );
+      width: double.infinity,
+      height: 854.h,
+      decoration: BoxDecoration(
+        color: const Color(0xFFFAFAFA),
+        borderRadius: BorderRadius.only(topLeft: radius, topRight: radius),
+      ),
+      child: Obx(() {
+        switch (c.cpSelect) {
+          case 1:
+            return _BottomSheetItem1();
+          default:
+            return _BottomSheetItem0();
+        }
+      }),
+    );
   }
 }
 
-class _BottomSheetItem0 extends StatelessWidget with _BottomSheetItemMixin {
+class _BottomSheetItem0 extends StatelessWidget with _BottomSheetPositionedMixin {
   @override
   Widget build(BuildContext context) {
     final MakefriendsController c = Get.find();
@@ -681,14 +868,20 @@ class _BottomSheetItem0 extends StatelessWidget with _BottomSheetItemMixin {
       clipBehavior: Clip.none,
       children: [
         positioned('cp_btn_shoudao_1', Rect.fromLTWH(42.w, -31.w, 335.w, 154.w)),
-        positioned('cp_btn_fangru_0', Rect.fromLTWH(449.w, 21.w, 196.w, 29.w), () => c.cpSelect = 1),
-        content(0, ['', '']),
+        positioned('cp_btn_fangru_0', Rect.fromLTWH(449.w, 21.w, 196.w, 29.w), () => c.setCpSelect(1)),
+        Positioned(
+          top: 123.w,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: _BottomSheetList(0),
+        ),
       ],
     );
   }
 }
 
-class _BottomSheetItem1 extends StatelessWidget with _BottomSheetItemMixin {
+class _BottomSheetItem1 extends StatelessWidget with _BottomSheetPositionedMixin {
   @override
   Widget build(BuildContext context) {
     final MakefriendsController c = Get.find();
@@ -697,14 +890,20 @@ class _BottomSheetItem1 extends StatelessWidget with _BottomSheetItemMixin {
       clipBehavior: Clip.none,
       children: [
         positioned('cp_btn_fangru_1', Rect.fromLTWH(377.w, -31.w, 335.w, 154.w)),
-        positioned('cp_btn_shoudao_0', Rect.fromLTWH(114.w, 21.w, 196.w, 29.w), () => c.cpSelect = 0),
-        content(1, []),
+        positioned('cp_btn_shoudao_0', Rect.fromLTWH(114.w, 21.w, 196.w, 29.w), () => c.setCpSelect(0)),
+        Positioned(
+          top: 123.w,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: _BottomSheetList(1),
+        ),
       ],
     );
   }
 }
 
-mixin _BottomSheetItemMixin {
+mixin _BottomSheetPositionedMixin {
   Widget positioned(String img, Rect rect, [void Function()? action]) {
     return Positioned(
       left: rect.left,
@@ -717,26 +916,39 @@ mixin _BottomSheetItemMixin {
       ),
     );
   }
-  Widget content(int type, List<String> list) {
-    return Positioned(
-      top: 123.w,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Stack(
+}
+
+class _BottomSheetList extends StatelessWidget with _ItemContent {
+  final int type;
+  _BottomSheetList(this.type);
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final length = c.getLength(type);
+      return Stack(
         children: [
-          if (list.isEmpty)
-            _null()
-          else
-            ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 41.w),
-              itemBuilder: _builder,
-              itemCount: list.length,
-            ),
+          if (length == 0) _null(),
+          SmartRefresher(
+            header: MyUtils.myHeader(),
+            footer: MyUtils.myFotter(),
+            controller: c.paperController(type),
+            enablePullUp: true,
+            enablePullDown: true,
+            onLoading: () => c.onLoading(type),
+            onRefresh: () => c.onRefresh(type),
+            child: length > 0
+                ? ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 41.w),
+                    itemBuilder: _builder,
+                    itemCount: length,
+                  )
+                : null,
+          ),
         ],
-      ),
-    );
+      );
+    });
   }
+
   Widget _null() {
     return Center(
       child: Container(
@@ -762,6 +974,7 @@ mixin _BottomSheetItemMixin {
   }
 
   Widget _builder(BuildContext context, int index) {
+    final item = c.paperList(type)[index];
     return Container(
       width: double.infinity,
       // height: 438.w,
@@ -774,46 +987,58 @@ mixin _BottomSheetItemMixin {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _head(),
+          if (type == 0) _head(item),
           Padding(
             padding: EdgeInsets.only(top: 18.w),
             child: Text(
-              '家人们啊....快来找我玩啊',
+              item.content,
               style: TextStyle(
                 color: const Color(0xFF212121),
                 fontSize: 30.sp,
               ),
             ),
           ),
-          Container(
-            width: 180.w,
-            height: 180.w,
-            margin: EdgeInsets.only(top: 27.w),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(20.w),
+          if (item.img_url.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.only(top: 27.w),
+              child: itemContent(item),
             ),
-            clipBehavior: Clip.hardEdge,
-          ),
           Padding(
             padding: EdgeInsets.only(top: 24.w, bottom: 8.w),
-            child: Text(
-              '2024-04-18 10:24:12',
-              style: TextStyle(
-                color: const Color(0xFF999999),
-                fontSize: 20.sp,
-              ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    item.add_time,
+                    style: TextStyle(
+                      color: const Color(0xFF999999),
+                      fontSize: 20.sp,
+                    ),
+                  ),
+                ),
+                if (type == 1)
+                  GestureDetector(
+                    onTap: () => c.onItemDelete(item.id),
+                    child: Text(
+                    '删除',
+                    style: TextStyle(
+                      color: const Color(0xFFFF6666),
+                      fontSize: 20.sp,
+                    ),
+                  ),
+                  ),
+              ],
             ),
           ),
         ],
       ),
     );
   }
-  Widget _head() {
+
+  Widget _head(ActivityGetPaperBeanData item) {
     return Row(
       children: [
-        UserFrameHead(
-            size: 80.w, avatar: sp.getString('user_headimg').toString()),
+        UserFrameHead(size: 80.w, avatar: item.avatar),
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 13.w),
@@ -821,7 +1046,7 @@ mixin _BottomSheetItemMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '小美',
+                  item.nickname,
                   style: TextStyle(
                     color: const Color(0xFF212121),
                     fontSize: 30.sp,
@@ -830,7 +1055,7 @@ mixin _BottomSheetItemMixin {
                 SizedBox(height: 8.w),
                 Row(
                   children: [
-                    UserGenderCircle(size: 24.w, gender: 0),
+                    UserGenderCircle(size: 24.w, gender: item.gender),
                     Container(
                       width: 59.w,
                       height: 26.w,
@@ -841,7 +1066,7 @@ mixin _BottomSheetItemMixin {
                         borderRadius: BorderRadius.circular(13.w),
                       ),
                       child: Text(
-                        '22岁',
+                        '${item.age}岁',
                         style: TextStyle(
                           color: const Color(0xFFFF1313),
                           fontSize: 18.sp,
@@ -873,6 +1098,77 @@ mixin _BottomSheetItemMixin {
           ),
         ),
       ],
+    );
+  }
+}
+
+mixin _ItemContent {
+  final MakefriendsController c = Get.find();
+  Widget itemContent(ActivityGetPaperBeanData model) {
+    return Container(
+      width: 180.w,
+      height: 180.w,
+      margin: EdgeInsets.only(bottom: 10.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE7E7E7),
+        borderRadius: BorderRadius.circular(20.w),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: model.type == 2 ? _showVideo(model) : _showImag(model),
+    );
+  }
+  
+  Widget _showVideo(ActivityGetPaperBeanData model) {
+    final videoController = VideoPlayerController.networkUrl(Uri.parse(model.img_url));
+    videoController.initialize();
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        SizedBox(
+          width: 180.w,
+          height: 180.w,
+          child: AspectRatio(
+            aspectRatio: videoController.value.aspectRatio,
+            child: VideoPlayer(videoController),
+          ),
+        ),
+        GestureDetector(
+          onTap: () => c.action(() {
+            Get.to(PagePreviewVideo(url: model.img_url), opaque: false);
+          }),
+          child: Icon(
+            Icons.play_circle_fill_outlined,
+            color: Colors.white,
+            size: 70.w,
+          ),
+        )
+      ],
+    );
+    }
+
+  ///显示图片
+  Widget _showImag(ActivityGetPaperBeanData model) {
+    return GestureDetector(
+      onTap: () => c.action(() {
+        Get.to(SwiperPage(imgList: [model.img_url]), opaque: false);
+      }),
+      child: CachedNetworkImage(
+        imageUrl: model.img_url,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+        placeholder: (context, url) => Image.asset(
+          'assets/images/img_placeholder.png',
+          fit: BoxFit.cover,
+        ),
+        errorWidget: (context, url, error) {
+          Get.log('加载错误提示 $error');
+          return Image.asset(
+            'assets/images/img_placeholder.png',
+            fit: BoxFit.cover,
+          );
+        },
+      ),
     );
   }
 }

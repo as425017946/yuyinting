@@ -74,7 +74,7 @@ class Data {
     city = json['city'];
     level = json['level'];
     birthday = json['birthday'];
-    age = json['age'];
+    age = json['age'].toString();
     isHi = json['is_hi'];
     followStatus = json['follow_status'];
     avatarFrameImg = json['avatar_frame_img'];
