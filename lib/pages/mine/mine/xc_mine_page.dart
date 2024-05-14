@@ -731,14 +731,14 @@ class _MinePageContent extends StatelessWidget {
                     },
                   );
                 }),
-                GestureDetector(
-                  onTap: () => Get.to(const CeShi()),
-                  child: Container(
-                    color: Colors.transparent,
-                    alignment: Alignment.center,
-                    child: const Text('去支付', style: TextStyle(fontSize: 30)),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () => Get.to(const CeShi()),
+                //   child: Container(
+                //     color: Colors.transparent,
+                //     alignment: Alignment.center,
+                //     child: const Text('去支付', style: TextStyle(fontSize: 30)),
+                //   ),
+                // ),
               ],
             ),
           ),

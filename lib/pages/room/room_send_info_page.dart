@@ -7,7 +7,6 @@ import 'package:yuyinting/utils/my_toast_utils.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/my_utils.dart';
-import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
@@ -30,7 +29,7 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
     super.initState();
     if (widget.info!.isNotEmpty) {
       setState(() {
-        controller.text = '@${widget.info!} Hi';
+        controller.text = '@${widget.info!} ';
       });
     }
   }

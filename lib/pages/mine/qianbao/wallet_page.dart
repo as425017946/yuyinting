@@ -548,25 +548,25 @@ class _WalletPageState extends State<WalletPage> {
         },
       ),
     ];
-    if (sp.getString('user_identity').toString() == 'president' ||
-        sp.getString('user_identity').toString() == 'leader') {
-      // 特权充值
-      actions.insert(
-        0,
-        _WalletPageAction(
-          title: '特权充值',
-          action: () {
-            if (MyUtils.checkClick()) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return TQDouPayPage(shuliang: jinbi);
-              })).then((value) {
-                doPostBalance();
-              });
-            }
-          },
-        ),
-      );
-    }
+    // if (sp.getString('user_identity').toString() == 'president' ||
+    //     sp.getString('user_identity').toString() == 'leader') {
+    //   // 特权充值
+    //   actions.insert(
+    //     0,
+    //     _WalletPageAction(
+    //       title: '特权充值',
+    //       action: () {
+    //         if (MyUtils.checkClick()) {
+    //           Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //             return TQDouPayPage(shuliang: jinbi);
+    //           })).then((value) {
+    //             doPostBalance();
+    //           });
+    //         }
+    //       },
+    //     ),
+    //   );
+    // }
     return _card(
       'assets/images/mine_wallet_dbj.png',
       'assets/images/mine_wallet_dd.png',

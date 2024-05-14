@@ -238,7 +238,7 @@ class _ReDuOnLinePageState extends State<ReDuOnLinePage> {
             ),
           ),
         ),
-        // WidgetUtils.myLine(indent: 20, endIndent: 20)
+        WidgetUtils.myLine(indent: 20, endIndent: 20),
         WidgetUtils.commonSizedBox(20.h,0)
       ],
     );
