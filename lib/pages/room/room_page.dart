@@ -859,9 +859,6 @@ class _RoomPageState extends State<RoomPage>
                 isBack = false;
               });
             } else {
-              if (_timerHot != null) {
-                _timerHot!.cancel();
-              }
               //取消订阅所有远端用户的音频流。
               _engine!.muteAllRemoteAudioStreams(true);
               // 取消发布本地音频流
@@ -871,6 +868,9 @@ class _RoomPageState extends State<RoomPage>
               // 清空存储信息
               deleteChatInfo();
               deleteGifInfo();
+              if (_timerHot != null) {
+                _timerHot!.cancel();
+              }
               doPostBeforeJoin(listPH[i].id.toString());
             }
           }
@@ -4906,6 +4906,11 @@ class _RoomPageState extends State<RoomPage>
                   GestureDetector(
                     onTap: (() {
                       if (MyUtils.checkClick()) {
+                        //取消订阅所有远端用户的音频流。
+                        _engine!.muteAllRemoteAudioStreams(true);
+                        // 取消发布本地音频流
+                        _engine!.muteLocalAudioStream(true);
+                        _engine!.disableAudio();
                         sp.setString('roomID', '');
                         // 调用离开房间接口
                         doPostLeave();

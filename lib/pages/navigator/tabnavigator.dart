@@ -1040,6 +1040,11 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                       // 当一条可接受的数据被拖放到这个拖动目标上时调用
                       onAccept: (data) {
                         setState(() {
+                          //取消订阅所有远端用户的音频流。
+                          _engine!.muteAllRemoteAudioStreams(true);
+                          // 取消发布本地音频流
+                          _engine!.muteLocalAudioStream(true);
+                          _engine!.disableAudio();
                           _dispose();
                           // 调用离开房间接口
                           doPostLeave(sp.getString('roomID').toString());

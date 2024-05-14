@@ -504,30 +504,50 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                           GestureDetector(
                             onTap: (() {
                               if (MyUtils.checkClick()) {
-                                if(sp.getString('isEmulation').toString() == '1'){
-                                  MyToastUtils.showToastBottom('当前为模拟器设备，禁止注册！');
-                                }else{
-                                  setState(() {
-                                    type = 1;
-                                  });
-                                  if (_autoCodeText == '发送验证码' ||
-                                      _autoCodeText == '重新获取') {
-                                    if (controllerPhone.text.trim().isEmpty) {
-                                      MyToastUtils.showToastBottom('请输入手机号');
-                                    } else if (!MyUtils.chinaPhoneNumber(
-                                        controllerPhone.text.trim())) {
-                                      MyToastUtils.showToastBottom('输入的手机号码格式错误');
-                                    } else {
-                                      //没有ip
-                                      // if(sp.getString('userIP').toString().isEmpty){
-                                      //   doPostPdAddress();
-                                      // }else{
-                                      //   doPostLoginSms();
-                                      // }
-                                      doPostLoginSms();
-                                    }
+                                setState(() {
+                                  type = 1;
+                                });
+                                if (_autoCodeText == '发送验证码' ||
+                                    _autoCodeText == '重新获取') {
+                                  if (controllerPhone.text.trim().isEmpty) {
+                                    MyToastUtils.showToastBottom('请输入手机号');
+                                  } else if (!MyUtils.chinaPhoneNumber(
+                                      controllerPhone.text.trim())) {
+                                    MyToastUtils.showToastBottom('输入的手机号码格式错误');
+                                  } else {
+                                    //没有ip
+                                    // if(sp.getString('userIP').toString().isEmpty){
+                                    //   doPostPdAddress();
+                                    // }else{
+                                    //   doPostLoginSms();
+                                    // }
+                                    doPostLoginSms();
                                   }
                                 }
+                                // if(sp.getString('isEmulation').toString() == '1'){
+                                //   MyToastUtils.showToastBottom('当前为模拟器设备，禁止注册！');
+                                // }else{
+                                //   setState(() {
+                                //     type = 1;
+                                //   });
+                                //   if (_autoCodeText == '发送验证码' ||
+                                //       _autoCodeText == '重新获取') {
+                                //     if (controllerPhone.text.trim().isEmpty) {
+                                //       MyToastUtils.showToastBottom('请输入手机号');
+                                //     } else if (!MyUtils.chinaPhoneNumber(
+                                //         controllerPhone.text.trim())) {
+                                //       MyToastUtils.showToastBottom('输入的手机号码格式错误');
+                                //     } else {
+                                //       //没有ip
+                                //       // if(sp.getString('userIP').toString().isEmpty){
+                                //       //   doPostPdAddress();
+                                //       // }else{
+                                //       //   doPostLoginSms();
+                                //       // }
+                                //       doPostLoginSms();
+                                //     }
+                                //   }
+                                // }
                               }
                             }),
                             child: Container(
