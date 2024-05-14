@@ -860,11 +860,11 @@ class _RoomPageState extends State<RoomPage>
               });
             } else {
               //取消订阅所有远端用户的音频流。
-              _engine!.muteAllRemoteAudioStreams(true);
-              // 取消发布本地音频流
-              _engine!.muteLocalAudioStream(true);
-              _engine!.disableAudio();
-              _dispose();
+              // _engine!.muteAllRemoteAudioStreams(true);
+              // // 取消发布本地音频流
+              // _engine!.muteLocalAudioStream(true);
+              // _engine!.disableAudio();
+              // _dispose();
               // 清空存储信息
               deleteChatInfo();
               deleteGifInfo();
@@ -6179,7 +6179,7 @@ class _RoomPageState extends State<RoomPage>
           // 取消发布本地音频流
           _engine!.muteLocalAudioStream(true);
           _engine!.disableAudio();
-          _dispose();
+          await _dispose();
           // 清空存储信息
           deleteChatInfo();
           deleteGifInfo();
