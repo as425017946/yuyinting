@@ -767,7 +767,7 @@ class _MessagePageState extends State<MessagePage>
       }
       // 执行查询操作
       String queryM =
-          'select MAX(id) AS id from messageSLTable group by combineID order by weight desc,add_time desc';
+          'select MAX(id) AS id from messageSLTable group by combineID order by weight desc, add_time desc';
       List<Map<String, dynamic>> result = await db.rawQuery(queryM);
 
       // 查询出来后在查询单条信息具体信息
