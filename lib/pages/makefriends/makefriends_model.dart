@@ -329,7 +329,7 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
     }
   }
   int getLength(int type) => type == 1 ? _putLength.value : _getLength.value;
-  Future<LoadStatus> postActivityPaperList(int type, bool isFirst) async {
+  Future<LoadStatus> postActivityPaperList(int type, bool isFirst, [int pageSize = 10]) async {
     LoadStatus status = LoadStatus.idle;
     // ignore: prefer_typing_uninitialized_variables
     final list, post, getLength, next;
@@ -347,7 +347,6 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
         next = isFirst ? 1 :( _getPage + 1);
     }
     try {
-      const pageSize = 10;
       final bean = await doRequest(() => post(next, pageSize));
       if (_setPage(next, type, isFirst)) {
         if (next == 1) list.clear();
@@ -431,25 +430,35 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
     }
   }
   void onItemDelete(int id) {
-    action(() {
-      doPostDelPaper(id.toString());
+    action(() async {
+      Loading.show();
+      if (await doPostDelPaper(id.toString())) {
+        await postActivityPaperList(1, true, 10 * _putPage);
+      }
+      Loading.dismiss();
     });
   }
 
   /// 删除纸条
-  Future<void> doPostDelPaper(String id) async {
-    Map<String, dynamic> params = <String, dynamic>{
-      'id': id,
-    };
-    CommonBean bean = await DataUtils.postDelPaper(params);
-    switch (bean.code) {
-      case MyHttpConfig.successCode:
-        await postActivityPaperList(1, true);
-        break;
-      default:
-        MyToastUtils.showToastBottom(bean.msg!);
-        break;
+  Future<bool> doPostDelPaper(String id) async {
+    bool isSuccess = false;
+    try {
+      Map<String, dynamic> params = <String, dynamic>{
+        'id': id,
+      };
+      CommonBean bean = await DataUtils.postDelPaper(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          isSuccess = true;
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      Get.log(e.toString());
     }
+    return isSuccess;
   }
 }
 
