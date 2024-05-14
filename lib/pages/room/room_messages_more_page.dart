@@ -1711,7 +1711,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 3,
-      'number': (msg.body as EMVoiceMessageBody).duration, //audioNum,
+      'number': isDevices != 'ios' ? (msg.body as EMVoiceMessageBody).duration : audioNum, //audioNum,
       'status': 0,
       'readStatus': 1,
       'liveStatus': 0,

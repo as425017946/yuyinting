@@ -41,14 +41,14 @@ void main() async {
   AutoOrientation.portraitAutoMode();
 
   FlutterBugly.postCatchedException(() {
-    // 初始化 Bugly
-    FlutterBugly.init(
-      androidAppId: "5a93eefd46",
-      iOSAppId: "9402178c9d",
-      customUpgrade: true, // 调用 Android 原生升级方式
-    ).then((_result) {
-      LogE('Bugly 返回id ${_result.appId}');
-    });
+    // // 初始化 Bugly
+    // FlutterBugly.init(
+    //   androidAppId: "5a93eefd46",
+    //   iOSAppId: "9402178c9d",
+    //   customUpgrade: true, // 调用 Android 原生升级方式
+    // ).then((_result) {
+    //   LogE('Bugly 返回id ${_result.appId}');
+    // });
 
     runApp(const MyApp());
   });
