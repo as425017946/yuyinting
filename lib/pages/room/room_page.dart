@@ -4577,7 +4577,7 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 聊天除使用
                       Positioned(
-                        bottom: 80.h,
+                        bottom: isDevices == 'ios' ? 100.h : 80.h,
                         child:
 
                             /// 消息列表最外层
