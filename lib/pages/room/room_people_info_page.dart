@@ -684,6 +684,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           )),
                         ],
                       ),
+                      WidgetUtils.commonSizedBox(15.h, 0),
                       const Spacer(),
                     ],
                   ),

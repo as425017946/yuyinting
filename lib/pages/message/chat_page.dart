@@ -1416,7 +1416,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                 ),
                 // 底部键盘
                 Container(
-                  height: isDevices == 'ios' ? 160.h : 240.h,
+                  height: isDevices == 'ios' ? 300.h : 240.h,
                   color: Colors.white,
                   child: Column(
                     children: [
