@@ -96,6 +96,16 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
                         //         color: Colors.white, fontSize: 24.sp)),
                         WidgetUtils.commonSizedBox(20.h, 0),
                         WidgetUtils.onlyText(
+                            '什么是幸运礼物',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.zpGZYellow, fontSize: 24.sp)),
+                        Text(
+                          '幸运礼物是一种隐藏款礼物，当您开启转盘时有一定概率出现，会在转盘转动到金豆价值最低的礼物时随机爆出，为您带来意外的惊喜。幸运礼物的价值远超普通礼物，因此是给玩家带来好运和额外奖励的一种形式。',
+                          maxLines: 10,
+                          style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 24.sp),
+                        ),
+                        WidgetUtils.commonSizedBox(20.h, 0),
+                        WidgetUtils.onlyText(
                             '什么是欢乐值',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.zpGZYellow, fontSize: 24.sp)),
