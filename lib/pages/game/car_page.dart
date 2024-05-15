@@ -2110,9 +2110,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
 
   /// 赛车押注
   Future<void> doPostCarBet(String benSN) async {
+    final betAmount = xiazhujine.toInt();
     Map<String, dynamic> params = <String, dynamic>{
       'bet_sn': benSN,
-      'bet_amount': xiazhujine.toString()
+      'bet_amount': betAmount.toString()
     };
     try {
       carYZBean bean = await DataUtils.postCarBet(params);
@@ -2225,7 +2226,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           setState(() {
             LogE('更新余额 == ${int.parse(benSN) - 1}');
             listJL[int.parse(benSN) - 1] =
-                listJL[int.parse(benSN) - 1] + xiazhujine;
+                listJL[int.parse(benSN) - 1] + betAmount;
             if (sp.getString('car_audio') == null ||
                 sp.getString('car_audio').toString() == '开启') {
               playSound2();
