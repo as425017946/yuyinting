@@ -1235,7 +1235,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         case MyHttpConfig.successCode:
           // 如果收起了房间，先把音频停掉
           if (isJoinRoom) {
-            setState(() {
+            setState(() async{
               isFirstJoinRoom = false;
               isJoinRoom = false;
               //取消订阅所有远端用户的音频流。
@@ -1243,7 +1243,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               // 取消发布本地音频流
               _engine!.muteLocalAudioStream(true);
               _engine!.disableAudio();
-              _dispose();
+              await _dispose();
             });
           }
           // ignore: use_build_context_synchronously
