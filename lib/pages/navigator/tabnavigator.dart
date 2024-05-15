@@ -316,6 +316,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           doPostSvgaDressList();
         }
       } else if (event.title == '去掉旋转') {
+        doPostIsFirstOrder();
         // 防止用户被顶号时没有清空表
         setState(() {
           sp.setBool('sqRoom', false);
