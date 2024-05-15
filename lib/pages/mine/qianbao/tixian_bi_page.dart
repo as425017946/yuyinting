@@ -575,7 +575,8 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
               WidgetUtils.onlyText(
-                  '1.请确保支付宝账号和真实姓名一致，否则可能导致提现失败；',//（无需使用账号实名账户）',
+                  // '1.请确保支付宝账号和真实姓名一致，否则可能导致提现失败；（无需使用账号实名账户）',
+                  '1.请确保银行卡卡号和真实姓名一致，否则可能导致提现失败；',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
