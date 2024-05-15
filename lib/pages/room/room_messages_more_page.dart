@@ -289,64 +289,90 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
           // sampleRate: 44000,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
-      if (isDevices == 'ios') {
-        /// 监听录音
-        _recorderSubscription = recorderModule.onProgress!.listen((e) {
-          if (e != null && e.duration != null) {
-            DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                e.duration.inMilliseconds,
-                isUtc: true);
 
-            if (date.second >= _maxLength) {
-              print('===>  到达时常停止录音');
-              setState(() {
-                audioNum = 60;
-                isPlay = 2;
-              });
-              _stopRecorder();
-              //发送录音
-              doSendAudio();
-            }
-            setState(() {
-              audioNum = date.second;
-              print("录制声音：$audioNum");
-              print("时间：${date.second}");
-              print("当前振幅：${e.decibels}");
-            });
-          }
-        });
-        setState(() {
-          _state = RecordPlayState.recording;
-          _path = path;
-          print("path == $path");
-        });
-      } else {
-        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          if (isPlay == 2) {
-            LogE('停止了==');
-            setState(() {
-              isLuZhi = false;
-            });
-            _stopRecorder(); // 确保录音器停止并保存数据到文件
-            timer.cancel();
-          } else {
-            setState(() {
-              _maxLength--;
-              audioNum++;
-            });
-          }
-          if (_maxLength == 0) {
-            setState(() {
-              isPlay = 2;
-              isLuZhi = false;
-            });
-            timer.cancel();
-            _stopRecorder();
-            //发送录音
-            doSendAudio();
-          }
-        });
-      }
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (isPlay == 2) {
+          LogE('停止了==');
+          setState(() {
+            isLuZhi = false;
+          });
+          _stopRecorder(); // 确保录音器停止并保存数据到文件
+          timer.cancel();
+        } else {
+          setState(() {
+            _maxLength--;
+            audioNum++;
+          });
+        }
+        if (_maxLength == 0) {
+          setState(() {
+            isPlay = 2;
+            isLuZhi = false;
+          });
+          timer.cancel();
+          _stopRecorder();
+          //发送录音
+          doSendAudio();
+        }
+      });
+      // if (isDevices == 'ios') {
+      //   /// 监听录音
+      //   _recorderSubscription = recorderModule.onProgress!.listen((e) {
+      //     if (e != null && e.duration != null) {
+      //       DateTime date = DateTime.fromMillisecondsSinceEpoch(
+      //           e.duration.inMilliseconds,
+      //           isUtc: true);
+      //
+      //       if (date.second >= _maxLength) {
+      //         print('===>  到达时常停止录音');
+      //         setState(() {
+      //           audioNum = 60;
+      //           isPlay = 2;
+      //         });
+      //         _stopRecorder();
+      //         //发送录音
+      //         doSendAudio();
+      //       }
+      //       setState(() {
+      //         audioNum = date.second;
+      //         print("录制声音：$audioNum");
+      //         print("时间：${date.second}");
+      //         print("当前振幅：${e.decibels}");
+      //       });
+      //     }
+      //   });
+      //   setState(() {
+      //     _state = RecordPlayState.recording;
+      //     _path = path;
+      //     print("path == $path");
+      //   });
+      // } else {
+      //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      //     if (isPlay == 2) {
+      //       LogE('停止了==');
+      //       setState(() {
+      //         isLuZhi = false;
+      //       });
+      //       _stopRecorder(); // 确保录音器停止并保存数据到文件
+      //       timer.cancel();
+      //     } else {
+      //       setState(() {
+      //         _maxLength--;
+      //         audioNum++;
+      //       });
+      //     }
+      //     if (_maxLength == 0) {
+      //       setState(() {
+      //         isPlay = 2;
+      //         isLuZhi = false;
+      //       });
+      //       timer.cancel();
+      //       _stopRecorder();
+      //       //发送录音
+      //       doSendAudio();
+      //     }
+      //   });
+      // }
       setState(() {
         _state = RecordPlayState.recording;
         _path = path;
@@ -365,9 +391,10 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
   _stopRecorder() async {
     try {
       await recorderModule.stopRecorder();
-      if (isDevices != 'ios') {
-        _timer.cancel();
-      }
+      // if (isDevices != 'ios') {
+      //   _timer.cancel();
+      // }
+      _timer.cancel();
       print('stopRecorder===> fliePath:$_path');
       _cancelRecorderSubscriptions();
     } catch (err) {
@@ -1706,12 +1733,12 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
       'whoUid': sp.getString('user_id').toString(),
       'combineID': combineID,
       'nickName': widget.nickName,
-      'content': _path,
+      'content': (msg.body as EMVoiceMessageBody).remotePath,
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 3,
-      'number': isDevices != 'ios' ? (msg.body as EMVoiceMessageBody).duration : audioNum, //audioNum,
+      'number': (msg.body as EMVoiceMessageBody).duration, //audioNum,
       'status': 0,
       'readStatus': 1,
       'liveStatus': 0,

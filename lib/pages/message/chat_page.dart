@@ -2408,7 +2408,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'whoUid': sp.getString('user_id').toString(),
       'combineID': combineID,
       'nickName': widget.nickName,
-      'content': _path,
+      'content': (msg.body as EMVoiceMessageBody).remotePath,
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
