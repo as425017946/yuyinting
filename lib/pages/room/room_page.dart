@@ -2645,7 +2645,7 @@ class _RoomPageState extends State<RoomPage>
               } else if (cb.gameName == '金星魔方') {
                 map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
               } else {
-                map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+                map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;${cb.amount!}';
               }
               setState(() {
                 list.add(map);
@@ -2889,7 +2889,7 @@ class _RoomPageState extends State<RoomPage>
               } else if (cb.gameName == '金星魔方') {
                 map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
               } else {
-                map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+                map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;${cb.amount!}';
               }
               setState(() {
                 list.add(map);

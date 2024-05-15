@@ -11,6 +11,7 @@ import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
+import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
@@ -224,15 +225,15 @@ class RoomItems {
                   WidgetSpan(
                       child: list[i]['new_noble'].toString() == "1"
                           ? WidgetUtils.showImagesFill(
-                          'assets/images/dj/room_rui.png', 26.h, 50.h)
+                          'assets/images/dj/room_rui.png', 26.h, 60.h)
                           : list[i]['new_noble'].toString() == "2"
                           ? WidgetUtils.showImagesFill(
-                          'assets/images/dj/room_gui.png', 26.h, 50.h)
+                          'assets/images/dj/room_gui.png', 26.h, 60.h)
                           : list[i]['new_noble'].toString() == "3"
                           ? WidgetUtils.showImagesFill(
                           'assets/images/dj/room_qc.png',
                           30.h,
-                          50.h)
+                          60.h)
                           : const Text('')),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   //等级
@@ -1239,9 +1240,15 @@ class RoomItems {
     } else if (list[i]['type'] == '9') {
       // 厅内用户抽奖
       List<String> infos = list[i]['content'].toString().split(';');
+      LogE('游戏=== ${infos.length}');
       int startIndex = infos[4].indexOf('(') + 1;
       int endIndex = infos[4].indexOf(')');
-      String jine = infos[4].substring(startIndex, endIndex);
+      String jine = '';
+      if(list[i]['content'].toString().contains('赛车')){
+        jine = infos[4];
+      }else{
+        jine = infos[4].substring(startIndex, endIndex);
+      }
       // 厅内送出礼物推送
       return Stack(
         children: [
@@ -1452,15 +1459,15 @@ class RoomItems {
                     WidgetSpan(
                         child: list[i]['new_noble'].toString() == "1"
                             ? WidgetUtils.showImagesFill(
-                            'assets/images/dj/room_rui.png', 26.h, 50.h)
+                            'assets/images/dj/room_rui.png', 26.h, 60.h)
                             : list[i]['new_noble'].toString() == "2"
                             ? WidgetUtils.showImagesFill(
-                            'assets/images/dj/room_gui.png', 26.h, 50.h)
+                            'assets/images/dj/room_gui.png', 26.h, 60.h)
                             : list[i]['new_noble'].toString() == "3"
                             ? WidgetUtils.showImagesFill(
                             'assets/images/dj/room_qc.png',
                             30.h,
-                            50.h)
+                            60.h)
                             : const Text('')),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     //等级
