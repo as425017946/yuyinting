@@ -2646,6 +2646,10 @@ class _RoomPageState extends State<RoomPage>
                 map['content'] = '${cb.nickName};在;黄金幻宝;中赢得;$info';
               } else if (cb.gameName == '金星魔方') {
                 map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
+              } else if (cb.gameName == '心动转盘') {
+                map['content'] = '${cb.nickName};在;心动转盘;中赢得;$info';
+              } else if (cb.gameName == '超级转盘') {
+                map['content'] = '${cb.nickName};在;超级转盘;中赢得;$info';
               } else {
                 map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;${cb.amount!}';
               }
@@ -2890,6 +2894,10 @@ class _RoomPageState extends State<RoomPage>
                 map['content'] = '${cb.nickName};在;黄金幻宝;中赢得;$info';
               } else if (cb.gameName == '金星魔方') {
                 map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
+              } else if (cb.gameName == '心动转盘') {
+                map['content'] = '${cb.nickName};在;心动转盘;中赢得;$info';
+              } else if (cb.gameName == '超级转盘') {
+                map['content'] = '${cb.nickName};在;超级转盘;中赢得;$info';
               } else {
                 map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;${cb.amount!}';
               }
