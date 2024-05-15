@@ -329,62 +329,86 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
           // sampleRate: 44000,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
-      if (isDevices == 'ios') {
-        /// 监听录音
-        _recorderSubscription = recorderModule.onProgress!.listen((e) {
-          if (e != null && e.duration != null) {
-            DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                e.duration.inMilliseconds,
-                isUtc: true);
-
-            if (date.second >= _maxLength) {
-              print('===>  到达时常停止录音');
-              setState(() {
-                audioNum = 60;
-                isPlay = 2;
-              });
-              _stopRecorder();
-              doSendAudio();
-            }
-            setState(() {
-              audioNum = date.second;
-              print("录制声音：$audioNum");
-              print("时间：${date.second}");
-              print("当前振幅：${e.decibels}");
-            });
-          }
-        });
-        setState(() {
-          _state = RecordPlayState.recording;
-          _path = path;
-          print("path == $path");
-        });
-      } else {
-        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          if (isPlay == 2) {
-            LogE('停止了==');
-            setState(() {
-              isLuZhi = false;
-            });
-            _stopRecorder(); // 确保录音器停止并保存数据到文件
-            timer.cancel();
-          } else {
-            setState(() {
-              _maxLength--;
-              audioNum++;
-            });
-          }
-          if (_maxLength == 0) {
-            setState(() {
-              isPlay = 2;
-              isLuZhi = false;
-            });
-            timer.cancel();
-            _stopRecorder();
-            doSendAudio();
-          }
-        });
-      }
+      // if (isDevices == 'ios') {
+      //   /// 监听录音
+      //   _recorderSubscription = recorderModule.onProgress!.listen((e) {
+      //     if (e != null && e.duration != null) {
+      //       DateTime date = DateTime.fromMillisecondsSinceEpoch(
+      //           e.duration.inMilliseconds,
+      //           isUtc: true);
+      //
+      //       if (date.second >= _maxLength) {
+      //         print('===>  到达时常停止录音');
+      //         setState(() {
+      //           audioNum = 60;
+      //           isPlay = 2;
+      //         });
+      //         _stopRecorder();
+      //         doSendAudio();
+      //       }
+      //       setState(() {
+      //         audioNum = date.second;
+      //         print("录制声音：$audioNum");
+      //         print("时间：${date.second}");
+      //         print("当前振幅：${e.decibels}");
+      //       });
+      //     }
+      //   });
+      //   setState(() {
+      //     _state = RecordPlayState.recording;
+      //     _path = path;
+      //     print("path == $path");
+      //   });
+      // } else {
+      //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      //     if (isPlay == 2) {
+      //       LogE('停止了==');
+      //       setState(() {
+      //         isLuZhi = false;
+      //       });
+      //       _stopRecorder(); // 确保录音器停止并保存数据到文件
+      //       timer.cancel();
+      //     } else {
+      //       setState(() {
+      //         _maxLength--;
+      //         audioNum++;
+      //       });
+      //     }
+      //     if (_maxLength == 0) {
+      //       setState(() {
+      //         isPlay = 2;
+      //         isLuZhi = false;
+      //       });
+      //       timer.cancel();
+      //       _stopRecorder();
+      //       doSendAudio();
+      //     }
+      //   });
+      // }
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (isPlay == 2) {
+          LogE('停止了==');
+          setState(() {
+            isLuZhi = false;
+          });
+          _stopRecorder(); // 确保录音器停止并保存数据到文件
+          timer.cancel();
+        } else {
+          setState(() {
+            _maxLength--;
+            audioNum++;
+          });
+        }
+        if (_maxLength == 0) {
+          setState(() {
+            isPlay = 2;
+            isLuZhi = false;
+          });
+          timer.cancel();
+          _stopRecorder();
+          doSendAudio();
+        }
+      });
       setState(() {
         _state = RecordPlayState.recording;
         _path = path;

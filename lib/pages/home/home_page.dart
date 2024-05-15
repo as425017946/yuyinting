@@ -463,6 +463,8 @@ class _HomePageState extends State<HomePage>
       CheckoutBean bean = await DataUtils.checkVersion(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          // LogE('版本信息=== ${int.parse(buildNumber) < int.parse(bean.data!.customUpdateNum!)}');
+          // LogE('版本信息=== ${bean.data!.customUpdateNum!}');
           if (int.parse(buildNumber) < int.parse(bean.data!.customUpdateNum!)) {
             if (Platform.isAndroid) {
               if (sp.getString('isEmulation') == '0') {
