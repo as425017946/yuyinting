@@ -47,6 +47,8 @@ import '../../utils/style_utils.dart';
 import '../home/home_items.dart';
 import 'room_items.dart';
 
+RtcEngine? _engine;
+
 /// 厅内
 class RoomPage extends StatefulWidget {
   String roomId;
@@ -553,7 +555,7 @@ class _RoomPageState extends State<RoomPage>
   /// 声网使用
   int? _remoteUid;
   bool _localUserJoined = false;
-  RtcEngine? _engine;
+  // RtcEngine? _engine;
   bool isShow = false;
   late final Gradient gradient;
   FocusNode? _focusNode;
@@ -3867,10 +3869,16 @@ class _RoomPageState extends State<RoomPage>
 
   Future<void> _dispose() async {
     LogE('====退出监听');
-    if (_engine != null) {
-      await _engine!.leaveChannel(); // 离开频道
-      await _engine!.release(); // 释放资源
+    try{
+      if (_engine != null) {
+        await _engine!.leaveChannel(); // 离开频道
+        await _engine!.release(); // 释放资源
+        _engine = null;
+      }
+    }catch(e){
+      LogE('初始化失败===============');
     }
+
   }
 
   // 离开频道
@@ -3912,6 +3920,9 @@ class _RoomPageState extends State<RoomPage>
 
   // 初始化应用
   Future<void> initAgora() async {
+
+    await _dispose();
+
     // _dispose();
     // 获取权限
     await [Permission.microphone].request();
@@ -4050,7 +4061,7 @@ class _RoomPageState extends State<RoomPage>
       onConnectionStateChanged: (RtcConnection connection,
           ConnectionStateType state, ConnectionChangedReasonType reason) {
         LogE("用户已经加入频道： ${connection.channelId} 频道id");
-        LogE("用户已经加入频道： 状态 $state");
+        // LogE("用户已经加入频道： 状态 $state");
         LogE("用户已经加入频道： 状态 $reason");
         //如果加入频道失败等多项原因导致没声音，先移除频道，然后在重新走一遍加入频道流程
         if (reason == ConnectionChangedReasonType.connectionChangedJoinFailed ||
