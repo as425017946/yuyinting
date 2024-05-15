@@ -1040,7 +1040,12 @@ class _TuijianPageState extends State<TuijianPage>
           setState(() {
             sp.setBool('joinRoom', false);
             if (type == 0) {
-              doPostBeforeJoin(bean.data!.findSound.toString(), '');
+              final roomId = bean.data!.findSound;
+              if (roomId == 0) {
+                MyToastUtils.showToastBottom('暂无合适的房间');
+              } else {
+                doPostBeforeJoin(bean.data!.findSound.toString(), '');
+              }
             } else {
               doPostBeforeJoin(bean.data!.amuse.toString(), '');
             }
