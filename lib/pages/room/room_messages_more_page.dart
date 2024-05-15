@@ -1042,7 +1042,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                         ],
                       ),
                       Container(
-                        height: 122.h,
+                        height: 140.h,
                         width: double.infinity,
                         decoration: const BoxDecoration(
                           //背景
