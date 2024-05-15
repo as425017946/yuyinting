@@ -352,7 +352,7 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
         if (next == 1) list.clear();
         if (bean.data.isNotEmpty) list.addAll(bean.data);
         if (bean.data.length < pageSize) status = LoadStatus.noMore;
-        getLength.value = list.length;
+        getLength.trigger(list.length);
       }
     } catch (e) {
       if (e is GetBean) {
