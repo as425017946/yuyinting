@@ -427,9 +427,10 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   _stopRecorder() async {
     try {
       await recorderModule.stopRecorder();
-      if (isDevices != 'ios') {
-        _timer.cancel();
-      }
+      // if (isDevices != 'ios') {
+      //   _timer.cancel();
+      // }
+      _timer.cancel();
       print('stopRecorder===> fliePath:$_path');
       _cancelRecorderSubscriptions();
     } catch (err) {
@@ -2412,7 +2413,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 3,
-      'number': isDevices != 'ios' ? (msg.body as EMVoiceMessageBody).duration : audioNum, //audioNum,
+      'number': (msg.body as EMVoiceMessageBody).duration, //audioNum,
       'status': 0,
       'readStatus': 1,
       'liveStatus': 0,
