@@ -123,7 +123,8 @@ class _TixianBiPageState extends State<TixianBiPage> {
   }
 
   late List<String> listTD = [];
-  String method = '支付宝', methodID = '2'; //提现方式 2 支付宝 3银行卡
+  // String method = '支付宝', methodID = '2'; //提现方式 2 支付宝 3银行卡
+  String method = '银行卡', methodID = '3';
   ///data设置数据源，selectData设置选中下标，type 0代表第一个家长，1代表第二个家长 ，2代表选择性别
   void _onClickItem(var data, var selectData) {
     Pickers.showSinglePicker(
@@ -268,19 +269,19 @@ class _TixianBiPageState extends State<TixianBiPage> {
                                 fontSize: ScreenUtil().setSp(32))),
                         const Expanded(child: Text('')),
                         GestureDetector(
-                            onTap: (() {
-                              _onClickItem(listTD, '支付宝');
-                            }),
+                            // onTap: (() {
+                            //   _onClickItem(listTD, '支付宝');
+                            // }),
                             child: WidgetUtils.onlyText(
                                 method,
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.g9,
                                     fontSize: ScreenUtil().setSp(32)))),
                         WidgetUtils.commonSizedBox(0, 10.h),
-                        WidgetUtils.showImages(
-                            'assets/images/mine_more.png',
-                            ScreenUtil().setHeight(22),
-                            ScreenUtil().setHeight(10))
+                        // WidgetUtils.showImages(
+                        //     'assets/images/mine_more.png',
+                        //     ScreenUtil().setHeight(22),
+                        //     ScreenUtil().setHeight(10))
                       ],
                     ),
                     WidgetUtils.myLine(),
@@ -574,7 +575,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
               WidgetUtils.onlyText(
-                  '1.请确保支付宝账号和真实姓名一致，否则可能导致提现失败；（无需使用账号实名账户）',
+                  '1.请确保支付宝账号和真实姓名一致，否则可能导致提现失败；',//（无需使用账号实名账户）',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
