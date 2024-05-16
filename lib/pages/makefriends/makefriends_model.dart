@@ -15,6 +15,7 @@ import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
+import '../../utils/getx_chat.dart';
 import '../../utils/getx_tools.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
@@ -253,6 +254,7 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
       Loading.show();
       final bean = await doRequest(() => DataUtils.postActivityGetPaper());
       getPaperItem = bean.data;
+      _sendGetPaper(bean.data);
       _getNum.value += 1;
     } catch (e) {
       if (e is GetBean) {
@@ -459,6 +461,16 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
       Get.log(e.toString());
     }
     return isSuccess;
+  }
+
+  late final GetxChat _getxChat = GetxChat();
+  void _sendGetPaper(ActivityGetPaperBeanData item) async {
+    try {
+      final msg = await _getxChat.sendMsg('TA抽到了你的脱单盲盒，珍惜这份缘，脱单在眼前', item.uid.toString(), item.nickname, item.avatar);
+      eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
+    } catch (e) {
+      Get.log(e.toString());
+    }
   }
 }
 
