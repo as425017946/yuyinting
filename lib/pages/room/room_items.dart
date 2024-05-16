@@ -4799,7 +4799,7 @@ class RoomItems {
             ],
           ),
           WidgetUtils.commonSizedBox(0, 5),
-          (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3)
+          sp.getInt('user_grLevel')! >= 4
               ? Stack(
             children: [
               Container(
@@ -4823,7 +4823,7 @@ class RoomItems {
             ],
           )
               : const Text(''),
-          (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3)
+          sp.getInt('user_grLevel')! >= 4
               ? WidgetUtils.commonSizedBox(0, 10)
               : const Text(''),
           //消息
