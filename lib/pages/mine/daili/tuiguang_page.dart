@@ -214,7 +214,7 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
         ),
         const Spacer(),
         WidgetUtils.onlyTextGZ(
-            '提示：\n礼物股份=下级新人赠送礼物总额x分成比例，分润将在第二日以金币形式发放至您的后台，可随时领取至钱包。\n例如：\n若下级新人A今日礼物打赏额为1000金豆，若您的股份比例为0.1%，您第二日可在本页领取1金币的收益。',
+            '提示：\n礼物股份=下级新人赠送礼物总额x分成比例，分润将在第二日以金币形式发放至您的后台，可随时领取至钱包。\n例如：\n若下级新人A今日礼物打赏额为1000金豆，若您的股份比例为0.5%，您第二日可在本页领取5金币的收益。',
             StyleUtils.getCommonGZTextStyle(
                 color: Colors.black, fontSize: 26.sp, height: 1.5)),
         const Spacer(),

@@ -584,6 +584,13 @@ class _TrendsMorePageState extends State<TrendsMorePage>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
       onTapDown: ((details) {
         final tapPosition = details.globalPosition;
         setState(() {
