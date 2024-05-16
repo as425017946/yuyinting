@@ -53,8 +53,8 @@ class GetxChat {
       'weight': 50,
     };
     final msg = await EMClient.getInstance.chatManager.sendMessage(textMsg);
-    _insertData(msg, content, toId, toName, toHead);
-    return textMsg;
+    await _insertData(msg, content, toId, toName, toHead);
+    return msg;
   }
 
   // 插入数据
