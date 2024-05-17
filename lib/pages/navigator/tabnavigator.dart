@@ -822,8 +822,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   // 更新当前的索引值
                   _currentIndex = index;
                   // 如果点击的是消息，清空红点
-                  if (index == 2) {
-                    eventBus.fire(BiLiBack(index: 2, number: '消息'));
+                  if (index == 3) {
+                    eventBus.fire(XXBack(index: 3, number: '消息'));
                     setState(() {
                       isRed = false;
                     });

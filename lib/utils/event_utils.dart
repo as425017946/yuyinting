@@ -326,3 +326,10 @@ class BottomBarVisibleBack {
   bool visible;
   BottomBarVisibleBack({required this.visible});
 }
+
+///返回数据解析
+class XXBack {
+  int index;
+  String number;
+  XXBack({required this.index, required this.number});
+}

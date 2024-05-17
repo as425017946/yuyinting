@@ -555,6 +555,7 @@ class _RoomPageState extends State<RoomPage>
   /// 声网使用
   int? _remoteUid;
   bool _localUserJoined = false;
+
   // RtcEngine? _engine;
   bool isShow = false;
   late final Gradient gradient;
@@ -1904,136 +1905,6 @@ class _RoomPageState extends State<RoomPage>
             });
             _startTimer2(event.map!['serial_number'].toString());
           }
-        } else if (event.map!['type'] == 'blind_box') {
-          // 盲盒礼物
-          //厅内发送的送礼物消息
-          charmMHBean cb = charmMHBean.fromJson(event.map);
-          for (int i = 0; i < listM.length; i++) {
-            for (int a = 0; a < cb.charm!.length; a++) {
-              if (listM[i].uid.toString() == cb.charm![a].uid) {
-                setState(() {
-                  listM[i].charm = int.parse(cb.charm![a].charm.toString());
-                });
-              }
-            }
-          }
-          // 送出的盲盒
-          for (int i = 0; i < cb.giftInfo!.length; i++) {
-            Map<dynamic, dynamic> map = {};
-            map['info'] = cb.giftInfo![i].nickName!;
-            map['uid'] = event.map!['from_uid'];
-            map['type'] = '6';
-            String giftInfos = '';
-            String mhType = '';
-            if (cb.boxId == '1') {
-              mhType = '青铜礼盒(66)x${cb.number!}';
-            } else if (cb.boxId == '2') {
-              mhType = '白银礼盒(300)x${cb.number!}';
-            } else if (cb.boxId == '3') {
-              mhType = '黄金礼盒(660)x${cb.number!}';
-            }
-            for (int a = 0; a < cb.giftInfo![i].giftList!.length; a++) {
-              setState(() {
-                giftName = cb.giftInfo![i].giftList![a].giftName!;
-                nickName = cb.fromNickname!;
-                otherNickName = cb.giftInfo![i].nickName!;
-              });
-              // 保存信息
-              saveGiftInfo(
-                cb.fromAvatar!,
-                cb.fromUid!,
-                cb.fromNickname!,
-                cb.giftInfo![i].nickName!,
-                cb.toUids!,
-                cb.giftInfo![i].giftList![a].giftImgStatic!,
-                cb.giftInfo![i].giftList![a].giftNumber.toString(),
-                cb.giftInfo![i].giftList![a].giftName!,
-                cb.giftInfo![i].giftList![a].giftPrice.toString(),
-              );
-              if (giftInfos.isEmpty) {
-                giftInfos =
-                    ' 爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';
-              } else {
-                giftInfos =
-                    '$giftInfos,爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';
-              }
-              setState(() {
-                // 加入播放队列
-                if (isDevices == 'android') {
-                  // 这个是为了让别人也能看见自己送出的礼物
-                  if (listUrl.isEmpty) {
-                    if (cb.giftInfo![i].giftList![a].giftName! == '黄金宫殿' ||
-                        cb.giftInfo![i].giftList![a].giftName! == '糖果木马' ||
-                        cb.giftInfo![i].giftList![a].giftName! == '机械时代' ||
-                        cb.giftInfo![i].giftList![a].giftName! == '书中仙' ||
-                        cb.giftInfo![i].giftList![a].giftName! == '星光宝盒') {
-                      saveSVGAIMAGE(cb.giftInfo![i].giftList![a].giftImg!);
-                    } else {
-                      LogE('盲盒礼物== ${cb.giftInfo![i].giftList![a].giftImg!}');
-                      Map<dynamic, dynamic> map = {};
-                      map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
-                      map['svgaBool'] = true;
-                      // 直接用网络图地址
-                      listUrl.add(map);
-                      isShowSVGA = true;
-                      showStar(listUrl[0]);
-                    }
-                  } else {
-                    LogE('盲盒礼物==** ${cb.giftInfo![i].giftList![a].giftImg!}');
-                    if (cb.giftInfo![i].giftList![a].giftName! == '黄金宫殿' ||
-                        cb.giftInfo![i].giftList![a].giftName! == '糖果木马' ||
-                        cb.giftInfo![i].giftList![a].giftName! == '机械时代' ||
-                        cb.giftInfo![i].giftList![a].giftName! == '书中仙' ||
-                        cb.giftInfo![i].giftList![a].giftName! == '星光宝盒') {
-                      saveSVGAIMAGE(cb.giftInfo![i].giftList![a].giftImg!);
-                    } else {
-                      // 直接用网络图地址
-                      Map<dynamic, dynamic> map = {};
-                      map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
-                      map['svgaBool'] = true;
-                      // 直接用网络图地址
-                      listUrl.add(map);
-                    }
-                  }
-                } else {
-                  // ios
-                  // 这个是为了让别人也能看见自己送出的礼物
-                  if (listUrl.isEmpty) {
-                    Map<dynamic, dynamic> map = {};
-                    map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
-                    map['svgaBool'] = true;
-                    // 直接用网络图地址
-                    listUrl.add(map);
-                    isShowSVGA = true;
-                    showStar(listUrl[0]);
-                  } else {
-                    // 直接用网络图地址
-                    Map<dynamic, dynamic> map = {};
-                    map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
-                    map['svgaBool'] = true;
-                    // 直接用网络图地址
-                    listUrl.add(map);
-                  }
-                }
-              });
-            }
-            // 发送的信息
-            map['content'] =
-                '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos';
-            saveChatInfo(
-                event.map!,
-                '6',
-                event.map!['from_nickname'],
-                '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos',
-                event.map!['from_uid']);
-            setState(() {
-              list.add(map);
-            });
-          }
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
-            // scrollToLastItem2(); // 在widget构建完成后滚动到底部
-            scrollToLastItem();
-          });
         } else {
           /// 这里是用户的其他正常操作
           if (event.map!['room_id'].toString() == widget.roomId) {
@@ -2072,6 +1943,140 @@ class _RoomPageState extends State<RoomPage>
                     '${event.map!['nickname']},${event.map!['content']}',
                     event.map!['from_uid']);
                 list.add(map);
+              });
+            } else if (event.map!['type'] == 'blind_box') {
+              // 盲盒礼物
+              //厅内发送的送礼物消息
+              charmMHBean cb = charmMHBean.fromJson(event.map);
+              for (int i = 0; i < listM.length; i++) {
+                for (int a = 0; a < cb.charm!.length; a++) {
+                  if (listM[i].uid.toString() == cb.charm![a].uid) {
+                    setState(() {
+                      listM[i].charm = int.parse(cb.charm![a].charm.toString());
+                    });
+                  }
+                }
+              }
+              // 送出的盲盒
+              for (int i = 0; i < cb.giftInfo!.length; i++) {
+                Map<dynamic, dynamic> map = {};
+                map['info'] = cb.giftInfo![i].nickName!;
+                map['uid'] = event.map!['from_uid'];
+                map['type'] = '6';
+                String giftInfos = '';
+                String mhType = '';
+                if (cb.boxId == '1') {
+                  mhType = '青铜礼盒(66)x${cb.number!}';
+                } else if (cb.boxId == '2') {
+                  mhType = '白银礼盒(300)x${cb.number!}';
+                } else if (cb.boxId == '3') {
+                  mhType = '黄金礼盒(660)x${cb.number!}';
+                }
+                for (int a = 0; a < cb.giftInfo![i].giftList!.length; a++) {
+                  setState(() {
+                    giftName = cb.giftInfo![i].giftList![a].giftName!;
+                    nickName = cb.fromNickname!;
+                    otherNickName = cb.giftInfo![i].nickName!;
+                  });
+                  // 保存信息
+                  saveGiftInfo(
+                    cb.fromAvatar!,
+                    cb.fromUid!,
+                    cb.fromNickname!,
+                    cb.giftInfo![i].nickName!,
+                    cb.toUids!,
+                    cb.giftInfo![i].giftList![a].giftImgStatic!,
+                    cb.giftInfo![i].giftList![a].giftNumber.toString(),
+                    cb.giftInfo![i].giftList![a].giftName!,
+                    cb.giftInfo![i].giftList![a].giftPrice.toString(),
+                  );
+                  if (giftInfos.isEmpty) {
+                    giftInfos =
+                        ' 爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';
+                  } else {
+                    giftInfos =
+                        '$giftInfos,爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';
+                  }
+                  setState(() {
+                    // 加入播放队列
+                    if (isDevices == 'android') {
+                      // 这个是为了让别人也能看见自己送出的礼物
+                      if (listUrl.isEmpty) {
+                        if (cb.giftInfo![i].giftList![a].giftName! == '黄金宫殿' ||
+                            cb.giftInfo![i].giftList![a].giftName! == '糖果木马' ||
+                            cb.giftInfo![i].giftList![a].giftName! == '机械时代' ||
+                            cb.giftInfo![i].giftList![a].giftName! == '书中仙' ||
+                            cb.giftInfo![i].giftList![a].giftName! == '星光宝盒') {
+                          saveSVGAIMAGE(cb.giftInfo![i].giftList![a].giftImg!);
+                        } else {
+                          LogE(
+                              '盲盒礼物== ${cb.giftInfo![i].giftList![a].giftImg!}');
+                          Map<dynamic, dynamic> map = {};
+                          map['svgaUrl'] =
+                              cb.giftInfo![i].giftList![a].giftImg!;
+                          map['svgaBool'] = true;
+                          // 直接用网络图地址
+                          listUrl.add(map);
+                          isShowSVGA = true;
+                          showStar(listUrl[0]);
+                        }
+                      } else {
+                        LogE(
+                            '盲盒礼物==** ${cb.giftInfo![i].giftList![a].giftImg!}');
+                        if (cb.giftInfo![i].giftList![a].giftName! == '黄金宫殿' ||
+                            cb.giftInfo![i].giftList![a].giftName! == '糖果木马' ||
+                            cb.giftInfo![i].giftList![a].giftName! == '机械时代' ||
+                            cb.giftInfo![i].giftList![a].giftName! == '书中仙' ||
+                            cb.giftInfo![i].giftList![a].giftName! == '星光宝盒') {
+                          saveSVGAIMAGE(cb.giftInfo![i].giftList![a].giftImg!);
+                        } else {
+                          // 直接用网络图地址
+                          Map<dynamic, dynamic> map = {};
+                          map['svgaUrl'] =
+                              cb.giftInfo![i].giftList![a].giftImg!;
+                          map['svgaBool'] = true;
+                          // 直接用网络图地址
+                          listUrl.add(map);
+                        }
+                      }
+                    } else {
+                      // ios
+                      // 这个是为了让别人也能看见自己送出的礼物
+                      if (listUrl.isEmpty) {
+                        Map<dynamic, dynamic> map = {};
+                        map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
+                        map['svgaBool'] = true;
+                        // 直接用网络图地址
+                        listUrl.add(map);
+                        isShowSVGA = true;
+                        showStar(listUrl[0]);
+                      } else {
+                        // 直接用网络图地址
+                        Map<dynamic, dynamic> map = {};
+                        map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
+                        map['svgaBool'] = true;
+                        // 直接用网络图地址
+                        listUrl.add(map);
+                      }
+                    }
+                  });
+                }
+                // 发送的信息
+                map['content'] =
+                    '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos';
+                saveChatInfo(
+                    event.map!,
+                    '6',
+                    event.map!['from_nickname'],
+                    '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos',
+                    event.map!['from_uid']);
+                setState(() {
+                  list.add(map);
+                });
+              }
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                // scrollToLastItem2(); // 在widget构建完成后滚动到底部
+                scrollToLastItem();
               });
             } else if (event.map!['type'] == 'clean_charm') {
               // 清除魅力值
@@ -2651,7 +2656,8 @@ class _RoomPageState extends State<RoomPage>
               } else if (cb.gameName == '超级转盘') {
                 map['content'] = '${cb.nickName};在;超级转盘;中赢得;$info';
               } else {
-                map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;${cb.amount!}';
+                map['content'] =
+                    '${cb.nickName};在;${cb.gameName};中赢得;${cb.amount!}';
               }
               setState(() {
                 list.add(map);
@@ -2899,7 +2905,8 @@ class _RoomPageState extends State<RoomPage>
               } else if (cb.gameName == '超级转盘') {
                 map['content'] = '${cb.nickName};在;超级转盘;中赢得;$info';
               } else {
-                map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;${cb.amount!}';
+                map['content'] =
+                    '${cb.nickName};在;${cb.gameName};中赢得;${cb.amount!}';
               }
               setState(() {
                 list.add(map);
@@ -3877,16 +3884,15 @@ class _RoomPageState extends State<RoomPage>
 
   Future<void> _dispose() async {
     LogE('====退出监听');
-    try{
+    try {
       if (_engine != null) {
         await _engine!.leaveChannel(); // 离开频道
         await _engine!.release(); // 释放资源
         _engine = null;
       }
-    }catch(e){
+    } catch (e) {
       LogE('初始化失败===============');
     }
-
   }
 
   // 离开频道
@@ -3928,7 +3934,6 @@ class _RoomPageState extends State<RoomPage>
 
   // 初始化应用
   Future<void> initAgora() async {
-
     await _dispose();
 
     // _dispose();
@@ -4715,7 +4720,9 @@ class _RoomPageState extends State<RoomPage>
                           : const Text(''),
 
                       /// 厅内送礼物显示动画使用
-                      (isShowSVGA == true && roomDX == true && listUrl.isNotEmpty)
+                      (isShowSVGA == true &&
+                              roomDX == true &&
+                              listUrl.isNotEmpty)
                           ? IgnorePointer(
                               ignoring: true,
                               child: SizedBox(
@@ -6446,8 +6453,7 @@ class _RoomPageState extends State<RoomPage>
   }
 
   Widget _lunbotu() {
-    final hasGame =
-        (sp.getInt('user_grLevel')! >= 4);
+    final hasGame = (sp.getInt('user_grLevel')! >= 4);
     final isSc = sp.getString('scIsOk').toString() == '1';
     final list1 = [
       if (!isSc)

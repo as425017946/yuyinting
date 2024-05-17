@@ -106,7 +106,7 @@ class _MessagePageState extends State<MessagePage>
         unRead = 0;
       });
     });
-    list2 = eventBus.on<BiLiBack>().listen((event) {
+    list2 = eventBus.on<XXBack>().listen((event) {
       if (event.number == '消息') {
         doPostSystemMsgList2();
       }
