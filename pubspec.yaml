@@ -197,6 +197,9 @@ flutter:
     - assets/audio/car_bg.MP3
     - assets/version.html
     - assets/跨房PK/
+    - assets/跨房PK/icon/
+    - assets/跨房PK/胜利表情包/
+    - assets/跨房PK/失败者表情/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

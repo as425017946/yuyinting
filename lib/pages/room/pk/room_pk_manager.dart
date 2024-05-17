@@ -1,5 +1,11 @@
 import 'dart:math';
 
+import 'package:get/get.dart';
+
+import '../../../utils/getx_tools.dart';
+import 'room_pk_component.dart';
+
+
 extension RoomPkImageName on String {
   String get pkSvga => 'assets/跨房PK/$this.svga';
   String get pkIcon => 'assets/跨房PK/icon/$this.png';
@@ -26,5 +32,23 @@ class RoomPkGif {
 }
 
 class RoomPkManager {
+  final _ = Get.lazyPut(() => RoomPKController());
+
+  void onChaoFeng(void Function() callBack) async {
+    final back = await Get.dialog(const RoomPkChaoFengPage());
+    if (back is bool && back) {
+      callBack();
+    }
+  }
+
+  void onPiPei(void Function() callBack) async {
+    final back = await Get.bottomSheet(const RoomPkPiPeiPage());
+    if (back is bool && back) {
+      callBack();
+    }
+  }
+}
+
+class RoomPKController extends GetxController with GetAntiCombo {
   
 }
