@@ -50,5 +50,7 @@ class RoomPkManager {
 }
 
 class RoomPKController extends GetxController with GetAntiCombo {
-  
+  final _isPipei = false.obs;
+  bool get isPipei => _isPipei.value;
+
 }

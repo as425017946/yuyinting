@@ -84,14 +84,36 @@ class RoomPkPiPeiPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final RoomPKController c = Get.find();
+    return  Container(
       height: 856.w,
+      width: 750.w,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage('pk_match_bg2'.pkIcon),
         ),
       ),
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          _state(c),
+        ],
+      ),
     );
   }
   
+  Widget _state(RoomPKController c) {
+    return Positioned(
+      left: 318.w,
+      top: 76.w,
+      width: 116.w,
+      height: 34.w,
+      child: Obx(
+        () => Image.asset(
+          'pk_match_${c.isPipei ? 'matching' : 'waiting'}'.pkIcon,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
 }
