@@ -101,7 +101,7 @@ class _GPHiPageState extends State<GPHiPage>
                                       //边框设置
                                       decoration: BoxDecoration(
                                         //背景
-                                        color: gender == 0
+                                        color: gender != 1
                                             ? MyColors.dtPink
                                             : MyColors.dtBlue,
                                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
@@ -109,7 +109,7 @@ class _GPHiPageState extends State<GPHiPage>
                                             Radius.circular(15.h)),
                                       ),
                                       child: WidgetUtils.showImages(
-                                          gender == 0
+                                          gender != 1
                                               ? 'assets/images/nv.png'
                                               : 'assets/images/nan.png',
                                           30.h,
