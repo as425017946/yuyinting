@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/getx_tools.dart';
@@ -50,7 +52,58 @@ class RoomPkManager {
 }
 
 class RoomPKController extends GetxController with GetAntiCombo {
+  @override
+  void onClose() {
+    super.onClose();
+    timerStop();
+  }
+
   final _isPipei = false.obs;
   bool get isPipei => _isPipei.value;
+  final _pipeiTime = 0.obs;
+  int get pipeiTime => _pipeiTime.value;
+  final _pkTime = 15.obs;
+  int get pkTime => _pkTime.value;
+  Timer? _timer;
+  void timerStop() {
+    _isPipei.value = false;
+    if (_timer != null) {
+      _timer?.cancel();
+      _timer = null;
+    }
+  }
+  void onPipei() {
+    action(() {
+      if (_isPipei.value) {
+        timerStop();
+      } else {
+        _pipeiTime.value = 0;
+        _isPipei.value = true;
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          ++_pipeiTime.value;
+        });
+      }
+    });
+  }
 
+  final List<int> sTimes = [5, 15, 30, 60];
+  void onTime(int value) {
+    _pkTime.value = value;
+  }
+  final sIsYq = false.obs;
+  void onYq(bool value) {
+    sIsYq.value = value;
+  }
+  final sIsPp = false.obs;
+  void onPp(bool value) {
+    sIsPp.value = value;
+  }
+
+  TextEditingController textController = TextEditingController();
+  final _searchItem = ''.obs;
+  String get searchItem => _searchItem.value;
+  void onSearch([_]) {
+    hideKeyboard();
+    _searchItem.value = textController.text;
+  }
 }

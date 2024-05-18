@@ -20,7 +20,6 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../message/care_home_page.dart';
-import '../../room/pk/room_pk_manager.dart';
 import '../gonghui/gonghui_home_page.dart';
 import '../gonghui/my_gonghui_page.dart';
 import '../huizhang/my_huizhang_page.dart';
@@ -740,16 +739,6 @@ class _MinePageContent extends StatelessWidget {
                 //     child: const Text('去支付', style: TextStyle(fontSize: 30)),
                 //   ),
                 // ),
-                GestureDetector(
-                  onTap: () {
-                    RoomPkManager().onPiPei(() { Get.log('发起匹配'); });
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    alignment: Alignment.center,
-                    child: const Text('测试', style: TextStyle(fontSize: 30)),
-                  ),
-                ),
               ],
             ),
           ),
