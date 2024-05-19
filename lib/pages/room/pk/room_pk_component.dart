@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 
 import 'room_pk_manager.dart';
@@ -86,12 +85,6 @@ class RoomPkPiPeiPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RoomPKController c = Get.find();
-    return FocusDetector(
-      onFocusLost: c.timerStop,
-      child: _content(c),
-    );
-  }
-  Widget _content(RoomPKController c) {
     return  Container(
       height: 856.w,
       decoration: BoxDecoration(
@@ -691,3 +684,89 @@ class _Search extends StatelessWidget {
 
 }
 
+class RoomPkBar extends StatelessWidget {
+  const RoomPkBar({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final RoomPKController c = Get.find();
+    final style = TextStyle(color: Colors.white, fontSize: c.pkFontSize);
+    final left = Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFFFF877C),
+            Color(0xFFB5325F),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+    );
+    final right = Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFF00BFF9),
+            Color(0xFF015EE9),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+    );
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Obx(() => Row(
+          children: [
+            SizedBox(
+              width: c.pkPadding,
+              child: left,
+            ),
+            Expanded(
+              flex: c.pkLeftWeight,
+              child: left,
+            ),
+            if (c.pkLight)
+            Expanded(
+              flex: c.pkRightWeight,
+              child: right,
+            ),
+            SizedBox(
+              width: c.pkPadding,
+              child: right,
+            ),
+          ],
+        )),
+        if (c.pkLight)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: c.pkPadding),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Obx(() {
+                  final offset = constraints.maxWidth * (c.pkLeftWeight.toDouble() / (c.pkLeftWeight + c.pkRightWeight).toDouble() - 0.5);
+                  return Center(
+                    child: Transform.translate(
+                      offset: Offset(offset, 0),
+                      child: Image.asset('pk_light'.pkIcon, fit: BoxFit.fitHeight),
+                    ),
+                  );
+                });
+              },
+            ),
+          ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: c.pkTextPadding),
+          child: Row(
+            children: [
+              Obx(() => Text('我方 ${c.pkLeft}', style: style)),
+              const Spacer(),
+              Obx(() => Text('${c.pkRight} 对方', style: style)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+  
+}

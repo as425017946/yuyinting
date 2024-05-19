@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/getx_tools.dart';
@@ -44,10 +45,47 @@ class RoomPkManager {
   }
 
   void onPiPei(void Function() callBack) async {
+    final RoomPKController c = Get.find();
+    c._timerStop();
     final back = await Get.bottomSheet(const RoomPkPiPeiPage());
     if (back is bool && back) {
       callBack();
     }
+  }
+
+  Widget pkBar({
+    double width = double.infinity,
+    double height = double.infinity,
+    double? fontSize,
+    int weight = 30,
+    bool isLight = true,
+    double padding = 0,
+    double textPadding = 10,
+  }) {
+    final RoomPKController c = Get.find();
+    c._pkWeight = weight;
+    if (fontSize != null) {
+      c.pkFontSize = fontSize;
+    }
+    c._pkLight.value = isLight;
+    c.pkPadding = padding;
+    c.pkTextPadding = textPadding;
+    c._pkLeft.value = 0;
+    c._pkRight.value = 0;
+    return SizedBox(
+      width: width,
+      height: height,
+      child: const RoomPkBar(),
+    );
+  }
+  void updatePkScore(int left, int right) {
+    final RoomPKController c = Get.find();
+    c._pkLeft.value = left;
+    c._pkRight.value = right;
+  }
+  void updatePkLight(bool isLight) {
+    final RoomPKController c = Get.find();
+    c._pkLight.value = isLight;
   }
 }
 
@@ -55,7 +93,7 @@ class RoomPKController extends GetxController with GetAntiCombo {
   @override
   void onClose() {
     super.onClose();
-    timerStop();
+    _timerStop();
   }
 
   final _isPipei = false.obs;
@@ -65,7 +103,7 @@ class RoomPKController extends GetxController with GetAntiCombo {
   final _pkTime = 15.obs;
   int get pkTime => _pkTime.value;
   Timer? _timer;
-  void timerStop() {
+  void _timerStop() {
     _isPipei.value = false;
     if (_timer != null) {
       _timer?.cancel();
@@ -75,7 +113,7 @@ class RoomPKController extends GetxController with GetAntiCombo {
   void onPipei() {
     action(() {
       if (_isPipei.value) {
-        timerStop();
+        _timerStop();
       } else {
         _pipeiTime.value = 0;
         _isPipei.value = true;
@@ -106,4 +144,17 @@ class RoomPKController extends GetxController with GetAntiCombo {
     hideKeyboard();
     _searchItem.value = textController.text;
   }
+
+  final _pkLight = false.obs;
+  bool get pkLight => _pkLight.value;
+  final _pkLeft = 0.obs;
+  final _pkRight = 0.obs;
+  double pkFontSize = 20.sp;
+  int _pkWeight = 30;
+  int get pkLeft => _pkLeft.value;
+  int get pkLeftWeight => _pkLeft.value + _pkWeight;
+  int get pkRight => _pkRight.value;
+  int get pkRightWeight => _pkRight.value + _pkWeight;
+  double pkPadding = 0;
+  double pkTextPadding = 0;
 }
