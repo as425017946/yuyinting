@@ -987,54 +987,52 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 width: ScreenUtil().setWidth(1),
                                 color: MyColors.roomTCWZ3,
                               ),
-                              sp.getInt('user_grLevel')! >= 4
-                                  ? GestureDetector(
-                                      onTap: (() {
-                                        setState(() {
-                                          gzTitle = '送礼';
-                                          isTS = false;
-                                          shuliang = 1;
-                                          isReduce = false;
-                                          url = '';
-                                          svga = '';
-                                          leixing = 2;
-                                          giftId = '';
-                                          for (int i = 0;
-                                              i < listPV.length;
-                                              i++) {
-                                            listPVBool[i] = false;
-                                          }
-                                          for (int i = 0;
-                                              i < listC.length;
-                                              i++) {
-                                            listCBool[i] = false;
-                                          }
-                                          for (int i = 0;
-                                              i < listPl.length;
-                                              i++) {
-                                            listPlBool[i] = false;
-                                          }
-                                        });
-                                        if (listPl.isEmpty) {
-                                          doPostGiftListBB();
-                                        }
-                                      }),
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        width: 80.h,
-                                        height: 40.h,
-                                        child: WidgetUtils.onlyTextCenter(
-                                            '背包',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: leixing == 2
-                                                    ? MyColors.roomTCWZ2
-                                                    : MyColors.roomTCWZ3,
-                                                fontSize: leixing == 2
-                                                    ? ScreenUtil().setSp(28)
-                                                    : ScreenUtil().setSp(25))),
-                                      ),
-                                    )
-                                  : WidgetUtils.commonSizedBox(0, 0),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    gzTitle = '送礼';
+                                    isTS = false;
+                                    shuliang = 1;
+                                    isReduce = false;
+                                    url = '';
+                                    svga = '';
+                                    leixing = 2;
+                                    giftId = '';
+                                    for (int i = 0;
+                                    i < listPV.length;
+                                    i++) {
+                                      listPVBool[i] = false;
+                                    }
+                                    for (int i = 0;
+                                    i < listC.length;
+                                    i++) {
+                                      listCBool[i] = false;
+                                    }
+                                    for (int i = 0;
+                                    i < listPl.length;
+                                    i++) {
+                                      listPlBool[i] = false;
+                                    }
+                                  });
+                                  if (listPl.isEmpty) {
+                                    doPostGiftListBB();
+                                  }
+                                }),
+                                child: Container(
+                                  color: Colors.transparent,
+                                  width: 80.h,
+                                  height: 40.h,
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '背包',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: leixing == 2
+                                              ? MyColors.roomTCWZ2
+                                              : MyColors.roomTCWZ3,
+                                          fontSize: leixing == 2
+                                              ? ScreenUtil().setSp(28)
+                                              : ScreenUtil().setSp(25))),
+                                ),
+                              ),
                               WidgetUtils.commonSizedBox(0, 10.w),
                               leixing == 2
                                   ? WidgetUtils.onlyTextCenter(
@@ -1884,8 +1882,20 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       CommonBean bean = await DataUtils.postSendGift(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          doPostBalance();
+          setState(() {
+            isCheck = false;
+          });
+          MyToastUtils.showToastBottom('打赏成功~');
+          if(leixing == 2){
+            for (int i = 0; i < listPlBool.length; i++) {
+              if(listPlBool[i] && listPl[i].number != 0){
+                listPl[i].number = listPl[i].number! - shuliang;
+              }
+            }
+          }
           // ignore: use_build_context_synchronously
-          Navigator.pop(context);
+          // Navigator.pop(context);
           eventBus.fire(ResidentBack(isBack: true));
           // ignore: use_build_context_synchronously
           if (svga.isEmpty) {
@@ -1894,9 +1904,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
             MyUtils.goTransparentPageCom(
                 context, RoomShowLiWuPage(listPeople: listPeople, url: url));
           } else {
-            for (int i = 0; i < listPeople.length; i++) {
-              listPeople[i] = false;
-            }
+            // for (int i = 0; i < listPeople.length; i++) {
+            //   listPeople[i] = false;
+            // }
             eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
             eventBus.fire(SVGABack(
                 isAll: false, url: svga, listurl: listurl, isJian: isReduce));
@@ -2009,13 +2019,17 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       CommonBean bean = await DataUtils.postPlayBlindBox(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context);
+          setState(() {
+            isCheck = false;
+          });
+          MyToastUtils.showToastBottom('打赏成功~');
+          // // ignore: use_build_context_synchronously
+          // Navigator.pop(context);
           eventBus.fire(ResidentBack(isBack: true));
           // ignore: use_build_context_synchronously
-          for (int i = 0; i < listPeople.length; i++) {
-            listPeople[i] = false;
-          }
+          // for (int i = 0; i < listPeople.length; i++) {
+          //   listPeople[i] = false;
+          // }
           eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
           break;
         case MyHttpConfig.errorloginCode:

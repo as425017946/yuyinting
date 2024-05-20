@@ -1763,7 +1763,7 @@ class _RoomPageState extends State<RoomPage>
             sp.setString("user_identity", '');
             // 直接杀死app
             SystemNavigator.pop();
-          } else if (event.type == 'up_noble') {
+          } else if (event.type == 'up_noble' && int.parse(event.map!['noble_id'].toString()) > 1) {
             if (sp.getString('user_id').toString() ==
                 event.map!['uid'].toString()) {
               sp.setString('nobleID', event.map!['noble_id'].toString());
@@ -4320,37 +4320,162 @@ class _RoomPageState extends State<RoomPage>
                                       ),
                                     )
                                   : const Text(''),
+                              // (isPK == 0)
+                              //     ? Transform.translate(
+                              //         offset: Offset(0, -50.h),
+                              //         child: Container(
+                              //           height: 450.h,
+                              //           width: double.infinity,
+                              //           decoration: const BoxDecoration(
+                              //             //设置Container修饰
+                              //             image: DecorationImage(
+                              //               //背景图片修饰
+                              //               image: AssetImage(
+                              //                   "assets/images/pk_bg.png"),
+                              //               fit: BoxFit.fill, //覆盖
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       )
+                              //     : const Text(''),
 
-                              /// 麦序位
-                              RoomItems.maixu(
-                                  context,
-                                  m1,
-                                  m2,
-                                  m3,
-                                  m4,
-                                  m5,
-                                  m6,
-                                  m7,
-                                  m8,
-                                  isBoss,
-                                  listM,
-                                  widget.roomId,
-                                  wherePeopleList,
-                                  listPeople,
-                                  audio1,
-                                  audio2,
-                                  audio3,
-                                  audio4,
-                                  audio5,
-                                  audio6,
-                                  audio7,
-                                  audio8,
-                                  whoWin,
-                                  jianLiWu,
-                                  animationControllerJL),
+                              // /// 麦序位
+                              // Transform.translate(
+                              //   offset: Offset(0, 80.h),
+                              //   child: RoomItems.maixuPK(
+                              //       context,
+                              //       m1,
+                              //       m2,
+                              //       m3,
+                              //       m4,
+                              //       m5,
+                              //       m6,
+                              //       m7,
+                              //       m8,
+                              //       isBoss,
+                              //       listM,
+                              //       widget.roomId,
+                              //       wherePeopleList,
+                              //       listPeople,
+                              //       audio1,
+                              //       audio2,
+                              //       audio3,
+                              //       audio4,
+                              //       audio5,
+                              //       audio6,
+                              //       audio7,
+                              //       audio8,
+                              //       whoWin,
+                              //       jianLiWu,
+                              //       animationControllerJL),
+                              // ),
+
+                              // Positioned(
+                              //   top: 50.w,
+                              //     right: 0,
+                              //     child: GestureDetector(
+                              //       onTap: ((){
+                              //
+                              //       }),
+                              //       child: Container(
+                              //         height: 300.h,
+                              //         width: 120.w,
+                              //         color: Colors.transparent,
+                              //         child: Stack(
+                              //           children: [
+                              //             WidgetUtils.showImagesFill(
+                              //                 'assets/images/pk_sq.png', 300.h, 120.w),
+                              //             Container(
+                              //               height: 300.h,
+                              //               padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                              //               child: ListView.builder(
+                              //                 padding: const EdgeInsets.only(top: 0),
+                              //                 itemBuilder: _itemOtherRoom,
+                              //                 itemCount: 9,
+                              //               ),
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     )),
+
+                              // Positioned(
+                              //     top: 50.w,
+                              //     right: 0,
+                              //     child: GestureDetector(
+                              //       onTap: ((){
+                              //
+                              //       }),
+                              //       child: Container(
+                              //         height: 300.h,
+                              //         width: 300.w,
+                              //         color: Colors.transparent,
+                              //         child: Stack(
+                              //           children: [
+                              //             WidgetUtils.showImagesFill(
+                              //                 'assets/images/pk_zk.png', 300.h, 300.w),
+                              //             Container(
+                              //               height: 300.h,
+                              //               width: 300.w,
+                              //               padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                              //               child: Column(
+                              //                 children: [
+                              //                   WidgetUtils.commonSizedBox(20.w, 0),
+                              //                   Container(
+                              //                     height: 80.h,
+                              //                     width: 50.h,
+                              //                     color: Colors.transparent,
+                              //                     child: Column(
+                              //                       children: [
+                              //                         WidgetUtils.showImages('assets/images/room_mai.png', 50.h, 50.h),
+                              //                         WidgetUtils.onlyTextCenter(
+                              //                             '主持麦',
+                              //                             StyleUtils.getCommonTextStyle(
+                              //                                 color: MyColors.roomMaiWZ,
+                              //                                 fontSize: ScreenUtil().setSp(14)))
+                              //                       ],
+                              //                     ),
+                              //                   ),
+                              //                   zkPeople(0),
+                              //                   zkPeople(4),
+                              //                 ],
+                              //               )
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     )),
+                              //
+                              // Positioned(left: 20.w, bottom: 90.w, child: WidgetUtils.showImagesFill(
+                              //     'assets/images/pk_cf.png', 52.h, 110.w)),
                             ],
                           ),
-
+                          RoomItems.maixu(
+                              context,
+                              m1,
+                              m2,
+                              m3,
+                              m4,
+                              m5,
+                              m6,
+                              m7,
+                              m8,
+                              isBoss,
+                              listM,
+                              widget.roomId,
+                              wherePeopleList,
+                              listPeople,
+                              audio1,
+                              audio2,
+                              audio3,
+                              audio4,
+                              audio5,
+                              audio6,
+                              audio7,
+                              audio8,
+                              whoWin,
+                              jianLiWu,
+                              animationControllerJL),
                           //pk
                           (whoWin != 'draw' && isPK != 0)
                               ? Transform.translate(
@@ -6483,6 +6608,97 @@ class _RoomPageState extends State<RoomPage>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _itemOtherRoom(BuildContext context, int i){
+    return Container(
+      height: 90.h,
+      width: 100.h,
+      color: Colors.transparent,
+      child: Column(
+        children: [
+          WidgetUtils.showImages('assets/images/room_mai.png', 50.h, 50.h),
+          WidgetUtils.onlyTextCenter(
+              '${(i+1)}号麦',
+              StyleUtils.getCommonTextStyle(
+                  color: MyColors.roomMaiWZ,
+                  fontSize: ScreenUtil().setSp(14)))
+        ],
+      ),
+    );
+  }
+
+  // 展开房间
+  Widget zkPeople(int i){
+    return Row(
+      children: [
+        const Spacer(),
+        Container(
+          height: 90.h,
+          width: 50.h,
+          color: Colors.transparent,
+          child: Column(
+            children: [
+              WidgetUtils.showImages('assets/images/room_mai.png', 50.h, 50.h),
+              WidgetUtils.onlyTextCenter(
+                  '${(i+1)}号麦',
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.roomMaiWZ,
+                      fontSize: ScreenUtil().setSp(14)))
+            ],
+          ),
+        ),
+        const Spacer(),
+        Container(
+          height: 90.h,
+          width: 50.h,
+          color: Colors.transparent,
+          child: Column(
+            children: [
+              WidgetUtils.showImages('assets/images/room_mai.png', 50.h, 50.h),
+              WidgetUtils.onlyTextCenter(
+                  '${(i+2)}号麦',
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.roomMaiWZ,
+                      fontSize: ScreenUtil().setSp(14)))
+            ],
+          ),
+        ),
+        const Spacer(),
+        Container(
+          height: 90.h,
+          width: 50.h,
+          color: Colors.transparent,
+          child: Column(
+            children: [
+              WidgetUtils.showImages('assets/images/room_mai.png', 50.h, 50.h),
+              WidgetUtils.onlyTextCenter(
+                  '${(i+2)}号麦',
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.roomMaiWZ,
+                      fontSize: ScreenUtil().setSp(14)))
+            ],
+          ),
+        ),
+        const Spacer(),
+        Container(
+          height: 90.h,
+          width: 50.h,
+          color: Colors.transparent,
+          child: Column(
+            children: [
+              WidgetUtils.showImages('assets/images/room_mai.png', 50.h, 50.h),
+              WidgetUtils.onlyTextCenter(
+                  '${(i+2)}号麦',
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.roomMaiWZ,
+                      fontSize: ScreenUtil().setSp(14)))
+            ],
+          ),
+        ),
+        const Spacer(),
+      ],
     );
   }
 }

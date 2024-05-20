@@ -473,7 +473,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             _dispose();
           }
         }
-      } else if (event.type == 'up_noble') {
+      } else if (event.type == 'up_noble' && int.parse(event.map!['noble_id'].toString()) > 1) {
         if(sp.getString('user_id').toString() == event.map!['uid'].toString()){
           sp.setString('nobleID', event.map!['noble_id'].toString());
         }

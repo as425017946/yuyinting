@@ -1240,7 +1240,7 @@ class RoomItems {
     } else if (list[i]['type'] == '9') {
       // 厅内用户抽奖
       List<String> infos = list[i]['content'].toString().split(';');
-      LogE('游戏=== ${infos.length}');
+      // LogE('游戏=== ${infos.length}');
       int startIndex = infos[4].indexOf('(') + 1;
       int endIndex = infos[4].indexOf(')');
       String jine = '';
@@ -4570,6 +4570,2144 @@ class RoomItems {
                 ),
                 WidgetUtils.commonSizedBox(0, 10 * 2.w),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 房间pk麦序使用
+  static Widget maixuPK(BuildContext context,
+      bool m1,
+      bool m2,
+      bool m3,
+      bool m4,
+      bool m5,
+      bool m6,
+      bool m7,
+      bool m8,
+      bool isBoss,
+      List<MikeList> listm,
+      String roomID,
+      List<String> wherePeople,
+      List<bool> listPeople,
+      bool audio1,
+      bool audio2,
+      bool audio3,
+      bool audio4,
+      bool audio5,
+      bool audio6,
+      bool audio7,
+      bool audio8, String whoWin, String jianLiWu,
+      SVGAAnimationController animationControllerJL) {
+    return Transform.translate(
+      offset: Offset(0, (-60 * 2 / 1.25).h),
+      child: Column(
+        children: [
+          Transform.translate(
+            offset: Offset(-70.w, 0),
+            child: Transform.scale(
+                scaleX:0.8,
+              scaleY: 0.8,
+              child: Row(
+                children: [
+                  WidgetUtils.commonSizedBox(0, 10 * 2.w),
+                  GestureDetector(
+                    onTap: (() {
+                      if (listm[0].isLock == 0) {
+                        if (m1) {
+                          if (listm[0].uid.toString() ==
+                              sp.getString('user_id').toString()) {
+                            eventBus.fire(RoomBack(title: '自己', index: '0'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[0].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[0].uid.toString(),
+                                    index: '0',
+                                    roomID: roomID,
+                                    isClose: listm[0].isClose.toString(),
+                                    listM: listm,
+                                  ));
+                            }
+                          }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '0'));
+                        }
+                      } else {
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader' ||
+                            sp.getString('role').toString() == 'president') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '0'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
+                      }
+                    }),
+                    child: SizedBox(
+                      width: ScreenUtil().setWidth(140 * 1.25),
+                      height: ScreenUtil().setHeight(230),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          m1 == true
+                              ? WidgetUtils.CircleHeadImage(
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80),
+                              listm[0].avatar!)
+                              : listm[0].isLock == 0
+                              ? WidgetUtils.showImages(
+                              'assets/images/room_mai.png',
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80))
+                              : WidgetUtils.showImages(
+                              'assets/images/room_suo.png',
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80)),
+                          (listm[0].isClose == 0 && audio1 == true)
+                              ? Container(
+                            height: 140.h,
+                            width: 140.h,
+                            alignment: Alignment.center,
+                            child: listm[0].waveGifImg!.isNotEmpty
+                                ? SVGASimpleImage(
+                              resUrl: listm[0].waveGifImg!,
+                            )
+                                : const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_shengbo.svga',
+                            ),
+                          )
+                              : const Text(''),
+                          // 头像框静态图
+                          (listm[0].avatarFrameGifImg!.isEmpty &&
+                              listm[0].avatarFrameImg!.isNotEmpty)
+                              ? WidgetUtils.CircleHeadImage(
+                              110.h,
+                              110.h,
+                              listm[0].avatarFrameImg!)
+                              : const Text(''),
+                          // 头像框动态图
+                          listm[0].avatarFrameGifImg!.isNotEmpty
+                              ? SizedBox(
+                            height: 110.h,
+                            width: 110.h,
+                            child: SVGASimpleImage(
+                              resUrl: listm[0].avatarFrameGifImg!,
+                            ),
+                          )
+                              : const Text(''),
+                          Column(
+                            children: [
+                              m1 == false
+                                  ? WidgetUtils.commonSizedBox(180.h, 0)
+                                  : WidgetUtils.commonSizedBox(160.h, 0),
+                              m1 == false
+                                  ? WidgetUtils.onlyTextCenter(
+                                  '1号麦',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.roomMaiWZ,
+                                      fontSize: ScreenUtil().setSp(19)))
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m1 == false
+                                  ? WidgetUtils.commonSizedBox(10, 0)
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m1 == true
+                                  ? Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  listm[0].nobleID! > 4 ? ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [MyColors.gz3, MyColors.gz4],
+                                      ).createShader(Offset.zero & bounds.size);
+                                    },
+                                    blendMode: BlendMode.srcATop,
+                                    child: Text(
+                                      listm[0].nickname! ?? '',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(21),
+                                          color: const Color(0xffffffff)),
+                                    ),
+                                  ) :
+                                  WidgetUtils.onlyText(
+                                      listm[0].nickname!,
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(21))),
+                                  const Expanded(child: Text('')),
+                                ],
+                              )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m1 == true
+                                  ? SizedBox(
+                                height: 20.h,
+                                child: Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    WidgetUtils.showImages(
+                                        'assets/images/room_xin.png',
+                                        ScreenUtil().setHeight(17),
+                                        ScreenUtil().setHeight(15)),
+                                    WidgetUtils.commonSizedBox(0, 5),
+                                    WidgetUtils.onlyText(
+                                        listm[0].charm.toString(),
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(21))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                ),
+                              )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                            ],
+                          ),
+                          wherePeople[0] == "1"
+                              ? Container(
+                            height: 80.h,
+                            width: 80.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/baodeng.svga',
+                            ),
+                          )
+                              : const Text(''),
+                          listPeople[0]
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_choose_people.svga',
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                          //pk失败方显示猪头
+                          whoWin == 'red'
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/pk/room_pk_loser.svga',
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                          jianLiWu.contains('1')
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: SVGAImage(
+                                animationControllerJL,
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Expanded(child: Text('')),
+                  GestureDetector(
+                    onTap: (() {
+                      if (listm[1].isLock == 0) {
+                        if (m2) {
+                          if (listm[1].uid.toString() ==
+                              sp.getString('user_id').toString()) {
+                            eventBus.fire(RoomBack(title: '自己', index: '1'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[1].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[1].uid.toString(),
+                                    index: '1',
+                                    roomID: roomID,
+                                    isClose: listm[1].isClose.toString(),
+                                    listM: listm,
+                                  ));
+                            }
+                          }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '1'));
+                        }
+                      } else {
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader' ||
+                            sp.getString('role').toString() == 'president') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '1'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
+                      }
+                    }),
+                    child: SizedBox(
+                      width: ScreenUtil().setWidth(140 * 1.25),
+                      height: ScreenUtil().setHeight(230),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          m2 == true
+                              ? WidgetUtils.CircleHeadImage(
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80),
+                              listm[1].avatar!)
+                              : listm[1].isLock == 0
+                              ? WidgetUtils.showImages(
+                              'assets/images/room_mai.png',
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80))
+                              : WidgetUtils.showImages(
+                              'assets/images/room_suo.png',
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80)),
+                          (listm[1].isClose == 0 && audio2 == true)
+                              ? Container(
+                            height: 140.h,
+                            width: 140.h,
+                            alignment: Alignment.center,
+                            child: listm[1].waveGifImg!.isNotEmpty
+                                ? SVGASimpleImage(
+                              resUrl: listm[1].waveGifImg!,
+                            )
+                                : const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_shengbo.svga',
+                            ),
+                          )
+                              : const Text(''),
+                          // 头像框静态图
+                          (listm[1].avatarFrameGifImg!.isEmpty &&
+                              listm[1].avatarFrameImg!.isNotEmpty)
+                              ? WidgetUtils.CircleHeadImage(
+                              110.h,
+                              110.h,
+                              listm[1].avatarFrameImg!)
+                              : const Text(''),
+                          // 头像框动态图
+                          listm[1].avatarFrameGifImg!.isNotEmpty
+                              ? SizedBox(
+                            height: 110.h,
+                            width: 110.h,
+                            child: SVGASimpleImage(
+                              resUrl: listm[1].avatarFrameGifImg!,
+                            ),
+                          )
+                              : const Text(''),
+                          Column(
+                            children: [
+                              m2 == false
+                                  ? WidgetUtils.commonSizedBox(180.h, 0)
+                                  : WidgetUtils.commonSizedBox(160.h, 0),
+                              m2 == false
+                                  ? WidgetUtils.onlyTextCenter(
+                                  '2号麦',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.roomMaiWZ,
+                                      fontSize: ScreenUtil().setSp(19)))
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m2 == false
+                                  ? WidgetUtils.commonSizedBox(10, 0)
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m2 == true
+                                  ? Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  listm[1].nobleID! > 4 ? ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [MyColors.gz3, MyColors.gz4],
+                                      ).createShader(Offset.zero & bounds.size);
+                                    },
+                                    blendMode: BlendMode.srcATop,
+                                    child: Text(
+                                      listm[1].nickname! ?? '',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(21),
+                                          color: const Color(0xffffffff)),
+                                    ),
+                                  ) :
+                                  WidgetUtils.onlyText(
+                                      listm[1].nickname!,
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(21))),
+                                  const Expanded(child: Text('')),
+                                ],
+                              )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m2 == true
+                                  ? SizedBox(
+                                height: 20.h,
+                                child: Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    WidgetUtils.showImages(
+                                        'assets/images/room_xin.png',
+                                        ScreenUtil().setHeight(17),
+                                        ScreenUtil().setHeight(15)),
+                                    WidgetUtils.commonSizedBox(0, 5),
+                                    WidgetUtils.onlyText(
+                                        listm[1].charm.toString(),
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(21))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                ),
+                              )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                            ],
+                          ),
+                          wherePeople[1] == "2"
+                              ? Container(
+                            height: 80.h,
+                            width: 80.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/baodeng.svga',
+                            ),
+                          )
+                              : const Text(''),
+                          listPeople[1]
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_choose_people.svga',
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                          //pk失败方显示猪头
+                          whoWin == 'red'
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/pk/room_pk_loser.svga',
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                          jianLiWu.contains('2')
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: SVGAImage(
+                                animationControllerJL,
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Expanded(child: Text('')),
+                  GestureDetector(
+                    onTap: (() {
+                      if (listm[2].isLock == 0) {
+                        if (m3) {
+                          if (listm[2].uid.toString() ==
+                              sp.getString('user_id').toString()) {
+                            eventBus.fire(RoomBack(title: '自己', index: '2'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[2].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[2].uid.toString(),
+                                    index: '2',
+                                    roomID: roomID,
+                                    isClose: listm[2].isClose.toString(),
+                                    listM: listm,
+                                  ));
+                            }
+                          }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '2'));
+                        }
+                      } else {
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader' ||
+                            sp.getString('role').toString() == 'president') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '2'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
+                      }
+                    }),
+                    child: SizedBox(
+                      width: ScreenUtil().setWidth(140 * 1.25),
+                      height: ScreenUtil().setHeight(230),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          m3 == true
+                              ? WidgetUtils.CircleHeadImage(
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80),
+                              listm[2].avatar!)
+                              : listm[2].isLock == 0
+                              ? WidgetUtils.showImages(
+                              'assets/images/room_mai.png',
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80))
+                              : WidgetUtils.showImages(
+                              'assets/images/room_suo.png',
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80)),
+                          (listm[2].isClose == 0 && audio3 == true)
+                              ? Container(
+                            height: 140.h,
+                            width: 140.h,
+                            alignment: Alignment.center,
+                            child: listm[2].waveGifImg!.isNotEmpty
+                                ? SVGASimpleImage(
+                              resUrl: listm[2].waveGifImg!,
+                            )
+                                : const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_shengbo.svga',
+                            ),
+                          )
+                              : const Text(''),
+                          // 头像框静态图
+                          (listm[2].avatarFrameGifImg!.isEmpty &&
+                              listm[2].avatarFrameImg!.isNotEmpty)
+                              ? WidgetUtils.CircleHeadImage(
+                              110.h,
+                              110.h,
+                              listm[2].avatarFrameImg!)
+                              : const Text(''),
+                          // 头像框动态图
+                          listm[2].avatarFrameGifImg!.isNotEmpty
+                              ? SizedBox(
+                            height: 110.h,
+                            width: 110.h,
+                            child: SVGASimpleImage(
+                              resUrl: listm[2].avatarFrameGifImg!,
+                            ),
+                          )
+                              : const Text(''),
+                          Column(
+                            children: [
+                              m3 == false
+                                  ? WidgetUtils.commonSizedBox(180.h, 0)
+                                  : WidgetUtils.commonSizedBox(160.h, 0),
+                              m3 == false
+                                  ? WidgetUtils.onlyTextCenter(
+                                  '3号麦',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.roomMaiWZ,
+                                      fontSize: ScreenUtil().setSp(19)))
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m3 == false
+                                  ? WidgetUtils.commonSizedBox(10, 0)
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m3 == true
+                                  ? Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  listm[2].nobleID! > 4 ? ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [MyColors.gz3, MyColors.gz4],
+                                      ).createShader(Offset.zero & bounds.size);
+                                    },
+                                    blendMode: BlendMode.srcATop,
+                                    child: Text(
+                                      listm[2].nickname! ?? '',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(21),
+                                          color: const Color(0xffffffff)),
+                                    ),
+                                  ) :
+                                  WidgetUtils.onlyText(
+                                      listm[2].nickname!,
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(21))),
+                                  const Expanded(child: Text('')),
+                                ],
+                              )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m3 == true
+                                  ? Container(
+                                height: 20.h,
+                                alignment: Alignment.center,
+                                child: Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    WidgetUtils.showImages(
+                                        'assets/images/room_xin.png',
+                                        ScreenUtil().setHeight(17),
+                                        ScreenUtil().setHeight(15)),
+                                    WidgetUtils.commonSizedBox(0, 5),
+                                    WidgetUtils.onlyText(
+                                        listm[2].charm.toString(),
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(21))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                ),
+                              )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                            ],
+                          ),
+                          wherePeople[2] == "3"
+                              ? Container(
+                            height: 80.h,
+                            width: 80.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/baodeng.svga',
+                            ),
+                          )
+                              : const Text(''),
+                          listPeople[2]
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_choose_people.svga',
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                          //pk失败方显示猪头
+                          whoWin == 'blue'
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/pk/room_pk_loser.svga',
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                          jianLiWu.contains('3')
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: SVGAImage(
+                                animationControllerJL,
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Expanded(child: Text('')),
+                  GestureDetector(
+                    onTap: (() {
+                      if (listm[3].isLock == 0) {
+                        if (m4) {
+                          if (listm[3].uid.toString() ==
+                              sp.getString('user_id').toString()) {
+                            eventBus.fire(RoomBack(title: '自己', index: '3'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[3].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[3].uid.toString(),
+                                    index: '3',
+                                    roomID: roomID,
+                                    isClose: listm[3].isClose.toString(),
+                                    listM: listm,
+                                  ));
+                            }
+                          }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '3'));
+                        }
+                      } else {
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader' ||
+                            sp.getString('role').toString() == 'president') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '3'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
+                      }
+                    }),
+                    child: SizedBox(
+                      width: ScreenUtil().setWidth(140 * 1.25),
+                      height: ScreenUtil().setHeight(230),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          m4 == true
+                              ? WidgetUtils.CircleHeadImage(
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80),
+                              listm[3].avatar!)
+                              : listm[3].isLock == 0
+                              ? WidgetUtils.showImages(
+                              'assets/images/room_mai.png',
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80))
+                              : WidgetUtils.showImages(
+                              'assets/images/room_suo.png',
+                              ScreenUtil().setHeight(80),
+                              ScreenUtil().setHeight(80)),
+                          (listm[3].isClose == 0 && audio4 == true)
+                              ? Container(
+                            height: 140.h,
+                            width: 140.h,
+                            alignment: Alignment.center,
+                            child: listm[3].waveGifImg!.isNotEmpty
+                                ? SVGASimpleImage(
+                              resUrl: listm[3].waveGifImg!,
+                            )
+                                : const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_shengbo.svga',
+                            ),
+                          )
+                              : const Text(''),
+                          // 头像框静态图
+                          (listm[3].avatarFrameGifImg!.isEmpty &&
+                              listm[3].avatarFrameImg!.isNotEmpty)
+                              ? WidgetUtils.CircleHeadImage(
+                              110.h,
+                              110.h,
+                              listm[3].avatarFrameImg!)
+                              : const Text(''),
+                          // 头像框动态图
+                          listm[3].avatarFrameGifImg!.isNotEmpty
+                              ? SizedBox(
+                            height: 110.h,
+                            width: 110.h,
+                            child: SVGASimpleImage(
+                              resUrl: listm[3].avatarFrameGifImg!,
+                            ),
+                          )
+                              : const Text(''),
+                          Column(
+                            children: [
+                              m4 == false
+                                  ? WidgetUtils.commonSizedBox(180.h, 0)
+                                  : WidgetUtils.commonSizedBox(160.h, 0),
+                              m4 == false
+                                  ? WidgetUtils.onlyTextCenter(
+                                  '4号麦',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.roomMaiWZ,
+                                      fontSize: ScreenUtil().setSp(19)))
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m4 == false
+                                  ? WidgetUtils.commonSizedBox(10, 0)
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m4 == true
+                                  ? Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  listm[3].nobleID! > 4 ? ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [MyColors.gz3, MyColors.gz4],
+                                      ).createShader(Offset.zero & bounds.size);
+                                    },
+                                    blendMode: BlendMode.srcATop,
+                                    child: Text(
+                                      listm[3].nickname! ?? '',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(21),
+                                          color: const Color(0xffffffff)),
+                                    ),
+                                  ) :
+                                  WidgetUtils.onlyText(
+                                      listm[3].nickname!,
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(21))),
+                                  const Expanded(child: Text('')),
+                                ],
+                              )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                              m4 == true
+                                  ? SizedBox(
+                                height: 20.h,
+                                child: Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    WidgetUtils.showImages(
+                                        'assets/images/room_xin.png',
+                                        ScreenUtil().setHeight(17),
+                                        ScreenUtil().setHeight(15)),
+                                    WidgetUtils.commonSizedBox(0, 5),
+                                    WidgetUtils.onlyText(
+                                        listm[3].charm.toString(),
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(21))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                ),
+                              )
+                                  : WidgetUtils.commonSizedBox(0, 0),
+                            ],
+                          ),
+                          wherePeople[3] == "4"
+                              ? Container(
+                            height: 80.h,
+                            width: 80.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/baodeng.svga',
+                            ),
+                          )
+                              : const Text(''),
+                          listPeople[3]
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_choose_people.svga',
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                          //pk失败方显示猪头
+                          whoWin == 'blue'
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/pk/room_pk_loser.svga',
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                          jianLiWu.contains('4')
+                              ? Positioned(
+                            child: Container(
+                              height: 130.h,
+                              width: 130.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: SVGAImage(
+                                animationControllerJL,
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          )
+                              : const Text(''),
+                        ],
+                      ),
+                    ),
+                  ),
+                  WidgetUtils.commonSizedBox(0, 10 * 2.w),
+                ],
+              ),
+            ),
+          ),
+
+          /// 第二排麦序
+          Transform.translate(
+            offset: Offset(0, (-50 * 2 / 1.25).h),
+            child: Transform.translate(
+              offset: Offset(-70.w, 0),
+              child: Transform.scale(
+                scaleX:0.8,
+                scaleY: 0.8,
+                child: Row(
+                  children: [
+                    WidgetUtils.commonSizedBox(0, 10 * 2.w),
+                    GestureDetector(
+                      onTap: (() {
+                        if (listm[4].isLock == 0) {
+                          if (m5) {
+                            if (listm[4].uid.toString() ==
+                                sp.getString('user_id').toString()) {
+                              eventBus.fire(RoomBack(title: '自己', index: '4'));
+                            } else {
+                              if (MyUtils.checkClick() &&
+                                  listm[4].uid.toString() !=
+                                      sp.getString('user_id').toString()) {
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    RoomPeopleInfoPage(
+                                      uid: listm[4].uid.toString(),
+                                      index: '4',
+                                      roomID: roomID,
+                                      isClose: listm[4].isClose.toString(),
+                                      listM: listm,
+                                    ));
+                              }
+                            }
+                          } else {
+                            eventBus.fire(RoomBack(title: '空位置', index: '4'));
+                          }
+                        } else {
+                          if (sp.getString('role').toString() == 'adminer' ||
+                              sp.getString('role').toString() == 'leader' ||
+                              sp.getString('role').toString() == 'president') {
+                            eventBus.fire(RoomBack(title: '空位置', index: '4'));
+                          } else {
+                            MyToastUtils.showToastBottom('麦位已锁');
+                          }
+                        }
+                      }),
+                      child: SizedBox(
+                        width: ScreenUtil().setWidth(140 * 1.25),
+                        height: ScreenUtil().setHeight(230),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            m5 == true
+                                ? WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80),
+                                listm[4].avatar!)
+                                : listm[4].isLock == 0
+                                ? WidgetUtils.showImages(
+                                'assets/images/room_mai.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80))
+                                : WidgetUtils.showImages(
+                                'assets/images/room_suo.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80)),
+                            (listm[4].isClose == 0 && audio5 == true)
+                                ? Container(
+                              height: 140.h,
+                              width: 140.h,
+                              alignment: Alignment.center,
+                              child: listm[4].waveGifImg!.isNotEmpty
+                                  ? SVGASimpleImage(
+                                resUrl: listm[4].waveGifImg!,
+                              )
+                                  : const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_shengbo.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            // 头像框静态图
+                            (listm[4].avatarFrameGifImg!.isEmpty &&
+                                listm[4].avatarFrameImg!.isNotEmpty)
+                                ? WidgetUtils.CircleHeadImage(
+                                110.h,
+                                110.h,
+                                listm[4].avatarFrameImg!)
+                                : const Text(''),
+                            // 头像框动态图
+                            listm[4].avatarFrameGifImg!.isNotEmpty
+                                ? SizedBox(
+                              height: 110.h,
+                              width: 110.h,
+                              child: SVGASimpleImage(
+                                resUrl: listm[4].avatarFrameGifImg!,
+                              ),
+                            )
+                                : const Text(''),
+                            Column(
+                              children: [
+                                m5 == false
+                                    ? WidgetUtils.commonSizedBox(180.h, 0)
+                                    : WidgetUtils.commonSizedBox(160.h, 0),
+                                m5 == false
+                                    ? WidgetUtils.onlyTextCenter(
+                                    '5号麦',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.roomMaiWZ,
+                                        fontSize: ScreenUtil().setSp(19)))
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m5 == false
+                                    ? WidgetUtils.commonSizedBox(10, 0)
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m5 == true
+                                    ? Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    listm[4].nobleID! > 4 ? ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return const LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [MyColors.gz3, MyColors.gz4],
+                                        ).createShader(Offset.zero & bounds.size);
+                                      },
+                                      blendMode: BlendMode.srcATop,
+                                      child: Text(
+                                        listm[4].nickname! ?? '',
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setSp(21),
+                                            color: const Color(0xffffffff)),
+                                      ),
+                                    ) :
+                                    WidgetUtils.onlyText(
+                                        listm[4].nickname!,
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            ScreenUtil().setSp(21))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m5 == true
+                                    ? SizedBox(
+                                  height: 20.h,
+                                  child: Row(
+                                    children: [
+                                      const Expanded(child: Text('')),
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_xin.png',
+                                          ScreenUtil().setHeight(17),
+                                          ScreenUtil().setHeight(15)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      WidgetUtils.onlyText(
+                                          listm[4].charm.toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(21))),
+                                      const Expanded(child: Text('')),
+                                    ],
+                                  ),
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                              ],
+                            ),
+                            wherePeople[4] == "5"
+                                ? Container(
+                              height: 80.h,
+                              width: 80.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName: 'assets/svga/baodeng.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            listPeople[4]
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/room_choose_people.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            //pk失败方显示猪头
+                            whoWin == 'red'
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/pk/room_pk_loser.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            jianLiWu.contains('5')
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: SVGAImage(
+                                  animationControllerJL,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Expanded(child: Text('')),
+                    GestureDetector(
+                      onTap: (() {
+                        if (listm[5].isLock == 0) {
+                          if (m6) {
+                            if (listm[5].uid.toString() ==
+                                sp.getString('user_id').toString()) {
+                              eventBus.fire(RoomBack(title: '自己', index: '5'));
+                            } else {
+                              if (MyUtils.checkClick() &&
+                                  listm[5].uid.toString() !=
+                                      sp.getString('user_id').toString()) {
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    RoomPeopleInfoPage(
+                                      uid: listm[5].uid.toString(),
+                                      index: '5',
+                                      roomID: roomID,
+                                      isClose: listm[5].isClose.toString(),
+                                      listM: listm,
+                                    ));
+                              }
+                            }
+                          } else {
+                            eventBus.fire(RoomBack(title: '空位置', index: '5'));
+                          }
+                        } else {
+                          if (sp.getString('role').toString() == 'adminer' ||
+                              sp.getString('role').toString() == 'leader' ||
+                              sp.getString('role').toString() == 'president') {
+                            eventBus.fire(RoomBack(title: '空位置', index: '5'));
+                          } else {
+                            MyToastUtils.showToastBottom('麦位已锁');
+                          }
+                        }
+                      }),
+                      child: SizedBox(
+                        width: ScreenUtil().setWidth(140 * 1.25),
+                        height: ScreenUtil().setHeight(230),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            m6 == true
+                                ? WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80),
+                                listm[5].avatar!)
+                                : listm[5].isLock == 0
+                                ? WidgetUtils.showImages(
+                                'assets/images/room_mai.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80))
+                                : WidgetUtils.showImages(
+                                'assets/images/room_suo.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80)),
+                            (listm[5].isClose == 0 && audio6 == true)
+                                ? Container(
+                              height: 140.h,
+                              width: 140.h,
+                              alignment: Alignment.center,
+                              child: listm[5].waveGifImg!.isNotEmpty
+                                  ? SVGASimpleImage(
+                                resUrl: listm[5].waveGifImg!,
+                              )
+                                  : const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_shengbo.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            // 头像框静态图
+                            (listm[5].avatarFrameGifImg!.isEmpty &&
+                                listm[5].avatarFrameImg!.isNotEmpty)
+                                ? WidgetUtils.CircleHeadImage(
+                                110.h,
+                                110.h,
+                                listm[5].avatarFrameImg!)
+                                : const Text(''),
+                            // 头像框动态图
+                            listm[5].avatarFrameGifImg!.isNotEmpty
+                                ? SizedBox(
+                              height: 110.h,
+                              width: 110.h,
+                              child: SVGASimpleImage(
+                                resUrl: listm[5].avatarFrameGifImg!,
+                              ),
+                            )
+                                : const Text(''),
+                            Column(
+                              children: [
+                                m6 == false
+                                    ? WidgetUtils.commonSizedBox(180.h, 0)
+                                    : WidgetUtils.commonSizedBox(160.h, 0),
+                                m6 == false
+                                    ? WidgetUtils.onlyTextCenter(
+                                    '6号麦',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.roomMaiWZ,
+                                        fontSize: ScreenUtil().setSp(19)))
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m6 == false
+                                    ? WidgetUtils.commonSizedBox(10, 0)
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m6 == true
+                                    ? Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    listm[5].nobleID! > 4 ? ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return const LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [MyColors.gz3, MyColors.gz4],
+                                        ).createShader(Offset.zero & bounds.size);
+                                      },
+                                      blendMode: BlendMode.srcATop,
+                                      child: Text(
+                                        listm[5].nickname! ?? '',
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setSp(21),
+                                            color: const Color(0xffffffff)),
+                                      ),
+                                    ) :
+                                    WidgetUtils.onlyText(
+                                        listm[5].nickname!,
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            ScreenUtil().setSp(21))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m6 == true
+                                    ? SizedBox(
+                                  height: 20.h,
+                                  child: Row(
+                                    children: [
+                                      const Expanded(child: Text('')),
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_xin.png',
+                                          ScreenUtil().setHeight(17),
+                                          ScreenUtil().setHeight(15)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      WidgetUtils.onlyText(
+                                          listm[5].charm.toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(21))),
+                                      const Expanded(child: Text('')),
+                                    ],
+                                  ),
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                              ],
+                            ),
+                            wherePeople[5] == "6"
+                                ? Container(
+                              height: 80.h,
+                              width: 80.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName: 'assets/svga/baodeng.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            listPeople[5]
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/room_choose_people.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            //pk失败方显示猪头
+                            whoWin == 'red'
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/pk/room_pk_loser.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            jianLiWu.contains('6')
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: SVGAImage(
+                                  animationControllerJL,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Expanded(child: Text('')),
+                    GestureDetector(
+                      onTap: (() {
+                        if (listm[6].isLock == 0) {
+                          if (m7) {
+                            if (listm[6].uid.toString() ==
+                                sp.getString('user_id').toString()) {
+                              eventBus.fire(RoomBack(title: '自己', index: '6'));
+                            } else {
+                              if (MyUtils.checkClick() &&
+                                  listm[6].uid.toString() !=
+                                      sp.getString('user_id').toString()) {
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    RoomPeopleInfoPage(
+                                      uid: listm[6].uid.toString(),
+                                      index: '6',
+                                      roomID: roomID,
+                                      isClose: listm[6].isClose.toString(),
+                                      listM: listm,
+                                    ));
+                              }
+                            }
+                          } else {
+                            eventBus.fire(RoomBack(title: '空位置', index: '6'));
+                          }
+                        } else {
+                          if (sp.getString('role').toString() == 'adminer' ||
+                              sp.getString('role').toString() == 'leader' ||
+                              sp.getString('role').toString() == 'president') {
+                            eventBus.fire(RoomBack(title: '空位置', index: '6'));
+                          } else {
+                            MyToastUtils.showToastBottom('麦位已锁');
+                          }
+                        }
+                      }),
+                      child: SizedBox(
+                        width: ScreenUtil().setWidth(140 * 1.25),
+                        height: ScreenUtil().setHeight(230),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            m7 == true
+                                ? WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80),
+                                listm[6].avatar!)
+                                : listm[6].isLock == 0
+                                ? WidgetUtils.showImages(
+                                'assets/images/room_mai.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80))
+                                : WidgetUtils.showImages(
+                                'assets/images/room_suo.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80)),
+                            (listm[6].isClose == 0 && audio7 == true)
+                                ? Container(
+                              height: 140.h,
+                              width: 140.h,
+                              alignment: Alignment.center,
+                              child: listm[6].waveGifImg!.isNotEmpty
+                                  ? SVGASimpleImage(
+                                resUrl: listm[6].waveGifImg!,
+                              )
+                                  : const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_shengbo.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            // 头像框静态图
+                            (listm[6].avatarFrameGifImg!.isEmpty &&
+                                listm[6].avatarFrameImg!.isNotEmpty)
+                                ? WidgetUtils.CircleHeadImage(
+                                110.h,
+                                110.h,
+                                listm[6].avatarFrameImg!)
+                                : const Text(''),
+                            // 头像框动态图
+                            listm[6].avatarFrameGifImg!.isNotEmpty
+                                ? SizedBox(
+                              height: 110.h,
+                              width: 110.h,
+                              child: SVGASimpleImage(
+                                resUrl: listm[6].avatarFrameGifImg!,
+                              ),
+                            )
+                                : const Text(''),
+                            Column(
+                              children: [
+                                m7 == false
+                                    ? WidgetUtils.commonSizedBox(180.h, 0)
+                                    : WidgetUtils.commonSizedBox(160.h, 0),
+                                m7 == false
+                                    ? WidgetUtils.onlyTextCenter(
+                                    '7号麦',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.roomMaiWZ,
+                                        fontSize: ScreenUtil().setSp(19)))
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m7 == false
+                                    ? WidgetUtils.commonSizedBox(10, 0)
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m7 == true
+                                    ? Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    listm[6].nobleID! > 4 ? ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return const LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [MyColors.gz3, MyColors.gz4],
+                                        ).createShader(Offset.zero & bounds.size);
+                                      },
+                                      blendMode: BlendMode.srcATop,
+                                      child: Text(
+                                        listm[6].nickname! ?? '',
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setSp(21),
+                                            color: const Color(0xffffffff)),
+                                      ),
+                                    ) :
+                                    WidgetUtils.onlyText(
+                                        listm[6].nickname!,
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            ScreenUtil().setSp(21))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m7 == true
+                                    ? SizedBox(
+                                  height: 20.h,
+                                  child: Row(
+                                    children: [
+                                      const Expanded(child: Text('')),
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_xin.png',
+                                          ScreenUtil().setHeight(17),
+                                          ScreenUtil().setHeight(15)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      WidgetUtils.onlyText(
+                                          listm[6].charm.toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(21))),
+                                      const Expanded(child: Text('')),
+                                    ],
+                                  ),
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                              ],
+                            ),
+                            wherePeople[6] == "7"
+                                ? Container(
+                              height: 80.h,
+                              width: 80.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName: 'assets/svga/baodeng.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            listPeople[6]
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/room_choose_people.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            //pk失败方显示猪头
+                            whoWin == 'blue'
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/pk/room_pk_loser.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            jianLiWu.contains('7')
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: SVGAImage(
+                                  animationControllerJL,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Expanded(child: Text('')),
+                    isBoss == true
+                        ? GestureDetector(
+                      onTap: (() {
+                        if (listm[7].isLock == 0) {
+                          if (m8) {
+                            if (listm[7].uid.toString() ==
+                                sp.getString('user_id').toString()) {
+                              eventBus
+                                  .fire(RoomBack(title: '自己', index: '7'));
+                            } else {
+                              if (MyUtils.checkClick() &&
+                                  listm[7].uid.toString() !=
+                                      sp.getString('user_id').toString()) {
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    RoomPeopleInfoPage(
+                                      uid: listm[7].uid.toString(),
+                                      index: '7',
+                                      roomID: roomID,
+                                      isClose: listm[7].isClose.toString(),
+                                      listM: listm,
+                                    ));
+                              }
+                            }
+                          } else {
+                            eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                          }
+                        } else {
+                          if (sp.getString('role').toString() == 'adminer' ||
+                              sp.getString('role').toString() == 'leader' ||
+                              sp.getString('role').toString() ==
+                                  'president') {
+                            eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                          } else {
+                            MyToastUtils.showToastBottom('麦位已锁');
+                          }
+                        }
+                      }),
+                      child: SizedBox(
+                        width: ScreenUtil().setWidth(140 * 1.25),
+                        height: ScreenUtil().setHeight(230),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            m8 == true
+                                ? WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80),
+                                listm[7].avatar!)
+                                : listm[7].isLock == 1
+                                ? WidgetUtils.showImages(
+                                'assets/images/room_suo.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80))
+                                : Container(
+                              height: ScreenUtil().setHeight(80),
+                              width: ScreenUtil().setHeight(80),
+                              color: Colors.transparent,
+                              child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/laobanwei.svga'),
+                            ),
+                            (listm[7].isClose == 0 && audio8 == true)
+                                ? Container(
+                              height: 140.h,
+                              width: 140.h,
+                              alignment: Alignment.center,
+                              child: listm[7].waveGifImg!.isNotEmpty
+                                  ? SVGASimpleImage(
+                                resUrl: listm[7].waveGifImg!,
+                              )
+                                  : const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_shengbo.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            // 头像框静态图
+                            (listm[7].avatarFrameGifImg!.isEmpty &&
+                                listm[7].avatarFrameImg!.isNotEmpty)
+                                ? WidgetUtils.CircleHeadImage(
+                                110.h,
+                                110.h,
+                                listm[7].avatarFrameImg!)
+                                : const Text(''),
+                            // 头像框动态图
+                            listm[7].avatarFrameGifImg!.isNotEmpty
+                                ? SizedBox(
+                              height: 110.h,
+                              width: 110.h,
+                              child: SVGASimpleImage(
+                                resUrl: listm[7].avatarFrameGifImg!,
+                              ),
+                            )
+                                : const Text(''),
+                            Column(
+                              children: [
+                                m8 == false
+                                    ? WidgetUtils.commonSizedBox(180.h, 0)
+                                    : WidgetUtils.commonSizedBox(160.h, 0),
+                                m8 == false
+                                    ? ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFF6ffffd),
+                                        Color(0xFFf8fec4)
+                                      ],
+                                    ).createShader(
+                                        Offset.zero & bounds.size);
+                                  },
+                                  blendMode: BlendMode.srcATop,
+                                  child: Text(
+                                    "老板位",
+                                    style: TextStyle(
+                                        fontSize:
+                                        ScreenUtil().setSp(19),
+                                        color: const Color(0xffffffff),
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m8 == false
+                                    ? WidgetUtils.commonSizedBox(10, 0)
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m8 == true
+                                    ? Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return const LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [
+                                            Color(0xFF6ffffd),
+                                            Color(0xFFf8fec4)
+                                          ],
+                                        ).createShader(
+                                            Offset.zero & bounds.size);
+                                      },
+                                      blendMode: BlendMode.srcATop,
+                                      child: Text(
+                                        listm[7].nickname!,
+                                        style: TextStyle(
+                                            fontSize:
+                                            ScreenUtil().setSp(21),
+                                            color:
+                                            const Color(0xffffffff),
+                                            fontWeight:
+                                            FontWeight.w700),
+                                      ),
+                                    ),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m8 == true
+                                    ? SizedBox(
+                                  height: 20.h,
+                                  child: Row(
+                                    children: [
+                                      const Expanded(child: Text('')),
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_xin.png',
+                                          ScreenUtil().setHeight(17),
+                                          ScreenUtil().setHeight(15)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      WidgetUtils.onlyText(
+                                          listm[7].charm.toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: ScreenUtil()
+                                                  .setSp(21))),
+                                      const Expanded(child: Text('')),
+                                    ],
+                                  ),
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                              ],
+                            ),
+                            wherePeople[7] == "8"
+                                ? Container(
+                              height: 80.h,
+                              width: 80.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName: 'assets/svga/baodeng.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            listPeople[7]
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/room_choose_people.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            //pk失败方显示猪头
+                            whoWin == 'blue'
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/pk/room_pk_loser.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            jianLiWu.contains('8')
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: SVGAImage(
+                                  animationControllerJL,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                          ],
+                        ),
+                      ),
+                    )
+                        : GestureDetector(
+                      onTap: (() {
+                        if (listm[7].isLock == 0) {
+                          if (m8) {
+                            if (listm[7].uid.toString() ==
+                                sp.getString('user_id').toString()) {
+                              eventBus
+                                  .fire(RoomBack(title: '自己', index: '7'));
+                            } else {
+                              if (MyUtils.checkClick() &&
+                                  listm[7].uid.toString() !=
+                                      sp.getString('user_id').toString()) {
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    RoomPeopleInfoPage(
+                                      uid: listm[7].uid.toString(),
+                                      index: '7',
+                                      roomID: roomID,
+                                      isClose: listm[7].isClose.toString(),
+                                      listM: listm,
+                                    ));
+                              }
+                            }
+                          } else {
+                            eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                          }
+                        } else {
+                          if (sp.getString('role').toString() == 'adminer' ||
+                              sp.getString('role').toString() == 'leader' ||
+                              sp.getString('role').toString() ==
+                                  'president') {
+                            eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                          } else {
+                            MyToastUtils.showToastBottom('麦位已锁');
+                          }
+                        }
+                      }),
+                      child: SizedBox(
+                        width: ScreenUtil().setWidth(140 * 1.25),
+                        height: ScreenUtil().setHeight(230),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            m8 == true
+                                ? WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80),
+                                listm[7].avatar!)
+                                : listm[7].isLock == 0
+                                ? WidgetUtils.showImages(
+                                'assets/images/room_mai.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80))
+                                : WidgetUtils.showImages(
+                                'assets/images/room_suo.png',
+                                ScreenUtil().setHeight(80),
+                                ScreenUtil().setHeight(80)),
+                            (listm[7].isClose == 0 && audio8 == true)
+                                ? Container(
+                              height: 140.h,
+                              width: 140.h,
+                              alignment: Alignment.center,
+                              child: listm[7].waveGifImg!.isNotEmpty
+                                  ? SVGASimpleImage(
+                                resUrl: listm[7].waveGifImg!,
+                              )
+                                  : const SVGASimpleImage(
+                                assetsName:
+                                'assets/svga/room_shengbo.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            // 头像框静态图
+                            (listm[7].avatarFrameGifImg!.isEmpty &&
+                                listm[7].avatarFrameImg!.isNotEmpty)
+                                ? WidgetUtils.CircleHeadImage(
+                                110.h,
+                                110.h,
+                                listm[7].avatarFrameImg!)
+                                : const Text(''),
+                            // 头像框动态图
+                            listm[7].avatarFrameGifImg!.isNotEmpty
+                                ? SizedBox(
+                              height: 110.h,
+                              width: 110.h,
+                              child: SVGASimpleImage(
+                                resUrl: listm[7].avatarFrameGifImg!,
+                              ),
+                            )
+                                : const Text(''),
+                            Column(
+                              children: [
+                                m8 == false
+                                    ? WidgetUtils.commonSizedBox(180.h, 0)
+                                    : WidgetUtils.commonSizedBox(160.h, 0),
+                                m8 == false
+                                    ? WidgetUtils.onlyTextCenter(
+                                    '8号麦',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.roomMaiWZ,
+                                        fontSize: ScreenUtil().setSp(19)))
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m8 == false
+                                    ? WidgetUtils.commonSizedBox(10, 0)
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m8 == true
+                                    ? Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    listm[7].nobleID! > 4 ? ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return const LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [MyColors.gz3, MyColors.gz4],
+                                        ).createShader(Offset.zero & bounds.size);
+                                      },
+                                      blendMode: BlendMode.srcATop,
+                                      child: Text(
+                                        listm[7].nickname! ?? '',
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setSp(21),
+                                            color: const Color(0xffffffff)),
+                                      ),
+                                    ) :
+                                    WidgetUtils.onlyText(
+                                        listm[7].nickname!,
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil()
+                                                .setSp(21))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                                m8 == true
+                                    ? SizedBox(
+                                  height: 20.h,
+                                  child: Row(
+                                    children: [
+                                      const Expanded(child: Text('')),
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_xin.png',
+                                          ScreenUtil().setHeight(17),
+                                          ScreenUtil().setHeight(15)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      WidgetUtils.onlyText(
+                                          listm[7].charm.toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: ScreenUtil()
+                                                  .setSp(21))),
+                                      const Expanded(child: Text('')),
+                                    ],
+                                  ),
+                                )
+                                    : WidgetUtils.commonSizedBox(0, 0),
+                              ],
+                            ),
+                            wherePeople[7] == "8"
+                                ? Container(
+                              height: 80.h,
+                              width: 80.h,
+                              //超出部分，可裁剪
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(50.h),
+                              ),
+                              child: const SVGASimpleImage(
+                                assetsName: 'assets/svga/baodeng.svga',
+                              ),
+                            )
+                                : const Text(''),
+                            listPeople[7]
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/room_choose_people.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            //pk失败方显示猪头
+                            whoWin == 'blue'
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/pk/room_pk_loser.svga',
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                            jianLiWu.contains('8')
+                                ? Positioned(
+                              child: Container(
+                                height: 130.h,
+                                width: 130.h,
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.h),
+                                ),
+                                child: SVGAImage(
+                                  animationControllerJL,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
+                                : const Text(''),
+                          ],
+                        ),
+                      ),
+                    ),
+                    WidgetUtils.commonSizedBox(0, 10 * 2.w),
+                  ],
+                ),
+              ),
             ),
           ),
         ],

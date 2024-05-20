@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -125,7 +126,21 @@ class _MessagePageState extends State<MessagePage>
       });
     };
     _sc.addListener(_scListener!);
+    // _getBatteryLevel();
   }
+
+  // final methodChannel = const MethodChannel('moniqi');
+  //
+  // Future<void> _getBatteryLevel() async {
+  //   try {
+  //     final result = await methodChannel.invokeMethod<int>('getBatteryLevel');
+  //     LogE('返回结果== $result');
+  //   } on PlatformException catch (e) {
+  //
+  //   }
+  //
+  // }
+
 
   @override
   void dispose() {
