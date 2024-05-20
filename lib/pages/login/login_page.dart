@@ -154,31 +154,54 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
 
 
   String pid = '';
+  // void ceshi() async {
+  //   List<String> uirlInfo = [];
+  //   ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain!);
+  //   if (data != null) {
+  //     setState(() {
+  //       if (data.text!.contains('?')) {
+  //         uirlInfo = data.text!.split('?');
+  //         // 有代理有房间id
+  //         if (uirlInfo[1].contains('&')) {
+  //           uirlInfo = uirlInfo[1].split('&');
+  //           pid = uirlInfo[0].split('=')[1];
+  //           LogE('代理id $pid');
+  //           sp.setString('daili_roomid', uirlInfo[1].split('=')[1]);
+  //           LogE('房间id ${uirlInfo[1].split('=')[1]}');
+  //         } else {
+  //           // 只有代理id
+  //           pid = uirlInfo[1].split('=')[1];
+  //           LogE('代理id $pid');
+  //           sp.setString('daili_roomid', '');
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     // MyToastUtils.showToastBottom('没有获取到剪切板信息');
+  //   }
+  // }
   void ceshi() async {
-    List<String> uirlInfo = [];
-    ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain!);
-    if (data != null) {
-      setState(() {
-        if (data.text!.contains('?')) {
-          uirlInfo = data.text!.split('?');
-          // 有代理有房间id
-          if (uirlInfo[1].contains('&')) {
-            uirlInfo = uirlInfo[1].split('&');
-            pid = uirlInfo[0].split('=')[1];
-            LogE('代理id $pid');
-            sp.setString('daili_roomid', uirlInfo[1].split('=')[1]);
-            LogE('房间id ${uirlInfo[1].split('=')[1]}');
-          } else {
-            // 只有代理id
-            pid = uirlInfo[1].split('=')[1];
-            LogE('代理id $pid');
-            sp.setString('daili_roomid', '');
-          }
+    ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data == null) return;
+    final text = data.text;
+    if (text == null || !text.contains('?')) return;
+    final index = text.indexOf('?');
+    final sub = text.substring(index+1);
+    final Map<String, String> map = {};
+    for (final element in sub.split('&')) {
+      final list = element.split('=');
+      if (list.length == 2) {
+        final value = list[1];
+        if (int.parse(value) > 0) {
+          map[list[0]] = value;
         }
-      });
-    } else {
-      // MyToastUtils.showToastBottom('没有获取到剪切板信息');
+      }
     }
+    final uid = map['uid'];
+    final roomId = map['room_id'];
+    if (uid == null || roomId == null) return;
+    pid = uid;
+    sp.setString('daili_roomid', roomId);
   }
 
   @override

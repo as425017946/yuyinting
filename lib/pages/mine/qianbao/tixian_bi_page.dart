@@ -10,6 +10,7 @@ import '../../../bean/isPayBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_utils.dart';
@@ -120,6 +121,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
         }
       });
     });
+    updrawalSave();
   }
 
   late List<String> listTD = [];
@@ -608,6 +610,16 @@ class _TixianBiPageState extends State<TixianBiPage> {
     );
   }
 
+  
+  void updrawalSave() {
+    if (methodID == '3') {
+      final drawal3Save = sp.getStringList('drawal_3_save');
+      if (drawal3Save == null || drawal3Save.length != 3) return;
+      controllerName.text = drawal3Save[0];
+      controllerYHKH.text = drawal3Save[1];
+      controllerYHName.text = drawal3Save[2];
+    }
+  }
   /// 申请提现
   Future<void> doPostWithdrawal(mima) async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -621,6 +633,10 @@ class _TixianBiPageState extends State<TixianBiPage> {
       'pay_pwd': mima, //支付密码
       'bank': controllerYHName.text.trim().toString()
     };
+    // 本地记录上次提现的账号信息
+    if (methodID == '3') { // 银行卡
+      sp.setStringList('drawal_3_save', [params['name'], params['account'], params['bank']]);
+    }
     try {
       Loading.show();
       CommonBean bean = await DataUtils.postWithdrawal(params);
