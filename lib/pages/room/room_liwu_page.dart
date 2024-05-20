@@ -1888,11 +1888,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           });
           MyToastUtils.showToastBottom('打赏成功~');
           if(leixing == 2){
-            for (int i = 0; i < listPlBool.length; i++) {
-              if(listPlBool[i] && listPl[i].number != 0){
-                listPl[i].number = listPl[i].number! - shuliang;
-              }
-            }
+            doPostGiftListBB();
           }
           // ignore: use_build_context_synchronously
           // Navigator.pop(context);
