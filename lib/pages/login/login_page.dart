@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     });
     // TODO: implement initState
     super.initState();
-    doPostPdAddress();
+    // doPostPdAddress();
     // getIPAddress();
     getDeviceIMEI();
     // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭
@@ -527,50 +527,50 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                           GestureDetector(
                             onTap: (() {
                               if (MyUtils.checkClick()) {
-                                setState(() {
-                                  type = 1;
-                                });
-                                if (_autoCodeText == '发送验证码' ||
-                                    _autoCodeText == '重新获取') {
-                                  if (controllerPhone.text.trim().isEmpty) {
-                                    MyToastUtils.showToastBottom('请输入手机号');
-                                  } else if (!MyUtils.chinaPhoneNumber(
-                                      controllerPhone.text.trim())) {
-                                    MyToastUtils.showToastBottom('输入的手机号码格式错误');
-                                  } else {
-                                    //没有ip
-                                    // if(sp.getString('userIP').toString().isEmpty){
-                                    //   doPostPdAddress();
-                                    // }else{
-                                    //   doPostLoginSms();
-                                    // }
-                                    doPostLoginSms();
-                                  }
-                                }
-                                // if(sp.getString('isEmulation').toString() == '1'){
-                                //   MyToastUtils.showToastBottom('当前为模拟器设备，禁止注册！');
-                                // }else{
-                                //   setState(() {
-                                //     type = 1;
-                                //   });
-                                //   if (_autoCodeText == '发送验证码' ||
-                                //       _autoCodeText == '重新获取') {
-                                //     if (controllerPhone.text.trim().isEmpty) {
-                                //       MyToastUtils.showToastBottom('请输入手机号');
-                                //     } else if (!MyUtils.chinaPhoneNumber(
-                                //         controllerPhone.text.trim())) {
-                                //       MyToastUtils.showToastBottom('输入的手机号码格式错误');
-                                //     } else {
-                                //       //没有ip
-                                //       // if(sp.getString('userIP').toString().isEmpty){
-                                //       //   doPostPdAddress();
-                                //       // }else{
-                                //       //   doPostLoginSms();
-                                //       // }
-                                //       doPostLoginSms();
-                                //     }
+                                // setState(() {
+                                //   type = 1;
+                                // });
+                                // if (_autoCodeText == '发送验证码' ||
+                                //     _autoCodeText == '重新获取') {
+                                //   if (controllerPhone.text.trim().isEmpty) {
+                                //     MyToastUtils.showToastBottom('请输入手机号');
+                                //   } else if (!MyUtils.chinaPhoneNumber(
+                                //       controllerPhone.text.trim())) {
+                                //     MyToastUtils.showToastBottom('输入的手机号码格式错误');
+                                //   } else {
+                                //     //没有ip
+                                //     // if(sp.getString('userIP').toString().isEmpty){
+                                //     //   doPostPdAddress();
+                                //     // }else{
+                                //     //   doPostLoginSms();
+                                //     // }
+                                //     doPostLoginSms();
                                 //   }
                                 // }
+                                if(sp.getString('isEmulation').toString() == '1'){
+                                  MyToastUtils.showToastBottom('当前为模拟器设备，禁止注册！');
+                                }else{
+                                  setState(() {
+                                    type = 1;
+                                  });
+                                  if (_autoCodeText == '发送验证码' ||
+                                      _autoCodeText == '重新获取') {
+                                    if (controllerPhone.text.trim().isEmpty) {
+                                      MyToastUtils.showToastBottom('请输入手机号');
+                                    } else if (!MyUtils.chinaPhoneNumber(
+                                        controllerPhone.text.trim())) {
+                                      MyToastUtils.showToastBottom('输入的手机号码格式错误');
+                                    } else {
+                                      //没有ip
+                                      // if(sp.getString('userIP').toString().isEmpty){
+                                      //   doPostPdAddress();
+                                      // }else{
+                                      //   doPostLoginSms();
+                                      // }
+                                      doPostLoginSms();
+                                    }
+                                  }
+                                }
                               }
                             }),
                             child: Container(
@@ -1087,49 +1087,49 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     }
   }
 
-  /// 判断当前网络，然后给返回适配的网络地址
-  Future<void> doPostPdAddress() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
-    sp.setString('myVersion2', version.toString());
-    sp.setString('buildNumber', buildNumber);
-    try {
-      // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
-      // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
-      var respons = await DataUtils.postPdAddress(OnlineConfig.pingParams);
-      if (respons.code == 200) {
-        setState(() {
-          sp.setString('userIP', respons.address);
-        });
-        MyPing.checkIp(
-          respons.ips,
-          (ip) {
-            setState(() {
-              // sp.setString('isDian', ip);
-              // LogE('Ping 设置: ${sp.getString('isDian')}');
-              // // MyHttpConfig.baseURL =
-              // //     "http://${sp.getString('isDian').toString()}:8081/api";
-              // MyHttpConfig.baseURL =
-              // "http://${sp.getString('isDian').toString()}:8080/api";
-              OnlineConfig.updateIp(ip);
-            });
-          },
-        );
-      } else if (respons.code == 401) {
-        // ignore: use_build_context_synchronously
-        MyUtils.jumpLogin(context);
-      } else {
-        MyToastUtils.showToastBottom('IP获取失败~');
-        Map<String, dynamic> paramsa = <String, dynamic>{
-          'title': '获取IP',
-          'msg': 'ip获取失败',
-        };
-        CommonBean bean = await DataUtils.postIpLog(paramsa);
-      }
-    } catch (e) {
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
-      // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
-    }
-  }
+  // /// 判断当前网络，然后给返回适配的网络地址
+  // Future<void> doPostPdAddress() async {
+  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  //   String version = packageInfo.version;
+  //   String buildNumber = packageInfo.buildNumber;
+  //   sp.setString('myVersion2', version.toString());
+  //   sp.setString('buildNumber', buildNumber);
+  //   try {
+  //     // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+  //     // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
+  //     var respons = await DataUtils.postPdAddress(OnlineConfig.pingParams);
+  //     if (respons.code == 200) {
+  //       setState(() {
+  //         sp.setString('userIP', respons.address);
+  //       });
+  //       MyPing.checkIp(
+  //         respons.ips,
+  //         (ip) {
+  //           setState(() {
+  //             // sp.setString('isDian', ip);
+  //             // LogE('Ping 设置: ${sp.getString('isDian')}');
+  //             // // MyHttpConfig.baseURL =
+  //             // //     "http://${sp.getString('isDian').toString()}:8081/api";
+  //             // MyHttpConfig.baseURL =
+  //             // "http://${sp.getString('isDian').toString()}:8080/api";
+  //             OnlineConfig.updateIp(ip);
+  //           });
+  //         },
+  //       );
+  //     } else if (respons.code == 401) {
+  //       // ignore: use_build_context_synchronously
+  //       MyUtils.jumpLogin(context);
+  //     } else {
+  //       MyToastUtils.showToastBottom('IP获取失败~');
+  //       Map<String, dynamic> paramsa = <String, dynamic>{
+  //         'title': '获取IP',
+  //         'msg': 'ip获取失败',
+  //       };
+  //       CommonBean bean = await DataUtils.postIpLog(paramsa);
+  //     }
+  //   } catch (e) {
+  //     // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+  //     // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
+  //   }
+  // }
 }

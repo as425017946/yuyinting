@@ -30,6 +30,9 @@ class _StarPageState extends State<StarPage> {
     // TODO: implement initState
     super.initState();
     setState(() {
+      setState(() {
+        sp.setString('isEmulation', '0');
+      });
       sp.setString('scIsOk', '0');
       sp.setString('userIP', '');
       sp.setInt('tjFirst', 0);
@@ -50,23 +53,6 @@ class _StarPageState extends State<StarPage> {
     });
     if (Platform.isAndroid) {
       setState(() {
-        sp.setString('isEmulation', '0');
-      });
-      AndroidPackageManager().getInstalledApplications().then((value){
-        setState(() {
-          _applicationInfoList = value;
-        });
-        for(int i = 0; i < _applicationInfoList!.length; i++){
-          if(_applicationInfoList![i].packageName!.contains('emulation')){
-            setState(() {
-              sp.setString('isEmulation', '1');
-            });
-            LogE('模拟器运行');
-            break;
-          }
-        }
-      });
-      setState(() {
         sp.setString('myDevices', 'android');
       });
     } else if (Platform.isIOS) {
@@ -81,7 +67,7 @@ class _StarPageState extends State<StarPage> {
     }
 
     doPostAheadPunish();
-    doPostPdAddress();
+    // doPostPdAddress();
     Future.delayed(const Duration(milliseconds: 2000), (() {
       sp.setBool('joinRoom', false);
       sp.setString('roomID', '');
@@ -103,6 +89,22 @@ class _StarPageState extends State<StarPage> {
       }
 
     }));
+
+    _getBatteryLevel();
+  }
+
+
+  final methodChannel = const MethodChannel('moniqi');
+
+  Future<void> _getBatteryLevel() async {
+    try {
+      final result = await methodChannel.invokeMethod('getBatteryLevel');
+      sp.setString('isEmulation', result.toString());
+      LogE('返回结果== $result');
+    } on PlatformException catch (e) {
+      LogE('返回结果==2 ${e.toString()}');
+    }
+
   }
 
   @override
@@ -139,43 +141,43 @@ class _StarPageState extends State<StarPage> {
     });
   }
 
-  /// 判断当前网络，然后给返回适配的网络地址
-  Future<void> doPostPdAddress() async {
-    try {
-      // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
-      // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
-      var respons = await DataUtils.postPdAddress(OnlineConfig.pingParams);
-      if (respons.code == 200) {
-        setState(() {
-          sp.setString('userIP', respons.address);
-        });
-        MyPing.checkIp(
-          respons.ips,
-          (ip) {
-            if (mounted) {
-              setState(() {
-                // sp.setString('isDian', ip);
-                // LogE('Ping 设置: ${sp.getString('isDian')}');
-                // // MyHttpConfig.baseURL =
-                // // "http://${sp.getString('isDian').toString()}:8081/api";
-                // MyHttpConfig.baseURL =
-                // "http://${sp.getString('isDian').toString()}:8080/api";
-                OnlineConfig.updateIp(ip);
-              });
-            }
-          },
-        );
-      } else if (respons.code == 401) {
-        // ignore: use_build_context_synchronously
-        MyUtils.jumpLogin(context);
-      } else {
-        MyToastUtils.showToastBottom('IP获取失败~');
-      }
-    } catch (e) {
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
-      // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
-    }
-  }
+  // /// 判断当前网络，然后给返回适配的网络地址
+  // Future<void> doPostPdAddress() async {
+  //   try {
+  //     // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+  //     // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
+  //     var respons = await DataUtils.postPdAddress(OnlineConfig.pingParams);
+  //     if (respons.code == 200) {
+  //       setState(() {
+  //         sp.setString('userIP', respons.address);
+  //       });
+  //       MyPing.checkIp(
+  //         respons.ips,
+  //         (ip) {
+  //           if (mounted) {
+  //             setState(() {
+  //               // sp.setString('isDian', ip);
+  //               // LogE('Ping 设置: ${sp.getString('isDian')}');
+  //               // // MyHttpConfig.baseURL =
+  //               // // "http://${sp.getString('isDian').toString()}:8081/api";
+  //               // MyHttpConfig.baseURL =
+  //               // "http://${sp.getString('isDian').toString()}:8080/api";
+  //               OnlineConfig.updateIp(ip);
+  //             });
+  //           }
+  //         },
+  //       );
+  //     } else if (respons.code == 401) {
+  //       // ignore: use_build_context_synchronously
+  //       MyUtils.jumpLogin(context);
+  //     } else {
+  //       MyToastUtils.showToastBottom('IP获取失败~');
+  //     }
+  //   } catch (e) {
+  //     // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+  //     // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
+  //   }
+  // }
 
   /// 打开app
   Future<void> doPostAheadPunish() async {

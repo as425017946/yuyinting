@@ -126,21 +126,7 @@ class _MessagePageState extends State<MessagePage>
       });
     };
     _sc.addListener(_scListener!);
-    // _getBatteryLevel();
   }
-
-  // final methodChannel = const MethodChannel('moniqi');
-  //
-  // Future<void> _getBatteryLevel() async {
-  //   try {
-  //     final result = await methodChannel.invokeMethod<int>('getBatteryLevel');
-  //     LogE('返回结果== $result');
-  //   } on PlatformException catch (e) {
-  //
-  //   }
-  //
-  // }
-
 
   @override
   void dispose() {

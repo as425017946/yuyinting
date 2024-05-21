@@ -380,46 +380,46 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  /// 判断当前网络，然后给返回适配的网络地址
-  Future<void> doPostPdAddress() async {
-    try {
-      // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
-      // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
-      var respons = await DataUtils.postPdAddress(OnlineConfig.pingParams);
-      if (respons.code == 200) {
-        setState(() {
-          sp.setString('userIP', respons.address);
-        });
-        MyPing.checkIp(
-          respons.ips,
-          (ip) {
-            setState(() {
-              // sp.setString('isDian', ip);
-              // LogE('Ping 设置: ${sp.getString('isDian')}');
-              // // MyHttpConfig.baseURL =
-              // // "http://${sp.getString('isDian').toString()}:8081/api";
-              // MyHttpConfig.baseURL =
-              // "http://${sp.getString('isDian').toString()}:8080/api";
-              OnlineConfig.updateIp(ip);
-            });
-          },
-        );
-      } else if (respons.code == 401) {
-        // ignore: use_build_context_synchronously
-        MyUtils.jumpLogin(context);
-      } else {
-        MyToastUtils.showToastBottom('IP获取失败~');
-        Map<String, dynamic> paramsa = <String, dynamic>{
-          'title': '获取IP',
-          'msg': 'ip获取失败',
-        };
-        CommonBean bean = await DataUtils.postIpLog(paramsa);
-      }
-    } catch (e) {
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
-      // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
-    }
-  }
+  // /// 判断当前网络，然后给返回适配的网络地址
+  // Future<void> doPostPdAddress() async {
+  //   try {
+  //     // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+  //     // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
+  //     var respons = await DataUtils.postPdAddress(OnlineConfig.pingParams);
+  //     if (respons.code == 200) {
+  //       setState(() {
+  //         sp.setString('userIP', respons.address);
+  //       });
+  //       MyPing.checkIp(
+  //         respons.ips,
+  //         (ip) {
+  //           setState(() {
+  //             // sp.setString('isDian', ip);
+  //             // LogE('Ping 设置: ${sp.getString('isDian')}');
+  //             // // MyHttpConfig.baseURL =
+  //             // // "http://${sp.getString('isDian').toString()}:8081/api";
+  //             // MyHttpConfig.baseURL =
+  //             // "http://${sp.getString('isDian').toString()}:8080/api";
+  //             OnlineConfig.updateIp(ip);
+  //           });
+  //         },
+  //       );
+  //     } else if (respons.code == 401) {
+  //       // ignore: use_build_context_synchronously
+  //       MyUtils.jumpLogin(context);
+  //     } else {
+  //       MyToastUtils.showToastBottom('IP获取失败~');
+  //       Map<String, dynamic> paramsa = <String, dynamic>{
+  //         'title': '获取IP',
+  //         'msg': 'ip获取失败',
+  //       };
+  //       CommonBean bean = await DataUtils.postIpLog(paramsa);
+  //     }
+  //   } catch (e) {
+  //     // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+  //     // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
+  //   }
+  // }
 
   /// 检查更新
   //定义apk的名称，与下载进度dialog

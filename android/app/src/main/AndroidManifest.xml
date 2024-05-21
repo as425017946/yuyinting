@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.littledog.yyt">
     <!-- 在application标签后添加权限设置 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,6 +28,7 @@
     <!--    获取包名-->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <application
+        tools:replace="android:label"
         android:label="小柴派对"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"

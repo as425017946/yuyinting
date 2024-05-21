@@ -468,7 +468,7 @@ class _DongtaiPageState extends State<DongtaiPage> {
             onLoading: _onLoading,
             onRefresh: _onRefresh,
             child: ListView.builder(
-              padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+              padding: EdgeInsets.only(top: ScreenUtil().setHeight(20), bottom: 600.w),
               itemBuilder: _itemPeople,
               itemCount: _list.length,
             ),
