@@ -843,7 +843,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                             child: Row(
                               children: [
                                 GestureDetector(
-                                  onTap: (() {
+                                  onTap: index == 2 ? null : (() {
                                     if (MyUtils.checkClick() && _noRefresh) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
@@ -867,7 +867,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 ),
                                 WidgetUtils.commonSizedBox(0, 15.h),
                                 GestureDetector(
-                                  onTap: (() {
+                                  onTap: index == 3 ? null : (() {
                                     if (MyUtils.checkClick() && _noRefresh) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
@@ -891,7 +891,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 ),
                                 WidgetUtils.commonSizedBox(0, 15.h),
                                 GestureDetector(
-                                  onTap: (() {
+                                  onTap: index == 6 ? null : (() {
                                     if (MyUtils.checkClick() && _noRefresh) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
@@ -916,7 +916,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 WidgetUtils.commonSizedBox(0, 15.h),
                                 listFL.isNotEmpty
                                     ? GestureDetector(
-                                        onTap: (() {
+                                        onTap: index == listFL[0].type as int ? null : (() {
                                           if (MyUtils.checkClick() && _noRefresh) {
                                             // 重新初始化
                                             _refreshController.resetNoData();
@@ -947,7 +947,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                     : const Text(''),
                                 listFL.length > 1
                                     ? GestureDetector(
-                                        onTap: (() {
+                                        onTap: index == listFL[1].type as int ? null : (() {
                                           if (MyUtils.checkClick() && _noRefresh) {
                                             // 重新初始化
                                             _refreshController.resetNoData();
@@ -977,7 +977,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                     ? WidgetUtils.commonSizedBox(0, 15.h)
                                     : const Text(''),
                                 GestureDetector(
-                                  onTap: (() {
+                                  onTap: index == 4 ? null : (() {
                                     if (MyUtils.checkClick() && _noRefresh) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
