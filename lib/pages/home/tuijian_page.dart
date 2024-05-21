@@ -67,9 +67,9 @@ class _TuijianPageState extends State<TuijianPage>
       isUp = false;
     });
     // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
+    // await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    // _refreshController.refreshCompleted();
     if (mounted) {
       setState(() {
         page = 1;
@@ -77,7 +77,8 @@ class _TuijianPageState extends State<TuijianPage>
     }
     doPostHotRoom();
     doPostPushRoom();
-    doPostPushStreamer();
+    await doPostPushStreamer();
+    _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
@@ -86,7 +87,7 @@ class _TuijianPageState extends State<TuijianPage>
       isDown = false;
     });
     // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
+    // await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) {
       setState(() {
@@ -95,7 +96,7 @@ class _TuijianPageState extends State<TuijianPage>
     }
     doPostHotRoom();
     doPostPushRoom();
-    doPostPushStreamer();
+    await doPostPushStreamer();
     _refreshController.loadComplete();
   }
 
@@ -990,7 +991,7 @@ class _TuijianPageState extends State<TuijianPage>
   /// 派对前5名排行
   Future<void> doPostHotRoom() async {
     try {
-      Loading.show();
+      // Loading.show();
       hotRoomBean bean = await DataUtils.postHotRoom();
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -1023,9 +1024,9 @@ class _TuijianPageState extends State<TuijianPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      Loading.dismiss();
+      // Loading.dismiss();
     } catch (e) {
-      Loading.dismiss();
+      // Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

@@ -66,6 +66,14 @@ class _PaiduiPageState extends State<PaiduiPage>
 
   final c = Get.put(HapplyWallController());
   final _happyWall = HappyWallBanner();
+  var _isRefresh = false;
+  bool get _noRefresh {
+    if (_isRefresh || _refreshController.isLoading || _refreshController.isRefresh) {
+      MyToastUtils.showToastBottom('点击操作太频繁了!');
+      return false;
+    }
+    return true;
+  }
 
   void _onRefresh() async {
     // 重新初始化
@@ -76,9 +84,9 @@ class _PaiduiPageState extends State<PaiduiPage>
     });
     c.doPostHappinessWall();
     // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
+    // await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    // _refreshController.refreshCompleted();
     if (mounted) {
       setState(() {
         page = 1;
@@ -86,7 +94,13 @@ class _PaiduiPageState extends State<PaiduiPage>
     }
     doPostRoomType();
     doPostPushRoom();
-    doPostTJRoomList2('$index');
+    // await doPostTJRoomList2('$index');
+    if (await doPostTJRoomList2('$index')) {
+      _refreshController.loadNoData();
+    } else {
+      _refreshController.loadComplete();
+    }
+    _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
@@ -95,7 +109,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       isDown = false;
     });
     // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
+    // await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) {
       setState(() {
@@ -104,8 +118,11 @@ class _PaiduiPageState extends State<PaiduiPage>
     }
     doPostRoomType();
     doPostPushRoom();
-    doPostTJRoomList2('$index');
-    _refreshController.loadComplete();
+    if (await doPostTJRoomList2('$index')) {
+      _refreshController.loadNoData();
+    } else {
+      _refreshController.loadComplete();
+    }
   }
 
   @override
@@ -827,7 +844,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                               children: [
                                 GestureDetector(
                                   onTap: (() {
-                                    if (MyUtils.checkClick()) {
+                                    if (MyUtils.checkClick() && _noRefresh) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
                                       setState(() {
@@ -851,7 +868,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 WidgetUtils.commonSizedBox(0, 15.h),
                                 GestureDetector(
                                   onTap: (() {
-                                    if (MyUtils.checkClick()) {
+                                    if (MyUtils.checkClick() && _noRefresh) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
                                       setState(() {
@@ -875,7 +892,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 WidgetUtils.commonSizedBox(0, 15.h),
                                 GestureDetector(
                                   onTap: (() {
-                                    if (MyUtils.checkClick()) {
+                                    if (MyUtils.checkClick() && _noRefresh) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
                                       setState(() {
@@ -900,7 +917,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 listFL.isNotEmpty
                                     ? GestureDetector(
                                         onTap: (() {
-                                          if (MyUtils.checkClick()) {
+                                          if (MyUtils.checkClick() && _noRefresh) {
                                             // 重新初始化
                                             _refreshController.resetNoData();
                                             setState(() {
@@ -931,7 +948,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 listFL.length > 1
                                     ? GestureDetector(
                                         onTap: (() {
-                                          if (MyUtils.checkClick()) {
+                                          if (MyUtils.checkClick() && _noRefresh) {
                                             // 重新初始化
                                             _refreshController.resetNoData();
                                             setState(() {
@@ -961,7 +978,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                     : const Text(''),
                                 GestureDetector(
                                   onTap: (() {
-                                    if (MyUtils.checkClick()) {
+                                    if (MyUtils.checkClick() && _noRefresh) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
                                       setState(() {
@@ -1171,14 +1188,16 @@ class _PaiduiPageState extends State<PaiduiPage>
   }
 
   /// 房间列表
-  Future<void> doPostTJRoomList2(type) async {
+  Future<bool> doPostTJRoomList2(type) async {
+    _isRefresh = true;
+    var noData = false;
     Map<String, dynamic> params = <String, dynamic>{
       'page': page,
       'pageSize': MyConfig.pageSize,
       'type': type
     };
     try {
-      Loading.show();
+      // Loading.show();
       tjRoomListBean bean = await DataUtils.postTJRoomList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -1232,11 +1251,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                 }
               }
             } else {
-              if (page > 1) {
-                if (bean.data!.length < MyConfig.pageSize) {
-                  _refreshController.loadNoData();
-                }
-              }
+              _refreshController.loadNoData();
+              noData = true;
             }
           });
           break;
@@ -1248,11 +1264,13 @@ class _PaiduiPageState extends State<PaiduiPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      Loading.dismiss();
+      // Loading.dismiss();
     } catch (e) {
-      Loading.dismiss();
+      // Loading.dismiss();
       // MyToastUtils.showToastBottom(e.toString());
     }
+    _isRefresh = false;
+    return noData;
   }
 
   /// 加入房间前
