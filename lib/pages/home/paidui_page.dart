@@ -1289,7 +1289,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       'room_id': roomID,
     };
     try {
-      Loading.show();
+      Loading.show2();
       joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -1341,7 +1341,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       'password': password
     };
     try {
-      Loading.show();
+      Loading.show2();
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
