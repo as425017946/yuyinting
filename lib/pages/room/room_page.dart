@@ -4997,7 +4997,15 @@ class _RoomPageState extends State<RoomPage>
             : Container(
                 height: double.infinity,
                 width: double.infinity,
-                color: Colors.black87,
+                decoration: const BoxDecoration(
+                  //设置Container修饰
+                  image: DecorationImage(
+                    //背景图片修饰
+                    image:
+                    AssetImage("assets/images/room_join_bg.jpg"),
+                    fit: BoxFit.fill, //覆盖
+                  ),
+                ),
               ),
         onWillPop: () async {
           //这里可以响应物理返回键

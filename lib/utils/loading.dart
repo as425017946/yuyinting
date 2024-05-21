@@ -44,6 +44,12 @@ class Loading {
     EasyLoading.show(status: text ?? MyConfig.successTitle);
   }
 
+  static void show2([String? text]) {
+    EasyLoading.instance.userInteractions = false;
+    EasyLoading.instance.indicatorType = EasyLoadingIndicatorType.pumpingHeart;
+    EasyLoading.show(status: text ?? MyConfig.successTitle);
+  }
+
   static void toast(String text) {
     EasyLoading.showToast(text);
   }

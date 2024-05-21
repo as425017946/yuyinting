@@ -506,7 +506,7 @@ class _SearchPageState extends State<SearchPage> {
       'room_id': roomID,
     };
     try {
-      Loading.show();
+      Loading.show2();
       joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -558,7 +558,7 @@ class _SearchPageState extends State<SearchPage> {
       'password': password
     };
     try {
-      Loading.show();
+      Loading.show2();
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:

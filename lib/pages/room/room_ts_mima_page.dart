@@ -154,7 +154,7 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
       'password': textEditingController.text.trim()
     };
     try {
-      Loading.show("校验中...");
+      Loading.show2("校验中...");
       joinRoomBean bean = await DataUtils.postCheckPwd(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -209,7 +209,7 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
       'anchor_uid': widget.anchorUid
     };
     try {
-      Loading.show();
+      Loading.show2();
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:

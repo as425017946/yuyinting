@@ -372,7 +372,7 @@ class _ShoucangPageState extends State<ShoucangPage>
       'room_id': roomID,
     };
     try {
-      Loading.show();
+      Loading.show2();
       joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -424,7 +424,7 @@ class _ShoucangPageState extends State<ShoucangPage>
       'password': password
     };
     try {
-      Loading.show();
+      Loading.show2();
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:

@@ -896,7 +896,7 @@ class _TuijianPageState extends State<TuijianPage>
       'room_id': roomID,
     };
     try {
-      Loading.show();
+      Loading.show2();
       joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -952,7 +952,7 @@ class _TuijianPageState extends State<TuijianPage>
       'anchor_uid': anchorUid
     };
     try {
-      Loading.show();
+      Loading.show2();
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -1034,7 +1034,7 @@ class _TuijianPageState extends State<TuijianPage>
   /// 推荐声音
   Future<void> doPostPushSound(int type) async {
     try {
-      Loading.show();
+      Loading.show2();
       soundBean bean = await DataUtils.postPushSound();
       switch (bean.code) {
         case MyHttpConfig.successCode:
