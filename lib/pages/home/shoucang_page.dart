@@ -50,15 +50,16 @@ class _ShoucangPageState extends State<ShoucangPage>
       isUp = false;
     });
     // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
+    // await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    // _refreshController.refreshCompleted();
     if (mounted) {
       setState(() {
         page = 1;
       });
     }
-    doPostFollowList();
+    await doPostFollowList();
+    _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
@@ -66,14 +67,14 @@ class _ShoucangPageState extends State<ShoucangPage>
       isDown = false;
     });
     // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
+    // await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) {
       setState(() {
         page++;
       });
     }
-    doPostFollowList();
+    await doPostFollowList();
     _refreshController.loadComplete();
   }
 
@@ -289,7 +290,7 @@ class _ShoucangPageState extends State<ShoucangPage>
       'pageSize': MyConfig.pageSize
     };
     try {
-      Loading.show(MyConfig.successTitle);
+      // Loading.show(MyConfig.successTitle);
       shoucangBean bean = await DataUtils.postFollowListRoom(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -324,9 +325,9 @@ class _ShoucangPageState extends State<ShoucangPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      Loading.dismiss();
+      // Loading.dismiss();
     } catch (e) {
-      Loading.dismiss();
+      // Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
