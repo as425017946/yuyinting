@@ -33,7 +33,13 @@ class Loading {
   }
 
   static void show([String? text]) {
+    EasyLoading.instance.loadingStyle = EasyLoadingStyle.custom;
     EasyLoading.instance.userInteractions = false;
+    EasyLoading.instance.backgroundColor = Colors.transparent;
+    EasyLoading.instance.indicatorColor = Colors.transparent;
+    EasyLoading.instance.textColor = Colors.transparent;
+    EasyLoading.instance.maskColor = Colors.transparent;
+    EasyLoading.instance.boxShadow = <BoxShadow>[];
     EasyLoading.instance.indicatorType = EasyLoadingIndicatorType.pumpingHeart;
     EasyLoading.show(status: text ?? MyConfig.successTitle);
   }
