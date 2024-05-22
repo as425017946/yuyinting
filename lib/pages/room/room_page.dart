@@ -1159,18 +1159,16 @@ class _RoomPageState extends State<RoomPage>
                   .joinChatRoom(chatRoomId);
             }
           }
-          if(sp.getString('roomAudio').toString() == '0'){
-            roomSY = false;
-            //取消订阅所有远端用户的音频流。
-            _engine!.muteAllRemoteAudioStreams(true);
-          }else{
-            roomSY = true;
-            //开启订阅所有远端用户的音频流。
-            _engine!.muteAllRemoteAudioStreams(false);
-          }
           setState(() {
-            //订阅所有远端用户的音频流。
-            _engine!.muteAllRemoteAudioStreams(false);
+            if(sp.getString('roomAudio').toString() == '0'){
+              roomSY = false;
+              //取消订阅所有远端用户的音频流。
+              _engine!.muteAllRemoteAudioStreams(true);
+            }else{
+              roomSY = true;
+              //开启订阅所有远端用户的音频流。
+              _engine!.muteAllRemoteAudioStreams(false);
+            }
             if (isJinyiin == false) {
               // 启用音频模块
               _engine!.enableAudio();
@@ -4157,7 +4155,7 @@ class _RoomPageState extends State<RoomPage>
           roomSY = false;
           //取消订阅所有远端用户的音频流。
           _engine!.muteAllRemoteAudioStreams(true);
-          MyToastUtils.showToastBottom('房间声音已关闭');
+          MyToastUtils.showToastBottom('您已关闭房间声音');
         }else{
           roomSY = true;
           //开启订阅所有远端用户的音频流。
