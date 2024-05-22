@@ -1032,6 +1032,7 @@ class _RoomPageState extends State<RoomPage>
         } else if (event.title == '房间声音已开启') {
           LogE('房间声音已开启');
           setState(() {
+            sp.setString('roomAudio', '1');
             roomSY = true;
             //默认订阅所有远端用户的音频流。
             _engine!.muteAllRemoteAudioStreams(false);
@@ -1039,6 +1040,7 @@ class _RoomPageState extends State<RoomPage>
         } else if (event.title == '房间声音已关闭') {
           LogE('房间声音已关闭');
           setState(() {
+            sp.setString('roomAudio', '0');
             roomSY = false;
             //取消订阅所有远端用户的音频流。
             _engine!.muteAllRemoteAudioStreams(true);
@@ -1150,6 +1152,22 @@ class _RoomPageState extends State<RoomPage>
           // } catch (e) {
           //   LogE(e.toString());
           // }
+          if (sp.getString('roomID').toString() == widget.roomId.toString()) {
+            final chatRoomId = sp.getString('chatRoomId').toString();
+            if (chatRoomId.isNotEmpty) {
+              EMClient.getInstance.chatRoomManager
+                  .joinChatRoom(chatRoomId);
+            }
+          }
+          if(sp.getString('roomAudio').toString() == '0'){
+            roomSY = false;
+            //取消订阅所有远端用户的音频流。
+            _engine!.muteAllRemoteAudioStreams(true);
+          }else{
+            roomSY = true;
+            //开启订阅所有远端用户的音频流。
+            _engine!.muteAllRemoteAudioStreams(false);
+          }
           setState(() {
             //订阅所有远端用户的音频流。
             _engine!.muteAllRemoteAudioStreams(false);
@@ -4130,6 +4148,23 @@ class _RoomPageState extends State<RoomPage>
       uid: int.parse(sp.getString('user_id').toString()),
     );
     _init();
+
+    if(sp.getString('roomAudio').toString() == 'null' || sp.getString('roomAudio').toString().isEmpty){
+      sp.setString('roomAudio', '1');
+    }else{
+      setState(() {
+        if(sp.getString('roomAudio').toString() == '0'){
+          roomSY = false;
+          //取消订阅所有远端用户的音频流。
+          _engine!.muteAllRemoteAudioStreams(true);
+          MyToastUtils.showToastBottom('房间声音已关闭');
+        }else{
+          roomSY = true;
+          //开启订阅所有远端用户的音频流。
+          _engine!.muteAllRemoteAudioStreams(false);
+        }
+      });
+    }
   }
 
   ///更新9个麦序的开麦状态
@@ -5024,6 +5059,10 @@ class _RoomPageState extends State<RoomPage>
             _cancelTimerAll();
             sp.setString('isShouQi', '1');
             sp.setString('sqRoomID', widget.roomId);
+            if(roomSY == false){
+              //取消订阅所有远端用户的音频流。
+              _engine!.muteAllRemoteAudioStreams(true);
+            }
             eventBus.fire(SubmitButtonBack(title: '收起房间'));
             // Navigator.pop(context);
             return true;
@@ -5116,6 +5155,10 @@ class _RoomPageState extends State<RoomPage>
                         _cancelTimerAll();
                         sp.setString('isShouQi', '1');
                         sp.setString('sqRoomID', widget.roomId);
+                        if(roomSY == false){
+                          //取消订阅所有远端用户的音频流。
+                          _engine!.muteAllRemoteAudioStreams(true);
+                        }
                         eventBus.fire(SubmitButtonBack(title: '收起房间'));
                         Navigator.pop(context);
                       }
@@ -6238,6 +6281,19 @@ class _RoomPageState extends State<RoomPage>
                   _engine!.enableLocalAudio(false);
                 }
               }
+            }
+            if(sp.getString('roomAudio').toString() == 'null' || sp.getString('roomAudio').toString().isEmpty){
+              sp.setString('roomAudio', '1');
+            }else{
+              setState(() {
+                if(sp.getString('roomAudio').toString() == '0'){
+                  //取消订阅所有远端用户的音频流。
+                  _engine!.muteAllRemoteAudioStreams(true);
+                }else{
+                  //开启订阅所有远端用户的音频流。
+                  _engine!.muteAllRemoteAudioStreams(false);
+                }
+              });
             }
           });
           break;

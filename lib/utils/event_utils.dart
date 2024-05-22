@@ -333,3 +333,11 @@ class XXBack {
   String number;
   XXBack({required this.index, required this.number});
 }
+
+
+///收起房间使用
+class RoomCallBack {
+  bool isBack;
+  String title;
+  RoomCallBack({required this.isBack, required this.title});
+}

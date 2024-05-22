@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen/screen.dart';
 import 'package:sqflite/sqflite.dart';
@@ -355,6 +356,13 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           });
         }
       } else if (event.title == 'im重连') {
+        if (isJoinRoom) {
+          final chatRoomId = sp.getString('chatRoomId').toString();
+          if (chatRoomId.isNotEmpty) {
+            EMClient.getInstance.chatRoomManager
+                .joinChatRoom(chatRoomId);
+          }
+        }
         doPostCheckToken();
       } else if (event.title == 'im断开链接') {
         // if(isJoinRoom){
