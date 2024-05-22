@@ -82,7 +82,15 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: const StarPage(),
-      builder: EasyLoading.init(),
+      builder: EasyLoading.init(
+        builder: (context, child) {
+          return MediaQuery(
+            // 设置字体不跟随系统变化
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: child ?? Container(),
+          );
+        },
+      ),
       //配置路由  -- map格式
       routes: staticRoutes,
       localizationsDelegates: const [
