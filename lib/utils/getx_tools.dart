@@ -53,7 +53,7 @@ mixin GetAntiCombo {
     if (sp.getBool('joinRoom') == false) {
       sp.setBool('joinRoom', true);
       try {
-        Loading.show();
+        Loading.show2();
         final String roomID = id.toString();
         final roomToken = await _doPostBeforeJoin(roomID, context);
         if (roomToken.isNotEmpty) {
@@ -166,6 +166,24 @@ mixin GetAntiCombo {
           MyToastUtils.showToastBottom(bean.msg);
         }
         throw bean;
+    }
+  }
+  void doBean<T>(int? code, String? msg) async {
+    switch (code) {
+      case MyHttpConfig.successCode:
+        return;
+      case MyHttpConfig.errorloginCode:
+        final context = Get.context;
+        if (context != null) {
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+        }
+        throw '未登录';
+      default:
+        if (msg != null) {
+          MyToastUtils.showToastBottom(msg);
+        }
+        throw msg ?? '';
     }
   }
 
