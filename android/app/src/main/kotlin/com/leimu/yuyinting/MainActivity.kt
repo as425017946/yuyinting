@@ -17,7 +17,7 @@ class MainActivity: FlutterActivity() {
             // TODO
 
             if(call.method.equals("getBatteryLevel")){
-                var a  = EmulatorDetectUtil.isEmulatorFromAll(this@MainActivity)
+                var a  = EmulatorDetectUtil.isEmulator(this@MainActivity)
 
                 if(a.toString() == "false"){
                     result.success("0");
