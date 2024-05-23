@@ -171,7 +171,7 @@ class PaiduiController extends GetxController with GetAntiCombo {
       Get.log(e.toString());
     }
     if (currentType == _tabSelect.value?.type) {
-      _roomListData(listPage);
+      _roomListData.trigger(listPage);
       refreshController.refreshCompleted();
       if (listPage.status == LoadStatus.noMore) {
         refreshController.loadNoData();
