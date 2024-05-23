@@ -22,7 +22,9 @@ class MeiLiDayPage extends StatefulWidget {
   State<MeiLiDayPage> createState() => _MeiLiDayPageState();
 }
 
-class _MeiLiDayPageState extends State<MeiLiDayPage> {
+class _MeiLiDayPageState extends State<MeiLiDayPage>  with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   int page = 1;
   List<ListBD> _list = [];
   List<ListBD> _list2 = [];

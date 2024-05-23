@@ -25,7 +25,9 @@ class MeiLiMonthPage extends StatefulWidget {
   State<MeiLiMonthPage> createState() => _MeiLiMonthPageState();
 }
 
-class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
+class _MeiLiMonthPageState extends State<MeiLiMonthPage>  with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   int page = 1;
   List<ListBD> _list = [];
   List<ListBD> _list2 = [];

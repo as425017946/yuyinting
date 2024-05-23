@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/mine/tequan/diwang_page.dart';
@@ -40,11 +42,22 @@ class _TequanPageState extends State<TequanPage> {
   int priceDou = 360;
   int priceYue = 36;
   var listen;
+  // 设备是安卓还是ios
+  String isDevices = 'android';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    } else if (Platform.isIOS) {
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     doPostMyNoble();
     listen = eventBus.on<GuizuButtonBack>().listen((event) {
       if (event.title == '右') {
@@ -92,7 +105,7 @@ class _TequanPageState extends State<TequanPage> {
                   ),
                   child: Column(
                     children: [
-                      WidgetUtils.commonSizedBox(35, 0),
+                      WidgetUtils.commonSizedBox(isDevices == 'ios' ? 45 : 35, 0),
 
                       ///头部信息
                       Container(

@@ -1207,7 +1207,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
           children: [
             Column(
               children: [
-                WidgetUtils.commonSizedBox(35, 0),
+                WidgetUtils.commonSizedBox(isDevices == 'ios' ? 45 : 35, 0),
 
                 ///头部信息
                 Container(
