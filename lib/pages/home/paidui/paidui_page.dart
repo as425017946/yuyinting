@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -8,7 +9,7 @@ import '../../../bean/fenleiBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
-import '../paidui_list_page.dart';
+import 'paidui_list_page.dart';
 import 'paidui_model.dart';
 
 class PaiduiPage extends StatefulWidget {
@@ -62,11 +63,14 @@ class _Content extends StatelessWidget {
             c.happyWall,
             SizedBox(height: 20.w),
             _tabs(c),
+            _roomList,
           ],
         ),
       ),
     );
   }
+
+  final _roomList = PaiduiListPage();
 
   Widget _tabs(PaiduiController c) {
     return Row(
@@ -83,7 +87,6 @@ class _Content extends StatelessWidget {
         ),
         SizedBox(width: 20.w),
         _tabListType(c),
-        _roomList(c),
       ],
     );
   }
@@ -95,9 +98,10 @@ class _Content extends StatelessWidget {
         onTap: () => c.onTab(item),
         child: Obx(() {
           final isSelect = item.type == c.tabSelect?.type;
-          return SizedBox(
+          return Container(
             width: 105.w,
             height: 50.w,
+            color: Colors.transparent,
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -139,24 +143,6 @@ class _Content extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _roomList(PaiduiController c) {
-    return Obx(
-      () {
-        final page = c.listPage;
-        if (page == null) return const SizedBox();
-        return PaiduiListPage(
-          isList: c.isList,
-          index: page.index,
-          roomType: page.roomType,
-          list: page.data,
-          listFL: c.listFL,
-          action: c.toRoom,
-          listBanner: c.listBanner,
-        );
-      },
     );
   }
 }

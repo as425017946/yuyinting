@@ -15,29 +15,33 @@ import '../wall/happy_wall_page.dart';
 class PaiduiController extends GetxController with GetAntiCombo {
 
   final RefreshController refreshController = RefreshController(initialRefresh: false);
-  final _canRefresh = false.obs;
-  bool get canRefresh => _canRefresh.value;
+  bool get canRefresh {
+    final page = roomListData;
+    if (page == null) return false;
+    return page.status != LoadStatus.loading;
+  }
   final _hwc = Get.put(HapplyWallController());
   late final happyWall = HappyWallBanner();
 
   @override
   void onReady() {
+    _hwc.doPostHappinessWall();
     onLoading();
     super.onReady();
-    
   }
 
-  Future<void> onLoading() async {
-    _hwc.doPostHappinessWall();
+  void onLoading() async {
+    listPage?.status == LoadStatus.loading;
+    _doPostPushRoom();
     await _doPostRoomType();
-    await _doPostPushRoom();
-    final first = listFL.first;
-    _tabSelect.value = first;
-    await _doPostTJRoomList2(true);
-    _canRefresh.value = true;
+    await _doPostTJRoomList2(false);
   }
-  void onRefresh() {
-
+  void onRefresh() async {
+    listPage?.status == LoadStatus.loading;
+    _hwc.doPostHappinessWall();
+    _doPostPushRoom();
+    await _doPostRoomType();
+    await _doPostTJRoomList2(true);
   }
 
   void toRoom(int? id) {
@@ -53,7 +57,21 @@ class PaiduiController extends GetxController with GetAntiCombo {
   final _tabSelect = Rxn<DataFL>();
   DataFL? get tabSelect => _tabSelect.value;
   void onTab(DataFL item) {
+    if (item.type == _tabSelect.value?.type) return;
     _tabSelect(item);
+    final page = listPage;
+    _roomListData.trigger(page);
+    refreshController.refreshCompleted();
+    if (page == null) {
+      refreshController.resetNoData();
+      onLoading();
+    } else {
+      if (page.status == LoadStatus.noMore) {
+        refreshController.loadNoData();
+      } else {
+        refreshController.loadComplete();
+      }
+    }
   }
   final _isList = (sp.getBool('paidui_list_type') ?? true).obs;
   bool get isList => _isList.value;
@@ -120,14 +138,16 @@ class PaiduiController extends GetxController with GetAntiCombo {
 
   final Map<int, ListPage> _roomList = {};
   ListPage? get listPage => _roomList[_tabSelect.value?.type];
+  final _roomListData = Rxn<ListPage>();
+  ListPage? get roomListData => _roomListData.value;
   /// 房间列表
   Future<void> _doPostTJRoomList2(bool isRefresh) async {
-    final current = _tabSelect.value;
-    if (current == null) return;
+    if (listFL.isEmpty) return;
+    final current = _tabSelect.value ??= listFL.first;
     final currentType = current.type;
     if (currentType == null) return;
     final listPage = _roomList[currentType] ??= ListPage(currentType, current.title ?? '');
-    final next = isRefresh ? 1 : (listPage.page + 1);
+    final int next = isRefresh ? 1 : (listPage.page + 1);
     const pageSize = MyConfig.pageSize;
     try {
       Map<String, dynamic> params = <String, dynamic>{
@@ -138,18 +158,20 @@ class PaiduiController extends GetxController with GetAntiCombo {
       tjRoomListBean bean = await DataUtils.postTJRoomList(params);
       doBean(bean.code, bean.msg);
       var data = bean.data ?? [];
-      if (next == 1) {
+      if (isRefresh) {
         listPage.data.clear();
       }
       if (data.isNotEmpty) {
         listPage.page = next;
-        listPage.data(listPage.data + data);
+        listPage.data.addAll(data);
       } 
       listPage.status = data.length < pageSize ? LoadStatus.noMore : LoadStatus.idle;
     } catch (e) {
+      listPage.status = LoadStatus.failed;
       Get.log(e.toString());
     }
     if (currentType == _tabSelect.value?.type) {
+      _roomListData(listPage);
       refreshController.refreshCompleted();
       if (listPage.status == LoadStatus.noMore) {
         refreshController.loadNoData();
@@ -163,7 +185,7 @@ class PaiduiController extends GetxController with GetAntiCombo {
 class ListPage {
   int page = 0;
   LoadStatus status = LoadStatus.idle;
-  final data = RxList<DataPH>();
+  final List<DataPH> data = [];
   final int index;
   final String roomType;
   ListPage(this.index, this.roomType);
