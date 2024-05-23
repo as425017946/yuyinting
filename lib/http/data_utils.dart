@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/bean/aboutUsBean.dart';
@@ -110,78 +111,78 @@ class DataUtils {
   ///判断网络
   static Future<addressIPBean> postPdAddress(
       Map<String, dynamic> params) async {
-    print("检查网络参数：$params");
-    print("检查网络地址：${MyHttpConfig.pdAddress}");
+    debugPrint("检查网络参数：$params");
+    debugPrint("检查网络地址：${MyHttpConfig.pdAddress}");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.pdAddress, {}, params);
-    print("检查网络：${respons}");
+    debugPrint("检查网络：$respons");
     return addressIPBean.fromJson(respons!);
   }
 
   ///判断网络
   static Future<addressIPBean> getPdAddress() async {
-    print("检查网络地址：${MyHttpConfig.pdAddressGet}");
+    debugPrint("检查网络地址：${MyHttpConfig.pdAddressGet}");
     Map<String, dynamic>? respons =
         await MyHttpRequest.get(MyHttpConfig.pdAddressGet, {}, {});
-    print("检查网络：${respons}");
+    debugPrint("检查网络：$respons");
     return addressIPBean.fromJson(respons!);
   }
 
   ///更新app
   static Future<CheckoutBean> checkVersion(Map<String, dynamic> params) async {
-    print("检查更新：${params}");
-    print("检查更新：${MyHttpConfig.checkVersion}");
+    debugPrint("检查更新：$params");
+    debugPrint("检查更新：${MyHttpConfig.checkVersion}");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.checkVersion, {}, params);
-    print("检查更新：${respons}");
+    debugPrint("检查更新：$respons");
     return CheckoutBean.fromJson(respons!);
   }
 
   /// 登录app后预下载
   static Future<svgaAllBean> postSvgaGiftList(
       Map<String, dynamic> params) async {
-    print("登录app后预下载${params}");
+    debugPrint("登录app后预下载$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.svgaGiftList, {}, params);
-    print("登录app后预下载：${respons}");
+    debugPrint("登录app后预下载：$respons");
     return svgaAllBean.fromJson(respons!);
   }
 
   /// 登录app后装扮预下载
   static Future<svgaAllBean> postSvgaDressList(
       Map<String, dynamic> params) async {
-    print("登录app后装扮预下载${params}");
+    debugPrint("登录app后装扮预下载$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.svgaDressList, {}, params);
-    print("登录app后装扮预下载：${respons}");
+    debugPrint("登录app后装扮预下载：$respons");
     return svgaAllBean.fromJson(respons!);
   }
 
   /// 登录接口
   static Future<LoginBean> login(Map<String, dynamic> params) async {
-    print('Ping 登录: ${MyHttpConfig.login}');
-    print("登录：传参${params}");
+    debugPrint('Ping 登录: ${MyHttpConfig.login}');
+    debugPrint("登录：传参$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.login, {}, params);
-    print("登录：${respons}");
+    debugPrint("登录：$respons");
     return LoginBean.fromJson(respons!);
   }
 
   /// 发送短信验证码
   static Future<CommonBean> postLoginSms(Map<String, dynamic> params) async {
-    print("发送短信验证码${params}");
+    debugPrint("发送短信验证码$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.loginSms, {}, params);
-    print("发送短信验证码：${respons}");
+    debugPrint("发送短信验证码：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 发送短信验证码-忘记密码
   static Future<CommonBean> postSendSms(Map<String, dynamic> params) async {
-    print("发送短信验证码-忘记密码${params}");
+    debugPrint("发送短信验证码-忘记密码$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.sendSms, {}, params);
-    print("发送短信验证码-忘记密码：${respons}");
+    debugPrint("发送短信验证码-忘记密码：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -189,7 +190,7 @@ class DataUtils {
   static Future<QuhaoBean> quhao() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.quhao, {}, {});
-    print("区号：${respons}");
+    debugPrint("区号：$respons");
     return QuhaoBean.fromJson(respons!);
   }
 
@@ -197,7 +198,7 @@ class DataUtils {
   static Future<CommonBean> forgetPassword(Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.forgotPwd, {}, params);
-    print("忘记密码：${respons}");
+    debugPrint("忘记密码：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -206,45 +207,45 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.codeSearch, {}, params);
-    print("电话区号搜索：${respons}");
+    debugPrint("电话区号搜索：$respons");
     return QuhaoSearcheBean.fromJson(respons!);
   }
 
   /// 首次填写个人信息
   static Future<CommonBean> postIsFirst(Map<String, dynamic> params) async {
-    print("首次填写个人传参：$params");
+    debugPrint("首次填写个人传参：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.firstFillInfo, {}, params);
-    print("首次填写个人信息：${respons}");
+    debugPrint("首次填写个人信息：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 设置交易密码
   static Future<CommonBean> postModifyPayPwd(
       Map<String, dynamic> params) async {
-    print("设置交易密码：$params");
+    debugPrint("设置交易密码：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.modifyPayPwd, {}, params);
-    print("设置交易密码：${respons}");
+    debugPrint("设置交易密码：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 修改密码
   static Future<CommonBean> postUpdatePwd(Map<String, dynamic> params) async {
-    print("修改密码：$params");
+    debugPrint("修改密码：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.updatePwd, {}, params);
-    print("修改密码：${respons}");
+    debugPrint("修改密码：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 绑定/更换手机号
   static Future<CommonBean> postChangeUserPhone(
       Map<String, dynamic> params) async {
-    print("绑定/更换手机号：$params");
+    debugPrint("绑定/更换手机号：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.changeUserPhone, {}, params);
-    print("绑定/更换手机号：${respons}");
+    debugPrint("绑定/更换手机号：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -252,7 +253,7 @@ class DataUtils {
   static Future<CommonBean> postWrittenOff() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.writtenOff, {}, {});
-    print("注销：${respons}");
+    debugPrint("注销：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -261,16 +262,16 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.blackList, {}, params);
-    print("黑名单列表：${respons}");
+    debugPrint("黑名单列表：$respons");
     return BlackListBean.fromJson(respons!);
   }
 
   /// 解除/添加黑名单
   static Future<CommonBean> postUpdateBlack(Map<String, dynamic> params) async {
-    print("黑名单：$params");
+    debugPrint("黑名单：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.updateBlack, {}, params);
-    print("黑名单：${respons}");
+    debugPrint("黑名单：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -278,7 +279,7 @@ class DataUtils {
   static Future<AboutUsBean> postUserAbout(Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.userAbout, {}, params);
-    print("关于我们：${respons}");
+    debugPrint("关于我们：$respons");
     return AboutUsBean.fromJson(respons!);
   }
 
@@ -286,64 +287,64 @@ class DataUtils {
   static Future<MyInfoBean> postMyIfon() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.myInfo, {}, {});
-    print("我的详情：${respons}");
+    debugPrint("我的详情：$respons");
     return MyInfoBean.fromJson(respons!);
   }
 
   /// 切换账号验证token
   static Future<qiehuanBean> postCheckToken(Map<String, dynamic> params) async {
-    print("切换账号验证token：$params");
+    debugPrint("切换账号验证token：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.checkToken, {}, params);
-    print("切换账号验证token：${respons}");
+    debugPrint("切换账号验证token：$respons");
     return qiehuanBean.fromJson(respons!);
   }
 
   /// file方式上传
   static Future<fileUpdateBean> postPostFileUpload(
       Map<String, dynamic> params) async {
-    print("file方式上传：$params");
+    debugPrint("file方式上传：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.fileUpload(MyHttpConfig.fileUpload, {}, params);
-    print("file方式上传：$respons");
+    debugPrint("file方式上传：$respons");
     return fileUpdateBean.fromJson(respons!);
   }
 
   /// 实名制
   static Future<CommonBean> postRealAuth(Map<String, dynamic> params) async {
-    print("实名制：$params");
+    debugPrint("实名制：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.realAuth, {}, params);
-    print("实名制：$respons");
+    debugPrint("实名制：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 用户关注和取关列表
   static Future<careListBean> postFollowList(
       Map<String, dynamic> params) async {
-    print("用户关注和取关列表：$params");
+    debugPrint("用户关注和取关列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.followList, {}, params);
-    print("用户关注和取关列表：$respons");
+    debugPrint("用户关注和取关列表：$respons");
     return careListBean.fromJson(respons!);
   }
 
   /// 关注的房间
   static Future<shoucangBean> postFollowListRoom(
       Map<String, dynamic> params) async {
-    print("关注的房间：$params");
+    debugPrint("关注的房间：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.followList, {}, params);
-    print("关注的房间：$respons");
+    debugPrint("关注的房间：$respons");
     return shoucangBean.fromJson(respons!);
   }
 
   /// 用户关注和取关
   static Future<CommonBean> postFollow(Map<String, dynamic> params) async {
-    print("用户关注和取关：$params");
+    debugPrint("用户关注和取关：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.follow, {}, params);
-    print("用户关注和取关：$respons");
+    debugPrint("用户关注和取关：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -351,44 +352,44 @@ class DataUtils {
   static Future<whoLockMe> postHistoryList(Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.history, {}, params);
-    print("谁看过我：$respons");
+    debugPrint("谁看过我：$respons");
     return whoLockMe.fromJson(respons!);
   }
 
   /// 个人主页
   static Future<myHomeBean> postMyHome(Map<String, dynamic> params) async {
-    print("个人主页：$params");
+    debugPrint("个人主页：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.myHome, {}, params);
-    print("个人主页：$respons");
+    debugPrint("个人主页：$respons");
     return myHomeBean.fromJson(respons!);
   }
 
   /// 礼物墙
   static Future<allGiftBean> postAllGiftAll(Map<String, dynamic> params) async {
-    print("礼物墙：$params");
+    debugPrint("礼物墙：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.allGiftAll, {}, params);
-    print("礼物墙：$respons");
+    debugPrint("礼物墙：$respons");
     return allGiftBean.fromJson(respons!);
   }
 
   /// 查看用户详情
   static Future<userInfoBean> postUserInfo(Map<String, dynamic> params) async {
-    print("查看用户详情：$params");
+    debugPrint("查看用户详情：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.userInfo, {}, params);
-    print("查看用户详情：$respons");
+    debugPrint("查看用户详情：$respons");
     return userInfoBean.fromJson(respons!);
   }
 
   /// 礼物明细
   static Future<liwuMoreBean> postGiftDetail(
       Map<String, dynamic> params) async {
-    print("礼物明细：$params");
+    debugPrint("礼物明细：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.giftDetail, {}, params);
-    print("礼物明细：$respons");
+    debugPrint("礼物明细：$respons");
     return liwuMoreBean.fromJson(respons!);
   }
 
@@ -397,17 +398,17 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.labelList, {}, params);
-    print("个性标签列表：$respons");
+    debugPrint("个性标签列表：$respons");
     return labelListBean.fromJson(respons!);
   }
 
   /// 修改个人资料
   static Future<CommonBean> postModifyUserInfo(
       Map<String, dynamic> params) async {
-    print("修改个人资料：$params");
+    debugPrint("修改个人资料：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.modifyUserInfo, {}, params);
-    print("修改个人资料：$respons");
+    debugPrint("修改个人资料：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -415,7 +416,7 @@ class DataUtils {
   static Future<cityBean> postGetCity() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getCity, {}, {});
-    print("获取城市：$respons");
+    debugPrint("获取城市：$respons");
     return cityBean.fromJson(respons!);
   }
 
@@ -423,7 +424,7 @@ class DataUtils {
   static Future<shopListBean> postShopList(Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.shopList, {}, params);
-    print("装扮商城列表：$respons");
+    debugPrint("装扮商城列表：$respons");
     return shopListBean.fromJson(respons!);
   }
 
@@ -432,17 +433,17 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.myShopList, {}, params);
-    print("装扮背包列表：$respons");
+    debugPrint("装扮背包列表：$respons");
     return myShopListBean.fromJson(respons!);
   }
 
   /// 搜索公会
   static Future<searchGonghuiBean> postSearchGuild(
       Map<String, dynamic> params) async {
-    print("搜索公会*：$params");
+    debugPrint("搜索公会*：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.searchGuild, {}, params);
-    print("搜索公会：$respons");
+    debugPrint("搜索公会：$respons");
     return searchGonghuiBean.fromJson(respons!);
   }
 
@@ -450,7 +451,7 @@ class DataUtils {
   static Future<CommonBean> postApplySign(Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.applySign, {}, params);
-    print("申请签约：$respons");
+    debugPrint("申请签约：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -458,64 +459,64 @@ class DataUtils {
   static Future<myGhBean> postMyGh() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.myGh, {}, {});
-    print("我的公会：$respons");
+    debugPrint("我的公会：$respons");
     return myGhBean.fromJson(respons!);
   }
 
   /// 公会成员列表
   static Future<ghPeopleBean> postSearchGuildStreamer(
       Map<String, dynamic> params) async {
-    print("公会成员列表：$params");
+    debugPrint("公会成员列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.searchGuildStreamer, {}, params);
-    print("公会成员列表：$respons");
+    debugPrint("公会成员列表：$respons");
     return ghPeopleBean.fromJson(respons!);
   }
 
   /// 公会房间列表
   static Future<ghRoomBean> postSearchGuildRoom(
       Map<String, dynamic> params) async {
-    print("公会房间列表：$params");
+    debugPrint("公会房间列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.searchGuildRoom, {}, params);
-    print("公会房间列表：$respons");
+    debugPrint("公会房间列表：$respons");
     return ghRoomBean.fromJson(respons!);
   }
 
   /// 申请签约列表
   static Future<qyListBean> postApplySignList(
       Map<String, dynamic> params) async {
-    print("申请签约列表：$params");
+    debugPrint("申请签约列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.applySignList, {}, params);
-    print("申请签约列表：$respons");
+    debugPrint("申请签约列表：$respons");
     return qyListBean.fromJson(respons!);
   }
 
   /// 签约审核
   static Future<CommonBean> postSignExamine(Map<String, dynamic> params) async {
-    print("签约审核：$params");
+    debugPrint("签约审核：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.signExamine, {}, params);
-    print("签约审核：$respons");
+    debugPrint("签约审核：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 公会设置
   static Future<CommonBean> postGhSave(Map<String, dynamic> params) async {
-    print("公会设置：$params");
+    debugPrint("公会设置：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.ghSave, {}, params);
-    print("公会设置：$respons");
+    debugPrint("公会设置：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 踢出公会
   static Future<CommonBean> postKickOut(Map<String, dynamic> params) async {
-    print("踢出公会：$params");
+    debugPrint("踢出公会：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.kickOut, {}, params);
-    print("踢出公会：$respons");
+    debugPrint("踢出公会：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -523,82 +524,82 @@ class DataUtils {
   static Future<kefuBean> postKefu() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.kefu, {}, {});
-    print("客服联系方式：$respons");
+    debugPrint("客服联系方式：$respons");
     return kefuBean.fromJson(respons!);
   }
 
   /// 用户动态列表
   static Future<userDTListBean> postUserList(
       Map<String, dynamic> params) async {
-    print("用户动态列表：$params");
+    debugPrint("用户动态列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.userList, {}, params);
-    print("用户动态列表：$respons");
+    debugPrint("用户动态列表：$respons");
     return userDTListBean.fromJson(respons!);
   }
 
   /// 关注动态列表
   static Future<DTListBean> postGZFollowList(
       Map<String, dynamic> params) async {
-    print("用户动态列表：$params");
+    debugPrint("用户动态列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.gzFollowList, {}, params);
-    print("用户动态列表：$respons");
+    debugPrint("用户动态列表：$respons");
     return DTListBean.fromJson(respons!);
   }
 
   /// 推荐动态列表
   static Future<DTTuiJianListBean> postRecommendList(
       Map<String, dynamic> params) async {
-    print("推荐动态列表：$params");
+    debugPrint("推荐动态列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.recommendList, {}, params);
-    print("推荐动态列表：$respons");
+    debugPrint("推荐动态列表：$respons");
     return DTTuiJianListBean.fromJson(respons!);
   }
 
   /// 点赞
   static Future<CommonBean> postLike(Map<String, dynamic> params) async {
-    print("点赞：$params");
+    debugPrint("点赞：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.like, {}, params);
-    print("点赞：$respons");
+    debugPrint("点赞：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 评论
   static Future<plBean> postComment(Map<String, dynamic> params) async {
-    print("评论：$params");
+    debugPrint("评论：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.comment, {}, params);
-    print("评论：$respons");
+    debugPrint("评论：$respons");
     return plBean.fromJson(respons!);
   }
 
   /// 动态详情
   static Future<DTMoreBean> postDtDetail(Map<String, dynamic> params) async {
-    print("动态详情：$params");
+    debugPrint("动态详情：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.dtDetail, {}, params);
-    print("动态详情：$respons");
+    debugPrint("动态详情：$respons");
     return DTMoreBean.fromJson(respons!);
   }
 
   /// 打招呼
   static Future<CommonBean> postHi(Map<String, dynamic> params) async {
-    print("打招呼：$params");
+    debugPrint("打招呼：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.hi, {}, params);
-    print("打招呼：$respons");
+    debugPrint("打招呼：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 发动态
   static Future<CommonBean> postSendDT(Map<String, dynamic> params) async {
-    print("发动态：$params");
+    debugPrint("发动态：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.sendDT, {}, params);
-    print("发动态：$respons");
+    debugPrint("发动态：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -606,7 +607,7 @@ class DataUtils {
   static Future<homeTJBean> postPushRoom() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.pushRoom, {}, {});
-    print("首页推荐房间：$respons");
+    debugPrint("首页推荐房间：$respons");
     return homeTJBean.fromJson(respons!);
   }
 
@@ -615,7 +616,7 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.pushStreamer, {}, params);
-    print("推荐主播：$respons");
+    debugPrint("推荐主播：$respons");
     return pushStreamerBean.fromJson(respons!);
   }
 
@@ -623,18 +624,18 @@ class DataUtils {
   static Future<recommendRoomBean> postRecommendRoom() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.recommendRoom, {}, {});
-    print("收藏页4个推荐房间：$respons");
+    debugPrint("收藏页4个推荐房间：$respons");
     return recommendRoomBean.fromJson(respons!);
   }
 
   /// 加入房间前
   static Future<joinRoomBean> postBeforeJoin(
       Map<String, dynamic> params) async {
-    print("加入房间前：$params");
-    print("加入房间前：${MyHttpConfig.beforeJoin}");
+    debugPrint("加入房间前：$params");
+    debugPrint("加入房间前：${MyHttpConfig.beforeJoin}");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.beforeJoin, {}, params);
-    print("加入房间前：$respons");
+    debugPrint("加入房间前：$respons");
     return joinRoomBean.fromJson(respons!);
   }
 
@@ -642,22 +643,22 @@ class DataUtils {
   static Future<joinRoomBean> postCheckPwd(Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.checkPwd, {}, params);
-    print("房间校验密码：$respons");
+    debugPrint("房间校验密码：$respons");
     return joinRoomBean.fromJson(respons!);
   }
 
   /// 加入房间
   static Future<CommonBean> postRoomJoin(Map<String, dynamic> params) async {
-    print("加入房间：$params");
-    print("加入房间前：${MyHttpConfig.roomJoin}");
+    debugPrint("加入房间：$params");
+    debugPrint("加入房间前：${MyHttpConfig.roomJoin}");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomJoin, {}, params);
-    print("加入房间：$respons");
+    debugPrint("加入房间：$respons");
     try {
       final chatRoomId = respons!['data']!['em_room_id'] as String;
       sp.setString('chatRoomId', chatRoomId);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     return CommonBean.fromJson(respons!);
   }
@@ -667,7 +668,7 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.userOnline, {}, params);
-    print("在线用户：$respons");
+    debugPrint("在线用户：$respons");
     return userOnlineBean.fromJson(respons!);
   }
 
@@ -675,7 +676,7 @@ class DataUtils {
   static Future<fenleiBean> postRoomType() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomType, {}, {});
-    print("获取分类：$respons");
+    debugPrint("获取分类：$respons");
     return fenleiBean.fromJson(respons!);
   }
 
@@ -683,26 +684,26 @@ class DataUtils {
   static Future<hotRoomBean> postHotRoom() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.hotRoom, {}, {});
-    print("前5名：$respons");
+    debugPrint("前5名：$respons");
     return hotRoomBean.fromJson(respons!);
   }
 
   /// 首页派对-房间列表
   static Future<tjRoomListBean> postTJRoomList(
       Map<String, dynamic> params) async {
-    print("房间列表：$params");
+    debugPrint("房间列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.tjRoomList, {}, params);
-    print("房间列表：$respons");
+    debugPrint("房间列表：$respons");
     return tjRoomListBean.fromJson(respons!);
   }
 
   /// 榜单
   static Future<rankListBean> postRankList(Map<String, dynamic> params) async {
-    print("榜单：$params");
+    debugPrint("榜单：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.rankList, {}, params);
-    print("榜单：$respons");
+    debugPrint("榜单：$respons");
     return rankListBean.fromJson(respons!);
   }
 
@@ -710,16 +711,16 @@ class DataUtils {
   static Future<gameListBean> postGameList() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.gameList, {}, {});
-    print("游戏列表：$respons");
+    debugPrint("游戏列表：$respons");
     return gameListBean.fromJson(respons!);
   }
 
   /// 获取系统消息
   static Future<xtListBean> postSystemMsgList(Map<String, dynamic> params) async {
-    print("获取系统消息：$params");
+    debugPrint("获取系统消息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.systemMsgList, {}, params);
-    print("获取系统消息：$respons");
+    debugPrint("获取系统消息：$respons");
     return xtListBean.fromJson(respons!);
   }
 
@@ -728,319 +729,319 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.chatUserInfo, {}, params);
-    print("聊天获取用户信息：$respons");
+    debugPrint("聊天获取用户信息：$respons");
     return chatUserInfoBean.fromJson(respons!);
   }
 
   /// 发私聊
   static Future<CommonBean> postSendUserMsg(Map<String, dynamic> params) async {
-    print("发私聊：$params");
+    debugPrint("发私聊：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.sendUserMsg, {}, params);
-    print("发私聊：$respons");
+    debugPrint("发私聊：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 用户开播、在线状态
   static Future<userStatusBean> postUserStatus(
       Map<String, dynamic> params) async {
-    print("用户开播、在线状态：$params");
+    debugPrint("用户开播、在线状态：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.userStatus, {}, params);
-    print("用户开播、在线状态：$respons");
+    debugPrint("用户开播、在线状态：$respons");
     return userStatusBean.fromJson(respons!);
   }
 
   /// 能否私聊
   static Future<CommonIntBean> postCanSendUser(Map<String, dynamic> params) async {
-    print("能否私聊：$params");
+    debugPrint("能否私聊：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.canSendUser, {}, params);
-    print("能否私聊：$respons");
+    debugPrint("能否私聊：$respons");
     return CommonIntBean.fromJson(respons!);
   }
 
   /// 房间信息
   static Future<roomInfoBean> postRoomInfo(Map<String, dynamic> params) async {
-    print("房间信息：$params");
+    debugPrint("房间信息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomInfo, {}, params);
-    print("房间信息：$respons");
+    debugPrint("房间信息：$respons");
     return roomInfoBean.fromJson(respons!);
   }
 
   /// 房间麦上详细信息
   static Future<maiXuBean> postRoomMikeInfo(Map<String, dynamic> params) async {
-    print("房间麦上详细信息：$params");
+    debugPrint("房间麦上详细信息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomMikeInfo, {}, params);
-    print("房间麦上详细信息：$respons");
+    debugPrint("房间麦上详细信息：$respons");
     return maiXuBean.fromJson(respons!);
   }
 
   /// 房间在线用户列表
   static Future<memberListBean> postMemberList(
       Map<String, dynamic> params) async {
-    print("房间在线用户列表：$params");
+    debugPrint("房间在线用户列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.memberList, {}, params);
-    print("房间在线用户列表：$respons");
+    debugPrint("房间在线用户列表：$respons");
     return memberListBean.fromJson(respons!);
   }
 
   /// 用户关注人或房间状态
   static Future<CommonStringBean> postUserFollowStatus(
       Map<String, dynamic> params) async {
-    print("用户关注人或房间状态：$params");
+    debugPrint("用户关注人或房间状态：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.userFollowStatus, {}, params);
-    print("用户关注人或房间状态：$respons");
+    debugPrint("用户关注人或房间状态：$respons");
     return CommonStringBean.fromJson(respons!);
   }
 
   /// 上麦下麦
   static Future<maiXuBean> postSetmai(Map<String, dynamic> params) async {
-    print("上麦下麦：$params");
+    debugPrint("上麦下麦：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setmai, {}, params);
-    print("上麦下麦：$respons");
+    debugPrint("上麦下麦：$respons");
     return maiXuBean.fromJson(respons!);
   }
 
   /// 房间内用户信息
   static Future<roomUserInfoBean> postRoomUserInfo(
       Map<String, dynamic> params) async {
-    print("房间内用户信息：$params");
+    debugPrint("房间内用户信息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomUserInfo, {}, params);
-    print("房间内用户信息：$respons");
+    debugPrint("房间内用户信息：$respons");
     return roomUserInfoBean.fromJson(respons!);
   }
 
   /// 设置/取消房间用户禁言
   static Future<CommonBean> postSetRoomForbation(
       Map<String, dynamic> params) async {
-    print("设置/取消房间用户禁言：$params");
+    debugPrint("设置/取消房间用户禁言：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setRoomForbation, {}, params);
-    print("设置/取消房间用户禁言：$respons");
+    debugPrint("设置/取消房间用户禁言：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 设置/取消黑名单
   static Future<CommonBean> postSetRoomBlack(
       Map<String, dynamic> params) async {
-    print("设置/取消黑名单：$params");
+    debugPrint("设置/取消黑名单：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setRoomBlack, {}, params);
-    print("设置/取消黑名单：$respons");
+    debugPrint("设置/取消黑名单：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 设置/取消管理员
   static Future<CommonBean> postSetRoomAdmin(
       Map<String, dynamic> params) async {
-    print("设置/取消管理员：$params");
+    debugPrint("设置/取消管理员：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setRoomAdmin, {}, params);
-    print("设置/取消管理员：$respons");
+    debugPrint("设置/取消管理员：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 房间用户信息
   static Future<roomInfoUserManagerBean> postRoomUserInfoManager(
       Map<String, dynamic> params) async {
-    print("房间用户信息：$params");
+    debugPrint("房间用户信息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomUserInfoManager, {}, params);
-    print("房间用户信息：$respons");
+    debugPrint("房间用户信息：$respons");
     return roomInfoUserManagerBean.fromJson(respons!);
   }
 
   /// 房间首页展示
   static Future<CommonBean> postSetShow(Map<String, dynamic> params) async {
-    print("房间首页展示：$params");
+    debugPrint("房间首页展示：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setShow, {}, params);
-    print("房间首页展示：$respons");
+    debugPrint("房间首页展示：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 清除魅力值
   static Future<CommonBean> postCleanCharm(Map<String, dynamic> params) async {
-    print("清除魅力值：$params");
+    debugPrint("清除魅力值：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.cleanCharm, {}, params);
-    print("清除魅力值：$respons");
+    debugPrint("清除魅力值：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 清除公屏
   static Future<CommonBean> postCleanPublicScreen(
       Map<String, dynamic> params) async {
-    print("清除公屏：$params");
+    debugPrint("清除公屏：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.cleanPublicScreen, {}, params);
-    print("清除公屏：$respons");
+    debugPrint("清除公屏：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 房间老板位
   static Future<CommonBean> postSetBoss(Map<String, dynamic> params) async {
-    print("房间老板位：$params");
+    debugPrint("房间老板位：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setBoss, {}, params);
-    print("房间老板位：$respons");
+    debugPrint("房间老板位：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 设置房间信息
   static Future<CommonBean> postEditRoom(Map<String, dynamic> params) async {
-    print("设置房间信息：$params");
+    debugPrint("设置房间信息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.editRoom, {}, params);
-    print("设置房间信息：$respons");
+    debugPrint("设置房间信息：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 房间单个用户麦序信息
   static Future<userMaiInfoBean> postRoomUserMikeInfo(
       Map<String, dynamic> params) async {
-    print("房间单个用户麦序信息：$params");
+    debugPrint("房间单个用户麦序信息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomUserMikeInfo, {}, params);
-    print("房间单个用户麦序信息：$respons");
+    debugPrint("房间单个用户麦序信息：$respons");
     return userMaiInfoBean.fromJson(respons!);
   }
 
   /// 房间管理员列表
   static Future<managerBean> postAdminList(Map<String, dynamic> params) async {
-    print("房间管理员列表：$params");
+    debugPrint("房间管理员列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.adminList, {}, params);
-    print("房间管理员列表：$respons");
+    debugPrint("房间管理员列表：$respons");
     return managerBean.fromJson(respons!);
   }
 
   /// 房间禁言列表
   static Future<managerBean> postRoomForbationList(
       Map<String, dynamic> params) async {
-    print("房间禁言列表：$params");
+    debugPrint("房间禁言列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomForbationList, {}, params);
-    print("房间禁言列表：$respons");
+    debugPrint("房间禁言列表：$respons");
     return managerBean.fromJson(respons!);
   }
 
   /// 房间黑名单列表
   static Future<managerBean> postRoomBlackList(
       Map<String, dynamic> params) async {
-    print("房间黑名单列表：$params");
+    debugPrint("房间黑名单列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomBlackList, {}, params);
-    print("房间黑名单列表：$respons");
+    debugPrint("房间黑名单列表：$respons");
     return managerBean.fromJson(respons!);
   }
 
   /// 房间背景图列表
   static Future<roomBGBean> postBgList(Map<String, dynamic> params) async {
-    print("房间背景图列表：$params");
+    debugPrint("房间背景图列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.bgList, {}, params);
-    print("房间背景图列表：$respons");
+    debugPrint("房间背景图列表：$respons");
     return roomBGBean.fromJson(respons!);
   }
 
   /// 选择房间背景图
   static Future<CommonBean> postCheckRoomBg(Map<String, dynamic> params) async {
-    print("选择房间背景图：$params");
+    debugPrint("选择房间背景图：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.checkRoomBg, {}, params);
-    print("选择房间背景图：$respons");
+    debugPrint("选择房间背景图：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 房间上传背景图
   static Future<CommonBean> postUploadBg(Map<String, dynamic> params) async {
-    print("房间上传背景图：$params");
+    debugPrint("房间上传背景图：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.uploadBg, {}, params);
-    print("房间上传背景图：$respons");
+    debugPrint("房间上传背景图：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 房间闭麦
   static Future<CommonBean> postSetClose(Map<String, dynamic> params) async {
-    print("房间闭麦：$params");
+    debugPrint("房间闭麦：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setClose, {}, params);
-    print("房间闭麦：$respons");
+    debugPrint("房间闭麦：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 房间锁麦
   static Future<CommonBean> postSetLock(Map<String, dynamic> params) async {
-    print("房间锁麦：$params");
+    debugPrint("房间锁麦：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setLock, {}, params);
-    print("房间锁麦：$respons");
+    debugPrint("房间锁麦：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 获取头像信息
   static Future<getHeadImageBean> postGetAvatars(
       Map<String, dynamic> params) async {
-    print("获取头像信息：$params");
+    debugPrint("获取头像信息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getAvatars, {}, params);
-    print("获取头像信息：$respons");
+    debugPrint("获取头像信息：$respons");
     return getHeadImageBean.fromJson(respons!);
   }
 
   /// 欢迎语
   static Future<CommonBean> postRoomWelcomeMsg(
       Map<String, dynamic> params) async {
-    print("欢迎语：$params");
+    debugPrint("欢迎语：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomWelcomeMsg, {}, params);
-    print("欢迎语：$respons");
+    debugPrint("欢迎语：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 礼物列表
   static Future<liwuBean> postGiftList(Map<String, dynamic> params) async {
-    print("礼物列表：$params");
+    debugPrint("礼物列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.giftList, {}, params);
-    print("礼物列表：$respons");
+    debugPrint("礼物列表：$respons");
     return liwuBean.fromJson(respons!);
   }
 
   /// 背包礼物
   static Future<beibaoBean> postGiftListBB(Map<String, dynamic> params) async {
-    print("背包礼物：$params");
+    debugPrint("背包礼物：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.giftList, {}, params);
-    print("背包礼物：$respons");
+    debugPrint("背包礼物：$respons");
     return beibaoBean.fromJson(respons!);
   }
 
   /// 送礼物
   static Future<CommonBean> postSendGift(Map<String, dynamic> params) async {
-    print("送礼物：$params");
+    debugPrint("送礼物：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.sendGift, {}, params);
-    print("送礼物：$respons");
+    debugPrint("送礼物：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 钱包明细
   static Future<walletListBean> postWalletList(
       Map<String, dynamic> params) async {
-    print("钱包明细：$params");
+    debugPrint("钱包明细：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.walletList, {}, params);
-    print("钱包明细：$respons");
+    debugPrint("钱包明细：$respons");
     return walletListBean.fromJson(respons!);
   }
 
@@ -1048,46 +1049,46 @@ class DataUtils {
   static Future<balanceBean> postBalance() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.balance, {}, {});
-    print("钱包余额：$respons");
+    debugPrint("钱包余额：$respons");
     return balanceBean.fromJson(respons!);
   }
 
   /// 厅内发消息
   static Future<CommonBean> postRoomMessageSend(
       Map<String, dynamic> params) async {
-    print("厅内发消息：$params");
+    debugPrint("厅内发消息：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomMessageSend, {}, params);
-    print("厅内发消息：$respons");
+    debugPrint("厅内发消息：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 厅内清除单个魅力
   static Future<CommonBean> postCleanCharmSingle(
       Map<String, dynamic> params) async {
-    print("厅内清除单个魅力：$params");
+    debugPrint("厅内清除单个魅力：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.cleanCharmSingle, {}, params);
-    print("厅内清除单个魅力：$respons");
+    debugPrint("厅内清除单个魅力：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 房间麦序在线用户
   static Future<onlineRoomUserBean> postOnlineRoomUser(
       Map<String, dynamic> params) async {
-    print("房间麦序在线用户：$params");
+    debugPrint("房间麦序在线用户：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.onlineRoomUser, {}, params);
-    print("房间麦序在线用户：$respons");
+    debugPrint("房间麦序在线用户：$respons");
     return onlineRoomUserBean.fromJson(respons!);
   }
 
   /// 赛车押注
   static Future<carYZBean> postCarBet(Map<String, dynamic> params) async {
-    print("赛车押注：$params");
+    debugPrint("赛车押注：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.carBet, {}, params);
-    print("赛车押注：$respons");
+    debugPrint("赛车押注：$respons");
     return carYZBean.fromJson(respons!);
   }
 
@@ -1095,7 +1096,7 @@ class DataUtils {
   static Future<carTimerBean> postGetWinTrack() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getWinTrack, {}, {});
-    print("赛车中奖赛道：$respons");
+    debugPrint("赛车中奖赛道：$respons");
     return carTimerBean.fromJson(respons!);
   }
 
@@ -1103,7 +1104,7 @@ class DataUtils {
   static Future<carZJLiShiBean> postGetWinTrackList() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getWinTrackList, {}, {});
-    print("赛车中奖赛道列表历史：$respons");
+    debugPrint("赛车中奖赛道列表历史：$respons");
     return carZJLiShiBean.fromJson(respons!);
   }
 
@@ -1111,7 +1112,7 @@ class DataUtils {
   static Future<carTimerBean> postGetCarTimer() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getCarTimer, {}, {});
-    print("赛车倒计时：$respons");
+    debugPrint("赛车倒计时：$respons");
     return carTimerBean.fromJson(respons!);
   }
 
@@ -1119,47 +1120,47 @@ class DataUtils {
   static Future<luckUserBean> postCarLuckyUser() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.carLuckyUser, {}, {});
-    print("赛车幸运用户：$respons");
+    debugPrint("赛车幸运用户：$respons");
     return luckUserBean.fromJson(respons!);
   }
 
   /// 魔方转盘竞猜
   static Future<playRouletteBean> postPlayRoulette(
       Map<String, dynamic> params) async {
-    print("魔方转盘竞猜：$params");
+    debugPrint("魔方转盘竞猜：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.playRoulette, {}, params);
-    print("魔方转盘竞猜：$respons");
+    debugPrint("魔方转盘竞猜：$respons");
     return playRouletteBean.fromJson(respons!);
   }
 
   /// 游戏商店
   static Future<gameStoreBean> postGameStore(
       Map<String, dynamic> params) async {
-    print("游戏商店：$params");
+    debugPrint("游戏商店：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.gameStore, {}, params);
-    print("游戏商店：$respons");
+    debugPrint("游戏商店：$respons");
     return gameStoreBean.fromJson(respons!);
   }
 
   /// 兑换游戏商店商品
   static Future<CommonBean> postExchangeGoods(
       Map<String, dynamic> params) async {
-    print("兑换游戏商店商品：$params");
+    debugPrint("兑换游戏商店商品：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.exchangeGoods, {}, params);
-    print("兑换游戏商店商品：$respons");
+    debugPrint("兑换游戏商店商品：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 魔方转盘我的中奖记录
   static Future<winListBean> postGetMineRouletteWinList(
       Map<String, dynamic> params) async {
-    print("魔方转盘我的中奖记录：$params");
+    debugPrint("魔方转盘我的中奖记录：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(
         MyHttpConfig.getMineRouletteWinList, {}, params);
-    print("魔方转盘我的中奖记录：$respons");
+    debugPrint("魔方转盘我的中奖记录：$respons");
     return winListBean.fromJson(respons!);
   }
 
@@ -1167,7 +1168,7 @@ class DataUtils {
   static Future<CommonIntBean> postGetGameLuck() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getGameLuck, {}, {});
-    print("大转盘幸运值：$respons");
+    debugPrint("大转盘幸运值：$respons");
     return CommonIntBean.fromJson(respons!);
   }
 
@@ -1176,27 +1177,27 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roulettePrizeList, {}, params);
-    print("魔方奖池：$respons");
+    debugPrint("魔方奖池：$respons");
     return mofangJCBean.fromJson(respons!);
   }
 
   /// 发红包
   static Future<CommonBean> postSendRedPacket(
       Map<String, dynamic> params) async {
-    print("发红包：$params");
+    debugPrint("发红包：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.sendRedPacket, {}, params);
-    print("发红包：$respons");
+    debugPrint("发红包：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 一键赠送背包礼物
   static Future<CommonBean> postOneClickPackageGift(
       Map<String, dynamic> params) async {
-    print("一键赠送背包礼物：$params");
+    debugPrint("一键赠送背包礼物：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.oneClickPackageGift, {}, params);
-    print("一键赠送背包礼物：$respons");
+    debugPrint("一键赠送背包礼物：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -1204,18 +1205,18 @@ class DataUtils {
   static Future<myFenRunBean> postMyPromotion() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.myPromotion, {}, {});
-    print("我的推广：$respons");
+    debugPrint("我的推广：$respons");
     return myFenRunBean.fromJson(respons!);
   }
 
   /// 领取分润
   static Future<CommonBean> postExtractRebate(
       Map<String, dynamic> params) async {
-    print("领取分润：$params");
-    print("领取分润地址：${MyHttpConfig.extractRebate}");
+    debugPrint("领取分润：$params");
+    debugPrint("领取分润地址：${MyHttpConfig.extractRebate}");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.extractRebate, {}, params);
-    print("领取分润：$respons");
+    debugPrint("领取分润：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -1223,74 +1224,74 @@ class DataUtils {
   static Future<tgmBean> postGetPromotionCode() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getPromotionCode, {}, {});
-    print("推广码：$respons");
+    debugPrint("推广码：$respons");
     return tgmBean.fromJson(respons!);
   }
 
   /// 团队总览
   static Future<zonglanBean> postTeamOverview(
       Map<String, dynamic> params) async {
-    print("团队总览：$params");
+    debugPrint("团队总览：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.teamOverview, {}, params);
-    print("团队总览：$respons");
+    debugPrint("团队总览：$respons");
     return zonglanBean.fromJson(respons!);
   }
 
   /// 团队报表
   static Future<baobiaoBean> postTeamReport(Map<String, dynamic> params) async {
-    print("团队报表：$params");
+    debugPrint("团队报表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.teamReport, {}, params);
-    print("团队报表：$respons");
+    debugPrint("团队报表：$respons");
     return baobiaoBean.fromJson(respons!);
   }
 
   /// 手工开户
   static Future<CommonBean> postOpenAccount(Map<String, dynamic> params) async {
-    print("手工开户：$params");
+    debugPrint("手工开户：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.openAccount, {}, params);
-    print("手工开户：$respons");
+    debugPrint("手工开户：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 手工开户开关
   static Future<CommonIntBean> postOaSwtich(Map<String, dynamic> params) async {
-    print("手工开户开关：$params");
+    debugPrint("手工开户开关：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.oaSwtich, {}, params);
-    print("手工开户开关：$respons");
+    debugPrint("手工开户开关：$respons");
     return CommonIntBean.fromJson(respons!);
   }
 
   /// 结算账单列表
   static Future<ghJieSuanListBean> postSettleList(
       Map<String, dynamic> params) async {
-    print("结算账单列表：$params");
+    debugPrint("结算账单列表：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.settleList, {}, params);
-    print("结算账单列表：$respons");
+    debugPrint("结算账单列表：$respons");
     return ghJieSuanListBean.fromJson(respons!);
   }
 
   /// 结算账单明细
   static Future<ghJieSuanListMoreBean> postSettleDetail(
       Map<String, dynamic> params) async {
-    print("结算账单明细：$params");
+    debugPrint("结算账单明细：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.settleDetail, {}, params);
-    print("结算账单明细：$respons");
+    debugPrint("结算账单明细：$respons");
     return ghJieSuanListMoreBean.fromJson(respons!);
   }
 
   /// 房间热度
   static Future<CommonMyIntBean> postHotDegree(
       Map<String, dynamic> params) async {
-    print("房间热度：$params");
+    debugPrint("房间热度：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.hotDegree, {}, params);
-    print("房间热度：$respons");
+    debugPrint("房间热度：$respons");
     return CommonMyIntBean.fromJson(respons!);
   }
 
@@ -1298,55 +1299,55 @@ class DataUtils {
   static Future<isPayBean> postPayPwd() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.payPwd, {}, {});
-    print("是否设置了支付密码：$respons");
+    debugPrint("是否设置了支付密码：$respons");
     return isPayBean.fromJson(respons!);
   }
 
   /// 提现申请
   static Future<CommonBean> postWithdrawal(Map<String, dynamic> params) async {
-    print("提现申请：$params");
+    debugPrint("提现申请：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.withdrawal, {}, params);
-    print("提现申请：$respons");
+    debugPrint("提现申请：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 离开房间
   static Future<CommonBean> postLeave(Map<String, dynamic> params) async {
-    print("离开房间：$params");
+    debugPrint("离开房间：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.leave, {}, params);
-    print("离开房间：$respons");
+    debugPrint("离开房间：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 删除房间背景图
   static Future<CommonBean> postRemoveRoomBg(
       Map<String, dynamic> params) async {
-    print("删除房间背景图：$params");
+    debugPrint("删除房间背景图：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.removeRoomBg, {}, params);
-    print("删除房间背景图：$respons");
+    debugPrint("删除房间背景图：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 币转豆
   static Future<CommonBean> postExchangeCurrency(
       Map<String, dynamic> params) async {
-    print("币转豆：$params");
+    debugPrint("币转豆：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.exchangeCurrency, {}, params);
-    print("币转豆：$respons");
+    debugPrint("币转豆：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 推荐页搜索房间和用户
   static Future<searchAllBean> postSearchAll(
       Map<String, dynamic> params) async {
-    print("推荐页搜索房间和用户：$params");
+    debugPrint("推荐页搜索房间和用户：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.searchAll, {}, params);
-    print("推荐页搜索房间和用户：$respons");
+    debugPrint("推荐页搜索房间和用户：$respons");
     return searchAllBean.fromJson(respons!);
   }
 
@@ -1354,26 +1355,26 @@ class DataUtils {
   static Future<roomTJBean> postShowRoomList() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.showRoomList, {}, {});
-    print("厅内推荐房间(无密码)：$respons");
+    debugPrint("厅内推荐房间(无密码)：$respons");
     return roomTJBean.fromJson(respons!);
   }
 
   /// 删除动态
   static Future<CommonBean> postDelDT(Map<String, dynamic> params) async {
-    print("删除动态：$params");
+    debugPrint("删除动态：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.delDT, {}, params);
-    print("删除动态：$respons");
+    debugPrint("删除动态：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 充值
   static Future<orderPayBean> postOrderCreate(
       Map<String, dynamic> params) async {
-    print("充值：$params");
+    debugPrint("充值：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.orderCreate, {}, params);
-    print("充值：$respons");
+    debugPrint("充值：$respons");
     return orderPayBean.fromJson(respons!);
   }
 
@@ -1381,16 +1382,16 @@ class DataUtils {
   static Future<isFirstOrderBean> postIsFirstOrder() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.isFirstOrder, {}, {});
-    print("首充：$respons");
+    debugPrint("首充：$respons");
     return isFirstOrderBean.fromJson(respons!);
   }
 
   /// 充值方式
   static Future<payLsitBean> postGetPayment(Map<String, dynamic> params) async {
-    print("充值方式：$params");
+    debugPrint("充值方式：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getPayment, {}, params);
-    print("充值方式：$respons");
+    debugPrint("充值方式：$respons");
     return payLsitBean.fromJson(respons!);
   }
 
@@ -1398,45 +1399,45 @@ class DataUtils {
   static Future<payLsitBean> postGetFirstPayment() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getFirstPayment, {}, {});
-    print("首充获取金额：$respons");
+    debugPrint("首充获取金额：$respons");
     return payLsitBean.fromJson(respons!);
   }
 
   /// 文件日志上传
   static Future<CommonBean> postFilelog(Map<String, dynamic> params) async {
-    print("文件日志上传：$params");
+    debugPrint("文件日志上传：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.filelog, {}, params);
-    print("文件日志上传：$respons");
+    debugPrint("文件日志上传：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 房间流水
   static Future<roomLiuShuiBean> postRoomSpendingList(
       Map<String, dynamic> params) async {
-    print("房间流水：$params");
+    debugPrint("房间流水：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomSpendingList, {}, params);
-    print("房间流水：$respons");
+    debugPrint("房间流水：$respons");
     return roomLiuShuiBean.fromJson(respons!);
   }
 
   /// 主播流水
   static Future<zhuboLiuShuiBean> postStreamerSpendingList(
       Map<String, dynamic> params) async {
-    print("主播流水：$params");
+    debugPrint("主播流水：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.streamerSpendingList, {}, params);
-    print("主播流水：$respons");
+    debugPrint("主播流水：$respons");
     return zhuboLiuShuiBean.fromJson(respons!);
   }
 
   /// 设置主播分润比例
   static Future<CommonBean> postSetRatio(Map<String, dynamic> params) async {
-    print("设置主播分润比例：$params");
+    debugPrint("设置主播分润比例：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setRatio, {}, params);
-    print("设置主播分润比例：$respons");
+    debugPrint("设置主播分润比例：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -1444,67 +1445,67 @@ class DataUtils {
   static Future<hzghBean> postHomepage() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.homepage, {}, {});
-    print("会长后台-我的公会：$respons");
+    debugPrint("会长后台-我的公会：$respons");
     return hzghBean.fromJson(respons!);
   }
 
   /// 会长后台-搜索公会成员
   static Future<hzZhuBoBean> postSearchConsortiaStreamer(
       Map<String, dynamic> params) async {
-    print("会长后台-搜索公会成员：$params");
+    debugPrint("会长后台-搜索公会成员：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(
         MyHttpConfig.searchConsortiaStreamer, {}, params);
-    print("会长后台-搜索公会成员：$respons");
+    debugPrint("会长后台-搜索公会成员：$respons");
     return hzZhuBoBean.fromJson(respons!);
   }
 
   /// 会长后台-搜索公会厅
   static Future<hzRoomBean> postSearchConsortiaGuild(
       Map<String, dynamic> params) async {
-    print("会长后台-搜索公会厅：$params");
+    debugPrint("会长后台-搜索公会厅：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.searchConsortiaGuild, {}, params);
-    print("会长后台-搜索公会厅：$respons");
+    debugPrint("会长后台-搜索公会厅：$respons");
     return hzRoomBean.fromJson(respons!);
   }
 
   /// 会长后台-设置厅分润比例
   static Future<CommonBean> postConsortiaSetRatio(
       Map<String, dynamic> params) async {
-    print("会长后台-设置厅分润比例：$params");
+    debugPrint("会长后台-设置厅分润比例：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.consortiaSetRatio, {}, params);
-    print("会长后台-设置厅分润比例：$respons");
+    debugPrint("会长后台-设置厅分润比例：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 会长后台-厅流水
   static Future<hzTingBean> postGuildSpendingList(
       Map<String, dynamic> params) async {
-    print("会长后台-厅流水：$params");
+    debugPrint("会长后台-厅流水：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.guildSpendingList, {}, params);
-    print("会长后台-厅流水：$respons");
+    debugPrint("会长后台-厅流水：$respons");
     return hzTingBean.fromJson(respons!);
   }
 
   /// 会长后台-房间流水
   static Future<roomLiuShuiBean> postCroomSpendingList(
       Map<String, dynamic> params) async {
-    print("会长后台-房间流水：$params");
+    debugPrint("会长后台-房间流水：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.croomSpendingList, {}, params);
-    print("会长后台-房间流水：$respons");
+    debugPrint("会长后台-房间流水：$respons");
     return roomLiuShuiBean.fromJson(respons!);
   }
 
   /// 会长后台-主播流水列表
   static Future<zhuboLiuShuiBean> postCstreamerSpendingList(
       Map<String, dynamic> params) async {
-    print("会长后台-主播流水列表：$params");
+    debugPrint("会长后台-主播流水列表：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(
         MyHttpConfig.cstreamerSpendingList, {}, params);
-    print("会长后台-主播流水列表：$respons");
+    debugPrint("会长后台-主播流水列表：$respons");
     return zhuboLiuShuiBean.fromJson(respons!);
   }
 
@@ -1512,7 +1513,7 @@ class DataUtils {
   static Future<feilvBean> postGetRate() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getRate, {}, {});
-    print("提现费率：$respons");
+    debugPrint("提现费率：$respons");
     return feilvBean.fromJson(respons!);
   }
 
@@ -1520,7 +1521,7 @@ class DataUtils {
   static Future<luckInfoBean> postGameRanking() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.gameRanking, {}, {});
-    print("幸运榜单：$respons");
+    debugPrint("幸运榜单：$respons");
     return luckInfoBean.fromJson(respons!);
   }
 
@@ -1529,53 +1530,53 @@ class DataUtils {
       Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.gameRanking, {}, params);
-    print("幸运榜单：$respons");
+    debugPrint("幸运榜单：$respons");
     return luckInfoBean.fromJson(respons!);
   }
 
   /// 设置勿扰模式
   static Future<CommonBean> postSetDisturb(Map<String, dynamic> params) async {
-    print("设置勿扰模式：$params");
+    debugPrint("设置勿扰模式：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setDisturb, {}, params);
-    print("设置勿扰模式：$respons");
+    debugPrint("设置勿扰模式：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 腾讯云id
   static Future<CommonMyIntBean> postTencentID(
       Map<String, dynamic> params) async {
-    print("腾讯云id：$params");
+    debugPrint("腾讯云id：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.tencentID, {}, params);
-    print("腾讯云id：$respons");
+    debugPrint("腾讯云id：$respons");
     return CommonMyIntBean.fromJson(respons!);
   }
 
   /// 用户举报
   static Future<CommonBean> postUserReport(Map<String, dynamic> params) async {
-    print("用户举报：$params");
+    debugPrint("用户举报：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.userReport, {}, params);
-    print("用户举报：$respons");
+    debugPrint("用户举报：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 设置离线模式
   static Future<CommonBean> postSetLockMic(Map<String, dynamic> params) async {
-    print("设置离线模式：$params");
+    debugPrint("设置离线模式：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setLockMic, {}, params);
-    print("设置离线模式：$respons");
+    debugPrint("设置离线模式：$respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 邀请有礼-提交申请
   static Future<CommonBean> postYqApply(Map<String, dynamic> params) async {
-    print("邀请有礼-提交申请：$params");
+    debugPrint("邀请有礼-提交申请：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.yqApply, {}, params);
-    print("邀请有礼-提交申请：$respons");
+    debugPrint("邀请有礼-提交申请：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -1583,7 +1584,7 @@ class DataUtils {
   static Future<getShareBean> postGetShareUrl() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getShareUrl, {}, {});
-    print("邀请有礼-获取分享链接 $respons");
+    debugPrint("邀请有礼-获取分享链接 $respons");
     return getShareBean.fromJson(respons!);
   }
 
@@ -1591,61 +1592,61 @@ class DataUtils {
   static Future<tgMyShareBean> postGetPromoUrl() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.getPromoUrl, {}, {});
-    print("邀请有礼-获取分享链接 $respons");
+    debugPrint("邀请有礼-获取分享链接 $respons");
     return tgMyShareBean.fromJson(respons!);
   }
 
   /// 购买装扮
   static Future<CommonBean> postBuyDress(Map<String, dynamic> params) async {
-    print("购买装扮 $params");
+    debugPrint("购买装扮 $params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.buyDress, {}, params);
-    print("购买装扮 $respons");
+    debugPrint("购买装扮 $respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 设置装扮
   static Future<CommonBean> postSetDress(Map<String, dynamic> params) async {
-    print("设置装扮 $params");
+    debugPrint("设置装扮 $params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.setDress, {}, params);
-    print("设置装扮 $respons");
+    debugPrint("设置装扮 $respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 爆灯
   static Future<CommonBean> postBurstLight(Map<String, dynamic> params) async {
-    print("爆灯 $params");
+    debugPrint("爆灯 $params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.burstLight, {}, params);
-    print("爆灯 $respons");
+    debugPrint("爆灯 $respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 开启pk
   static Future<CommonBean> postStartPk(Map<String, dynamic> params) async {
-    print("开启pk $params");
+    debugPrint("开启pk $params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.startPk, {}, params);
-    print("开启pk $respons");
+    debugPrint("开启pk $respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 提前结束pk
   static Future<CommonBean> postAheadOver(Map<String, dynamic> params) async {
-    print("提前结束pk $params");
+    debugPrint("提前结束pk $params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.aheadOver, {}, params);
-    print("提前结束pk $respons");
+    debugPrint("提前结束pk $respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 提前结束惩罚
   static Future<CommonBean> postAheadPunish(Map<String, dynamic> params) async {
-    print("提前结束惩罚 $params");
+    debugPrint("提前结束惩罚 $params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.aheadPunish, {}, params);
-    print("提前结束惩罚 $respons");
+    debugPrint("提前结束惩罚 $respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -1653,27 +1654,27 @@ class DataUtils {
   static Future<CommonBean> postAppOpen() async {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.appOpen, {}, {});
-    print("打开app $respons");
+    debugPrint("打开app $respons");
     return CommonBean.fromJson(respons!);
   }
 
   /// 获取不到ip上传日志
   static Future<CommonBean> postIpLog(Map<String, dynamic> params) async {
-    print("获取不到ip上传日志 $params");
-    print("获取不到ip上传日志地址 ${MyHttpConfig.ipLog}");
+    debugPrint("获取不到ip上传日志 $params");
+    debugPrint("获取不到ip上传日志地址 ${MyHttpConfig.ipLog}");
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.ipLog, {}, params);
-    print("获取不到ip上传日志 $respons");
+    debugPrint("获取不到ip上传日志 $respons");
     return CommonBean.fromJson(respons!);
   }
 
 
   /// 盲盒礼物
   static Future<CommonBean> postPlayBlindBox(Map<String, dynamic> params) async {
-    print("盲盒礼物 $params");
+    debugPrint("盲盒礼物 $params");
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.playBlindBox, {}, params);
-    print("盲盒礼物 $respons");
+    debugPrint("盲盒礼物 $respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -1681,7 +1682,7 @@ class DataUtils {
   static Future<WealthInfoBean> postWealthInfo() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/mine/wealthInfo', {}, {});
-    print("大客户详情 /mine/wealthInfo $respons");
+    debugPrint("大客户详情 /mine/wealthInfo $respons");
     final bean = WealthInfoBean.fromJson(respons);
     if (bean.code == MyHttpConfig.successCode && bean.data is WealthInfoBeanData) {
       final data = bean.data!;
@@ -1698,14 +1699,14 @@ class DataUtils {
   static Future<CommonBean> postGetDayReturn() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/mine/getDayReturn', {}, {});
-    print("领取日返 /mine/getDayReturn $respons");
+    debugPrint("领取日返 /mine/getDayReturn $respons");
     return CommonBean.fromJson(respons!);
   }
   /// 日返记录
   static Future<WealthDayReturnBean> postDayReturnList() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/mine/dayReturnList', {}, {});
-    print("领取日返 /mine/getDayReturn $respons");
+    debugPrint("领取日返 /mine/getDayReturn $respons");
     return WealthDayReturnBean.fromJson(respons!);
   }
 
@@ -1713,7 +1714,7 @@ class DataUtils {
   static Future<CommonBean> postCanSendRedPacket() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.canSendRedPacket, {}, {});
-    print("是否有发红包权限 $respons");
+    debugPrint("是否有发红包权限 $respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -1721,7 +1722,7 @@ class DataUtils {
   static Future<HappinessWallBean> postHappinessWall() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/happinessWall', {}, {});
-    print("幸福墙 /activity/happinessWall $respons");
+    debugPrint("幸福墙 /activity/happinessWall $respons");
     return HappinessWallBean.fromJson(respons!);
   }
 
@@ -1731,7 +1732,7 @@ class DataUtils {
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/user/findMate', {}, {
       if (gender != null) 'gender': gender
     });
-    print("找对象 /user/findMate $respons");
+    debugPrint("找对象 /user/findMate $respons");
     return FindMateBean.fromJson(respons!);
   }
 
@@ -1739,7 +1740,7 @@ class DataUtils {
   static Future<soundBean> postPushSound() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.pushSound, {}, {});
-    print("推荐声音 $respons");
+    debugPrint("推荐声音 $respons");
     return soundBean.fromJson(respons!);
   }
 
@@ -1748,7 +1749,7 @@ class DataUtils {
   static Future<gzBean> postMyNoble() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.myNoble, {}, {});
-    print("我的贵族 $respons");
+    debugPrint("我的贵族 $respons");
     return gzBean.fromJson(respons!);
   }
 
@@ -1756,16 +1757,16 @@ class DataUtils {
   static Future<rankListGZBean> postRankListGZ() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.rankListGZ, {}, {});
-    print("贵族榜单 $respons");
+    debugPrint("贵族榜单 $respons");
     return rankListGZBean.fromJson(respons!);
   }
 
   /// 设置隐身
   static Future<CommonBean> postSetStealth(Map<String, dynamic> params) async {
-    print("设置隐身：$params");
+    debugPrint("设置隐身：$params");
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.setStealth, {}, params);
-    print("设置隐身：$respons");
+    debugPrint("设置隐身：$respons");
     return CommonBean.fromJson(respons!);
   }
 
@@ -1773,7 +1774,7 @@ class DataUtils {
   static Future<ActivityPaperIndexBean> postActivityPaperIndex() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/paperIndex', {}, {});
-    print("告白纸条首页 /activity/paperIndex $respons");
+    debugPrint("告白纸条首页 /activity/paperIndex $respons");
     return ActivityPaperIndexBean.fromJson(respons!);
   }
   ///放入纸条
@@ -1784,7 +1785,7 @@ class DataUtils {
       'img_id' : id,
       'type' : type,
     });
-    print("放入纸条 /activity/putPaper $respons");
+    debugPrint("放入纸条 /activity/putPaper $respons");
     return GetXBean.fromJson(respons!);
   }
   ///放入纸条记录
@@ -1794,14 +1795,14 @@ class DataUtils {
       'page' : page,
       'pageSize' : pageSize,
     });
-    print("放入纸条记录 /activity/putPaperList $respons");
+    debugPrint("放入纸条记录 /activity/putPaperList $respons");
     return ActivityPutPaperListBean.fromJson(respons!);
   }
   ///抽取纸条
   static Future<ActivityGetPaperBean> postActivityGetPaper() async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/getPaper', {}, {});
-    print("抽取纸条 /activity/getPaper $respons");
+    debugPrint("抽取纸条 /activity/getPaper $respons");
     return ActivityGetPaperBean.fromJson(respons!);
   }
   ///抽取纸条记录
@@ -1811,7 +1812,7 @@ class DataUtils {
       'page' : page,
       'pageSize' : pageSize,
     });
-    print("抽取纸条记录 /activity/getPaperList $respons");
+    debugPrint("抽取纸条记录 /activity/getPaperList $respons");
     return ActivityGetPaperListBean.fromJson(respons!);
   }
 
@@ -1819,7 +1820,7 @@ class DataUtils {
   static Future<CommonBean> postDelPaper(Map<String, dynamic> params) async {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.delPaper, {}, params);
-    print("删除纸条 $respons");
+    debugPrint("删除纸条 $respons");
     return CommonBean.fromJson(respons!);
   }
 }

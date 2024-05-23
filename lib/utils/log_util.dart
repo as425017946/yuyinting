@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 
 const String _tag = "打印输出";
@@ -34,8 +35,12 @@ LogW(String msg) {
   _logger.w("$_tag :: $msg");
 }
 
+// LogE(String msg) {
+//   _logger.e("$_tag :: $msg");
+// }
+
 LogE(String msg) {
-  _logger.e("$_tag :: $msg");
+  debugPrint("$_tag :: $msg");
 }
 
 LogWTF(String msg) {
