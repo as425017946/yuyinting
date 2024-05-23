@@ -16,7 +16,7 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:yuyinting/colors/my_colors.dart';
-import 'package:yuyinting/pages/home/paidui_page.dart';
+import 'package:yuyinting/pages/home/paidui/paidui_page.dart';
 import 'package:yuyinting/pages/home/search_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
