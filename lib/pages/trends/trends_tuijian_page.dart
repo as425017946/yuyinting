@@ -100,7 +100,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
     listen.cancel();
   }
 
-  _initializeVideoController(List<String> listImg,int i) async {
+  _initializeVideoController(List<String> listImg, int i) async {
     final fileName = await VideoThumbnail.thumbnailFile(
       video: listImg[0],
       thumbnailPath: (await getTemporaryDirectory()).path,
@@ -112,11 +112,11 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
     // LogE('视频图片 $fileName');
   }
 
-  Widget waterCard(BuildContext context, int index){
-    if (_list[index].type == 2){
-      _initializeVideoController(_list[index].imgUrl!,index);
-    }
+  Widget waterCard(BuildContext context, int index) {
     final item = _list[index];
+    if (item.type == 2 && item.imgUrl![1].isEmpty) {
+      _initializeVideoController(item.imgUrl!,index);
+    }
     return GestureDetector(
       onTap: ((){
         if(MyUtils.checkClick()){

@@ -608,11 +608,17 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         setState(() {
           sumBG++;
           if (sumBG == 19) {
+            if (beanLuck == null || beanLuck?.code != 200) {
+              _timer?.cancel();
+              MyToastUtils.showToastBottom2("您的网络不佳，游戏即将关闭，稍后请在开奖记录查看！");
+              Navigator.pop(context);
+              return;
+            }
             MyUtils.goTransparentPageCom(
                 context,
                 ZhongJiangPage(
                   type: luck,
-                  bean: beanLuck,
+                  bean: beanLuck!,
                 ));
           }
           if (sumBG == 15) {
@@ -2461,12 +2467,12 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   }
 
   /// 赛车中奖用户
-  late luckUserBean beanLuck;
+  luckUserBean? beanLuck;
 
   Future<void> doPostCarLuckyUser() async {
     try {
       beanLuck = await DataUtils.postCarLuckyUser();
-      switch (beanLuck.code) {
+      switch (beanLuck!.code) {
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
