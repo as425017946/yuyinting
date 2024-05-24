@@ -949,6 +949,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
   String isDevices = 'android';
   @override
   void initState() {
+    //2.页面初始化的时候，添加一个状态的监听者
+    WidgetsBinding.instance.addObserver(this);
     sp.setString('carShow', '0');
     if (Platform.isAndroid) {
       setState(() {
@@ -1157,6 +1159,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
     _player4.stop();
     _player4.dispose();
     // subscription.cancel();
+    //3. 页面销毁时，移出监听者
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -2495,7 +2499,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
     switch (state) {
     //进入应用时候不会触发该状态 应用程序处于可见状态，并且可以响应用户的输入事件。它相当于 Android 中Activity的onResume
       case AppLifecycleState.resumed:
-        print("应用进入前台======");
+        print("应用进入前台======111111111111111111");
         break;
     //应用状态处于闲置状态，并且没有用户的输入事件，
     // 注意：这个状态切换到 前后台 会触发，所以流程应该是先冻结窗口，然后停止UI
@@ -2510,7 +2514,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
       case AppLifecycleState.paused:
         Navigator.pop(context);
         sp.setString('carShow', '1');
-        print("应用处于不可见状态 后台======");
+        print("应用处于不可见状态 后台======11111111111111");
         break;
     }
   }
