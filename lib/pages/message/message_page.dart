@@ -399,6 +399,26 @@ class _MessagePageState extends State<MessagePage>
     db.delete('messageSLTable', where: 'combineID = ?', whereArgs: [cbID]);
     doPostSystemMsgList();
   }
+  void doDeleteBlack() async {
+    if (listU.isEmpty) return;
+    List<int> uids = [];
+    for (var element in listU) {
+      if (element.accountStatus == 0 && element.uid != null) { // 0封禁 其他正常
+        uids.add(element.uid!);
+      }
+    }
+    if (uids.isEmpty) return;
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    for (var element in uids) {
+      final item = listMessage.firstWhere((e) => e['otherUid'] == element.toString(), orElse: () => {});
+      if (item.isNotEmpty) {
+        //删除
+        db.delete('messageSLTable', where: 'combineID = ?', whereArgs: [item['combineID']]);
+      }
+    }
+    doPostSystemMsgList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -855,6 +875,7 @@ class _MessagePageState extends State<MessagePage>
             listU.clear();
             if (bean.data!.isNotEmpty) {
               listU = bean.data!;
+              doDeleteBlack();
             }
           });
           break;

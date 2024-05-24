@@ -32,6 +32,7 @@ class DataU {
   int? loginStatus;
   int? liveStatus;
   int? nobleID;
+  int? accountStatus;
 
   DataU({this.uid, this.loginStatus, this.liveStatus, this.nobleID});
 
@@ -40,6 +41,7 @@ class DataU {
     loginStatus = json['login_status'];
     liveStatus = json['live_status'];
     nobleID = json['noble_id'];
+    accountStatus = json['account_status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +50,7 @@ class DataU {
     data['login_status'] = this.loginStatus;
     data['live_status'] = this.liveStatus;
     data['noble_id'] = this.nobleID;
+    data['account_status'] = this.accountStatus;
     return data;
   }
 }
