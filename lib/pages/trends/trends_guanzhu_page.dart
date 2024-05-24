@@ -383,7 +383,9 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
   }
 
   Widget showVideo(List<String> listImg, int i) {
-    _initializeVideoController(listImg, i);
+    if (listImg[1].isEmpty) {
+      _initializeVideoController(listImg, i);
+    }
     return Row(
       children: [
         Container(
@@ -687,7 +689,9 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
   }
 
   Widget showVideo2(List<String> listImg, int i) {
-    _initializeVideoController2(listImg, i);
+    if (listImg[1].isEmpty) {
+      _initializeVideoController2(listImg, i);
+    }
     return Row(
       children: [
         Container(

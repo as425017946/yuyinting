@@ -255,7 +255,9 @@ class _TrendsMorePageState extends State<TrendsMorePage>
   }
 
   Widget showVideo(List<String> listImg) {
-    _initializeVideoController(listImg);
+    if (videoImg.isEmpty) {
+      _initializeVideoController(listImg);
+    }
     String a = listImg[0];
     return Row(
       children: [
