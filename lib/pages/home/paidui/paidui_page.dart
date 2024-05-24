@@ -183,55 +183,64 @@ class _Rmtj extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(35),
         ),
-        child: Swiper(
-          itemBuilder: (BuildContext context, int index) {
-            // 配置图片地址
-            final String roomName = list[index].roomName;
-            return Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                FadeInImage.assetNetwork(
-                  width: size,
-                  height: size,
-                  placeholder: 'assets/images/img_placeholder.png',
-                  image: list[index].coverImg!,
-                  fit: BoxFit.cover,
-                  imageErrorBuilder: (context, error, stackTrace) {
-                    // 图片加载错误后展示的 widget
-                    // print("---图片加载错误---");
-                    // 此处不能 setState
-                    return const Image(
-                      image: AssetImage('assets/images/img_placeholder.png'),
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.contain,
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    roomName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 28),
-                  ),
-                ),
-              ],
-            );
-          },
-          // 配置图片数量
-          itemCount: list.length,
-          // 无限循环
-          loop: true,
-          // 自动轮播
-          autoplay: true,
-          autoplayDelay: 4000,
-          duration: 2500,
-          onIndexChanged: (index) {},
-          onTap: (index) => c.toRoom(int.parse(list[index].id)),
-        ),
+        child: list.length > 1
+            ? Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  // 配置图片地址
+                  final String roomName = list[index].roomName;
+                  return _rmSwiperItem(list[index].roomName, list[index].coverImg, size);
+                },
+                // 配置图片数量
+                itemCount: list.length,
+                // 无限循环
+                loop: true,
+                // 自动轮播
+                autoplay: true,
+                autoplayDelay: 4000,
+                duration: 2500,
+                onIndexChanged: (index) {},
+                onTap: (index) => c.toRoom(list[index].id),
+              )
+            : GestureDetector(
+              onTap: () => c.toRoom(list.first.id),
+              child: _rmSwiperItem(list.first.roomName, list.first.coverImg, size),
+            ),
       );
     }
+  }
+
+  Widget _rmSwiperItem(String roomName, String coverImg, double size) {
+    return Stack(
+      alignment: Alignment.bottomLeft,
+      children: [
+        FadeInImage.assetNetwork(
+          width: size,
+          height: size,
+          placeholder: 'assets/images/img_placeholder.png',
+          image: coverImg,
+          fit: BoxFit.cover,
+          imageErrorBuilder: (context, error, stackTrace) {
+            // 图片加载错误后展示的 widget
+            // print("---图片加载错误---");
+            // 此处不能 setState
+            return const Image(
+              image: AssetImage('assets/images/img_placeholder.png'),
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.contain,
+            );
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            roomName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 28),
+          ),
+        ),
+      ],
+    );
   }
 }
