@@ -25,15 +25,12 @@ class PaiduiController extends GetxController with GetAntiCombo {
 
   @override
   void onReady() {
-    _hwc.doPostHappinessWall();
-    onLoading();
+    onRefresh();
     super.onReady();
   }
 
   void onLoading() async {
     listPage?.status == LoadStatus.loading;
-    _doPostPushRoom();
-    await _doPostRoomType();
     await _doPostTJRoomList2(false);
   }
   void onRefresh() async {
