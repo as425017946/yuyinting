@@ -32,6 +32,7 @@ class _StarPageState extends State<StarPage> {
     setState(() {
       sp.setString('isEmulation', '0');
       sp.setString('mic_quren', '0');
+      sp.setString('carShow', '0');
       sp.setString('scIsOk', '0');
       sp.setString('userIP', '');
       sp.setInt('tjFirst', 0);

@@ -45,6 +45,7 @@ import '../../utils/loading.dart';
 import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/mic_queren_page.dart';
+import '../game/car_page.dart';
 import '../home/home_items.dart';
 import 'room_items.dart';
 
@@ -3513,6 +3514,9 @@ class _RoomPageState extends State<RoomPage>
     switch (state) {
       //进入应用时候不会触发该状态 应用程序处于可见状态，并且可以响应用户的输入事件。它相当于 Android 中Activity的onResume
       case AppLifecycleState.resumed:
+        if(sp.getString('carShow').toString() == '1'){
+          MyUtils.goTransparentPageCom(context, const Carpage());
+        }
         print("应用进入前台======");
         setState(() {
           isFirst++;

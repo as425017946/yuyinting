@@ -38,7 +38,7 @@ class Carpage extends StatefulWidget {
   State<Carpage> createState() => _CarpageState();
 }
 
-class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
+class _CarpageState extends State<Carpage> with TickerProviderStateMixin,WidgetsBindingObserver{
   // 下注区是否被选中
   List<bool> listA = [
     false,
@@ -949,6 +949,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   String isDevices = 'android';
   @override
   void initState() {
+    sp.setString('carShow', '0');
     if (Platform.isAndroid) {
       setState(() {
         isDevices = 'android';
@@ -2482,6 +2483,35 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       }
     } catch (e) {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+
+  //监听程序进入前后台的状态改变的方法
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+    //进入应用时候不会触发该状态 应用程序处于可见状态，并且可以响应用户的输入事件。它相当于 Android 中Activity的onResume
+      case AppLifecycleState.resumed:
+        print("应用进入前台======");
+        break;
+    //应用状态处于闲置状态，并且没有用户的输入事件，
+    // 注意：这个状态切换到 前后台 会触发，所以流程应该是先冻结窗口，然后停止UI
+      case AppLifecycleState.inactive:
+        print("应用处于闲置状态，这种状态的应用应该假设他们可能在任何时候暂停 切换到后台会触发======");
+        break;
+    //当前页面即将退出
+      case AppLifecycleState.detached:
+        print("当前页面即将退出======");
+        break;
+    // 应用程序处于不可见状态
+      case AppLifecycleState.paused:
+        Navigator.pop(context);
+        sp.setString('carShow', '1');
+        print("应用处于不可见状态 后台======");
+        break;
     }
   }
 }
