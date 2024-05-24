@@ -161,7 +161,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                 WidgetUtils.CircleHeadImage(
                     25 * 2.w, 25 * 2.w, _list[index].avatar!),
                 WidgetUtils.commonSizedBox(0, 10.w),
-                WidgetUtils.onlyText(_list[index].nickname!, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 24.sp,)),
+                WidgetUtils.onlyText(_list[index].nickname!.length > 7 ? _list[index].nickname!.substring(0,7) : _list[index].nickname!, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 24.sp,)),
                 const Spacer(),
                 _list[index].isLike == 0 ?  GestureDetector(
                     onTap:((){

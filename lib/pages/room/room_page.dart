@@ -44,6 +44,7 @@ import '../../utils/SlideAnimationController.dart';
 import '../../utils/loading.dart';
 import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
+import '../../widget/mic_queren_page.dart';
 import '../home/home_items.dart';
 import 'room_items.dart';
 
@@ -1836,6 +1837,22 @@ class _RoomPageState extends State<RoomPage>
           //离开频道并释放资源
           _dispose();
           Navigator.pop(context);
+        } else if (event.map!['type'] == 'yq_up_mic' && sp.getString('mic_quren').toString() == '0') {
+          if (mounted) {
+            // 收到邀请通知
+            if (event.map!['uid'].toString() ==
+                sp.getString('user_id').toString()) {
+                MyUtils.goTransparentPageCom(context, MicPage(title: '邀请上麦', roomID: widget.roomId, listM: listM,));
+            }
+          }
+        }  else if (event.map!['type'] == 'yq_open_mic'  && sp.getString('mic_quren').toString() == '0') {
+          if (mounted) {
+            // 收到邀请通知
+            if (event.map!['uid'].toString() ==
+                sp.getString('user_id').toString()) {
+              MyUtils.goTransparentPageCom(context, MicPage(title: '邀请开麦', roomID: widget.roomId, listM: listM,));
+            }
+          }
         } else if (event.map!['type'] == 'bao_mic') {
           // 通知用户被报上了麦序
           setState(() {
@@ -1850,7 +1867,7 @@ class _RoomPageState extends State<RoomPage>
             // 上下麦操作不是本地才刷新
             if (event.map!['uid'].toString() ==
                 sp.getString('user_id').toString()) {
-              MyToastUtils.showToastBottom(event.map!['text'].toString());
+              // MyToastUtils.showToastBottom(event.map!['text'].toString());
               doPostRoomMikeInfo();
             }
           }

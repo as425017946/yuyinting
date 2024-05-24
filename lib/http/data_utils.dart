@@ -75,6 +75,7 @@ import '../bean/rankListBean.dart';
 import '../bean/rankListGZBean.dart';
 import '../bean/recommendRoomBean.dart';
 import '../bean/roomBGBean.dart';
+import '../bean/roomDataBean.dart';
 import '../bean/roomInfoBean.dart';
 import '../bean/roomInfoUserManagerBean.dart';
 import '../bean/roomLiuShuiBean.dart';
@@ -1822,5 +1823,15 @@ class DataUtils {
     await MyHttpRequest.post(MyHttpConfig.delPaper, {}, params);
     debugPrint("删除纸条 $respons");
     return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 房间数据
+  static Future<roomDataBean> postRoomData(Map<String, dynamic> params) async {
+    debugPrint("房间数据 $params");
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.roomData, {}, params);
+    debugPrint("房间数据 $respons");
+    return roomDataBean.fromJson(respons!);
   }
 }

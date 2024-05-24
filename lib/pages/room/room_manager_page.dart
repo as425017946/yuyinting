@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/room/room_bg_page.dart';
 import 'package:yuyinting/pages/room/room_black_page.dart';
+import 'package:yuyinting/pages/room/room_data_page.dart';
 import 'package:yuyinting/pages/room/room_gonggao_page.dart';
 import 'package:yuyinting/pages/room/room_guanliyuan_page.dart';
 import 'package:yuyinting/pages/room/room_jinyan_page.dart';
@@ -48,7 +49,8 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
 
   // 厅头图片
   String ttImg = '';
-  var  listen;
+  var listen;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,9 +59,10 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
     setState(() {
       ttImg = sp.getString('roomImage').toString();
     });
+
     /// 腾讯云上传成功回调
     listen = eventBus.on<TencentBack>().listen((event) {
-      if(event.title == '房间管理'){
+      if (event.title == '房间管理') {
         doPostRoomJoin(event.filePath);
       }
     });
@@ -241,7 +244,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                   ),
                 )
               : Container(
-                  height: ScreenUtil().setHeight(950),
+                  height: ScreenUtil().setHeight(1030),
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     //设置Container修饰
@@ -435,12 +438,14 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                       ),
                       GestureDetector(
                         onTap: (() {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomGongGaoPage(
-                                roomID: widget.roomID,
-                              ));
-                          Navigator.pop(context);
+                          if (MyUtils.checkClick()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomGongGaoPage(
+                                  roomID: widget.roomID,
+                                ));
+                            Navigator.pop(context);
+                          }
                         }),
                         child: Container(
                           height: ScreenUtil().setHeight(80),
@@ -472,8 +477,10 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                       ),
                       GestureDetector(
                         onTap: (() {
-                          MyUtils.goTransparentPage(
-                              context, const RoomBGPage());
+                          if (MyUtils.checkClick()) {
+                            MyUtils.goTransparentPage(
+                                context, const RoomBGPage());
+                          }
                         }),
                         child: Container(
                           height: ScreenUtil().setHeight(80),
@@ -505,9 +512,13 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                       ),
                       GestureDetector(
                         onTap: (() {
-                          Navigator.pop(context);
-                          MyUtils.goTransparentPage(context,
-                              RoomPasswordPage(type: 0, roomID: widget.roomID));
+                          if (MyUtils.checkClick()) {
+                            Navigator.pop(context);
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPasswordPage(
+                                    type: 0, roomID: widget.roomID));
+                          }
                         }),
                         child: Container(
                           height: ScreenUtil().setHeight(80),
@@ -539,11 +550,13 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                       ),
                       GestureDetector(
                         onTap: (() {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomBlackPage(
-                                roomID: widget.roomID,
-                              ));
+                          if (MyUtils.checkClick()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomBlackPage(
+                                  roomID: widget.roomID,
+                                ));
+                          }
                         }),
                         child: Container(
                           height: ScreenUtil().setHeight(80),
@@ -575,11 +588,13 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                       ),
                       GestureDetector(
                         onTap: (() {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomJinYanPage(
-                                roomID: widget.roomID,
-                              ));
+                          if (MyUtils.checkClick()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomJinYanPage(
+                                  roomID: widget.roomID,
+                                ));
+                          }
                         }),
                         child: Container(
                           height: ScreenUtil().setHeight(80),
@@ -609,6 +624,52 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                         child: WidgetUtils.myLine(
                             color: MyColors.g9, indent: 20, endIndent: 20),
                       ),
+                      (sp.getString('role').toString() == 'leader' ||
+                              sp.getString('role').toString() == 'president')
+                          ? GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  MyUtils.goTransparentPage(
+                                      context,
+                                      RoomDataPage(
+                                        roomID: widget.roomID,
+                                      ));
+                                }
+                              }),
+                              child: Container(
+                                height: ScreenUtil().setHeight(80),
+                                color: Colors.transparent,
+                                child: Row(
+                                  children: [
+                                    WidgetUtils.commonSizedBox(0, 20),
+                                    WidgetUtils.onlyText(
+                                        '房间数据',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.roomTCWZ2,
+                                            fontSize: ScreenUtil().setSp(25))),
+                                    const Expanded(child: Text('')),
+                                    Image(
+                                      image: const AssetImage(
+                                          'assets/images/mine_more.png'),
+                                      width: ScreenUtil().setHeight(12),
+                                      height: ScreenUtil().setHeight(20),
+                                    ),
+                                    WidgetUtils.commonSizedBox(0, 20),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : WidgetUtils.commonSizedBox(0, 0),
+                      (sp.getString('role').toString() == 'leader' ||
+                              sp.getString('role').toString() == 'president')
+                          ? Opacity(
+                              opacity: 0.2,
+                              child: WidgetUtils.myLine(
+                                  color: MyColors.g9,
+                                  indent: 20,
+                                  endIndent: 20),
+                            )
+                          : WidgetUtils.commonSizedBox(0, 0),
                     ],
                   ),
                 )
@@ -766,10 +827,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
   /// 上传房间缩略图
   Future<void> doPostPostFileUploadTX(String imgID) async {
     FormData formdata = FormData.fromMap(
-      {
-        'room_id': sp.getString('roomID').toString(),
-        "img_id": imgID
-      },
+      {'room_id': sp.getString('roomID').toString(), "img_id": imgID},
     );
     BaseOptions option = BaseOptions(
         contentType: 'multipart/form-data', responseType: ResponseType.plain);
@@ -785,7 +843,8 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
         setState(() {
           ttImg = sp.getString('local_path').toString();
         });
-        eventBus.fire(RoomBack(title: '厅头修改', index: sp.getString('local_path').toString()));
+        eventBus.fire(RoomBack(
+            title: '厅头修改', index: sp.getString('local_path').toString()));
         MyToastUtils.showToastBottom('上传成功');
         Loading.dismiss();
       } else if (jsonResponse['code'] == 401) {
@@ -801,6 +860,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
       MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
   }
+
   /// 压缩图片
   void yasuo(String path) async {
     var dir = await path_provider.getTemporaryDirectory();
@@ -811,7 +871,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
     } else if (path.toString().contains('.jpg') ||
         path.toString().contains('.GPG')) {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -820,7 +880,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
     } else if (path.toString().contains('.jpeg') ||
         path.toString().contains('.GPEG')) {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -833,7 +893,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
     } else if (path.toString().contains('.webp') ||
         path.toString().contains('.WEBP')) {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -841,7 +901,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
       );
     } else {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -849,13 +909,15 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
       );
     }
 
-    _upload(path.toString().contains('.gif') || path.toString().contains('.GIF')
-        ? targetPath
-        : result!.path, 'image');
+    _upload(
+        path.toString().contains('.gif') || path.toString().contains('.GIF')
+            ? targetPath
+            : result!.path,
+        'image');
   }
 
   /// 上传  String? _pickFilePath;选择的文件路径
-  void _upload(String pickFilePath,String type) async {
+  void _upload(String pickFilePath, String type) async {
     sp.setString('local_path', pickFilePath);
     if (pickFilePath == null) {
       MyToastUtils.showToastBottom('请先选择需要上传的文件');
@@ -863,8 +925,8 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!, type, '房间管理', (count, total) {
-      });
+      await UploadHttpClient.upload(
+          pickFilePath!, type, '房间管理', (count, total) {});
     } catch (e) {
       LogE('上传失败${e.toString()}');
     }
@@ -885,7 +947,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
         filePath.contains('.png') ||
         filePath.contains('.png')) {
       fileType = 'image';
-    }else if(filePath.contains('.avi') ||
+    } else if (filePath.contains('.avi') ||
         filePath.contains('.AVI') ||
         filePath.contains('.wmv') ||
         filePath.contains('.WMV') ||
@@ -894,7 +956,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
         filePath.contains('.mp4') ||
         filePath.contains('.MP4') ||
         filePath.contains('.m4v') ||
-        filePath.contains('.M4V')||
+        filePath.contains('.M4V') ||
         filePath.contains('.mov') ||
         filePath.contains('.MOV') ||
         filePath.contains('.asf') ||
@@ -902,17 +964,17 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
         filePath.contains('.flv') ||
         filePath.contains('.FLV') ||
         filePath.contains('.f4v') ||
-        filePath.contains('.F4V')||
+        filePath.contains('.F4V') ||
         filePath.contains('.rmvb') ||
         filePath.contains('.RMVB') ||
         filePath.contains('.rm') ||
         filePath.contains('.RM') ||
-        filePath.contains('.3gp')||
+        filePath.contains('.3gp') ||
         filePath.contains('.3GP') ||
         filePath.contains('.vob') ||
-        filePath.contains('.VOB')){
+        filePath.contains('.VOB')) {
       fileType = 'video';
-    }else if(filePath.contains('.mp3') ||
+    } else if (filePath.contains('.mp3') ||
         filePath.contains('.MP3') ||
         filePath.contains('.wma') ||
         filePath.contains('.WMA') ||
@@ -921,11 +983,11 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
         filePath.contains('.flac') ||
         filePath.contains('.FLAC') ||
         filePath.contains('.ogg') ||
-        filePath.contains('.OGG')||
+        filePath.contains('.OGG') ||
         filePath.contains('.aac') ||
         filePath.contains('.AAC') ||
         filePath.contains('.mp4') ||
-        filePath.contains('.MP4') ){
+        filePath.contains('.MP4')) {
       fileType = 'audio';
     }
     Map<String, dynamic> params = <String, dynamic>{
@@ -939,7 +1001,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
           doPostPostFileUploadTX(bean.data.toString());
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

@@ -11,7 +11,7 @@ import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
-import '../../utils/event_utils.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -136,8 +136,16 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage>
                     ? GestureDetector(
                         onTap: (() {
                           if(MyUtils.checkClick()){
-                            eventBus
-                                .fire(RoomBack(title: '抱麦', index: list[i].uid.toString()));
+                            final textMsg = EMMessage.createTxtSendMessage(
+                              targetId: list[i].uid.toString(),
+                              content: '邀请上麦',
+                            );
+                            MyToastUtils.showToastBottom('已发送上麦邀请，请等待用户确认~');
+                            textMsg.attributes = {
+                              'uid': list[i].uid.toString(),
+                              'type': 'yq_up_mic',
+                            };
+                            EMClient.getInstance.chatManager.sendMessage(textMsg);
                             Navigator.pop(context);
                           }
                         }),

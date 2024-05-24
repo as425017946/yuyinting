@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/room/room_liwu_page.dart';
@@ -603,7 +604,21 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                         GestureDetector(
                                           onTap: (() {
                                             if (MyUtils.checkClick()) {
-                                              doPostSetClose(widget.index);
+                                              if(zhuangtai == '开麦'){
+                                                MyToastUtils.showToastBottom('已发送开麦邀请，请等待用户确认~');
+                                                final textMsg = EMMessage.createTxtSendMessage(
+                                                  targetId: widget.uid,
+                                                  content: '邀请开麦',
+                                                );
+                                                textMsg.attributes = {
+                                                  'uid': widget.uid,
+                                                  'type': 'yq_open_mic',
+                                                };
+                                                EMClient.getInstance.chatManager.sendMessage(textMsg);
+                                                Navigator.pop(context);
+                                              }else{
+                                                doPostSetClose(widget.index);
+                                              }
                                             }
                                           }),
                                           child: WidgetUtils.onlyTextCenter(

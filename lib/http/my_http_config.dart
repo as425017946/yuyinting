@@ -383,5 +383,7 @@ class MyHttpConfig{
   static  String setStealth = "$baseURL/mine/setStealth";
   // 删除纸条
   static  String delPaper = "$baseURL/activity/delPaper";
+  // 房间数据
+  static  String roomData = "$baseURL/room/data";
 
 }

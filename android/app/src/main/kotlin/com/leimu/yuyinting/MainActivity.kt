@@ -16,15 +16,15 @@ class MainActivity: FlutterActivity() {
             // This method is invoked on the main thread.
             // TODO
 
-            if(call.method.equals("getBatteryLevel")){
-                var a  = EmulatorDetectUtil.isEmulator(this@MainActivity)
-
-                if(a.toString() == "false"){
-                    result.success("0");
-                }else{
-                    result.success("1");
-                }
-            }
+//            if(call.method.equals("getBatteryLevel")){
+//                var a  = EmulatorDetectUtil.isEmulator(this@MainActivity)
+//
+//                if(a.toString() == "false"){
+//                    result.success("0");
+//                }else{
+//                    result.success("1");
+//                }
+//            }
 
         }
     }

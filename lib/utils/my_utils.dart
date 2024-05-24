@@ -573,88 +573,94 @@ class MyUtils {
               {
                 EMTextMessageBody body = msg.body as EMTextMessageBody;
                 LogE('接收文本信息$msg');
-                Map info = msg.attributes!;
-                LogE('接收文本信息类型 ${info['type']}');
-                LogE('接收文本信息$info');
-                if (body.content == '赛车押注') {
-                  eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
-                } else if (body.content == '清除魅力值') {
-                  eventBus.fire(
-                      JoinRoomYBack(map: info, type: 'clean_charm_single'));
-                } else if (body.content == '离开房间') {
-                  eventBus
-                      .fire(JoinRoomYBack(map: info, type: 'user_leave_room'));
-                } else if (body.content == '充值成功') {
-                  eventBus.fire(SubmitButtonBack(title: '充值成功'));
-                } else if (body.content == '下麦') {
-                  eventBus
-                      .fire(JoinRoomYBack(map: info, type: 'user_down_mic'));
-                } else if (body.content == '开麦') {
-                  eventBus.fire(
-                      JoinRoomYBack(map: info, type: 'user_un_close_mic'));
-                } else if (body.content == '闭麦') {
-                  eventBus
-                      .fire(JoinRoomYBack(map: info, type: 'user_close_mic'));
-                } else if (body.content == '抱麦') {
-                  eventBus.fire(JoinRoomYBack(map: info, type: 'bao_mic'));
-                } else if (body.content == '爆灯') {
-                  eventBus.fire(JoinRoomYBack(map: info, type: 'burstlight'));
-                } else if (body.content == '盲盒礼物') {
-                  eventBus.fire(JoinRoomYBack(map: info, type: 'blind_box'));
-                } else if (body.content == '盲盒礼物横幅') {
-                  eventBus.fire(JoinRoomYBack(map: info, type: 'blind_box_all'));
-                }else {
-                  if (info['lv'] == '' || info['lv'] == null) {
-                    if (info['type'] == 'clean_charm') {
-                      // 厅内清空魅力值
-                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                    } else if (info['type'] == 'clean_public_screen') {
-                      // 清除公屏
-                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                    } else if (info['type'] == 'one_click_gift') {
-                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                    } else {
-                      String nickName = info['nickname'];
-                      String headImg = info['avatar'];
-                      String combineID = '';
-                      if (int.parse(sp.getString('user_id').toString()) >
-                          int.parse(msg.from!)) {
-                        combineID =
-                            '${msg.from}-${sp.getString('user_id').toString()}';
-                      } else {
-                        combineID =
-                            '${sp.getString('user_id').toString()}-${msg.from}';
-                      }
-
-                      // 接收别人发来的消息
-                      Map<String, dynamic> params = <String, dynamic>{
-                        'uid': sp.getString('user_id').toString(),
-                        'otherUid': msg.from,
-                        'whoUid': msg.from,
-                        'combineID': combineID,
-                        'nickName': nickName,
-                        'content': body.content,
-                        'bigImg': '',
-                        'headNetImg': sp.getString('user_headimg').toString(),
-                        'otherHeadNetImg': headImg,
-                        'add_time': msg.serverTime,
-                        'type': 1,
-                        'number': 0,
-                        'status': 1,
-                        'readStatus': 0,
-                        'liveStatus': 0,
-                        'loginStatus': 0,
-                        'weight': info['weight'],
-                        'msgId': msg.msgId,
-                        'msgRead': 2,
-                        'msgJson': jsonEncode(msg.toJson()),
-                      };
-                      // 插入数据
-                      await databaseHelper.insertData('messageSLTable', params);
-                      eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                    }
+                if(msg.attributes!.toString() != 'null'){
+                  Map info = msg.attributes!;
+                  LogE('接收文本信息类型 ${info['type']}');
+                  LogE('接收文本信息$info');
+                  if (body.content == '赛车押注') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
+                  } else if (body.content == '清除魅力值') {
+                    eventBus.fire(
+                        JoinRoomYBack(map: info, type: 'clean_charm_single'));
+                  } else if (body.content == '离开房间') {
+                    eventBus
+                        .fire(JoinRoomYBack(map: info, type: 'user_leave_room'));
+                  } else if (body.content == '充值成功') {
+                    eventBus.fire(SubmitButtonBack(title: '充值成功'));
+                  } else if (body.content == '下麦') {
+                    eventBus
+                        .fire(JoinRoomYBack(map: info, type: 'user_down_mic'));
+                  } else if (body.content == '开麦') {
+                    eventBus.fire(
+                        JoinRoomYBack(map: info, type: 'user_un_close_mic'));
+                  } else if (body.content == '闭麦') {
+                    eventBus
+                        .fire(JoinRoomYBack(map: info, type: 'user_close_mic'));
+                  } else if (body.content == '抱麦') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'bao_mic'));
+                  } else if (body.content == '爆灯') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'burstlight'));
+                  } else if (body.content == '盲盒礼物') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'blind_box'));
+                  } else if (body.content == '盲盒礼物横幅') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'blind_box_all'));
+                  } else if (body.content == '邀请上麦') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'yq_up_mic'));
+                  }  else if (body.content == '邀请开麦') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'yq_open_mic'));
                   } else {
-                    eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                    if (info['lv'] == '' || info['lv'] == null) {
+                      if (info['type'] == 'clean_charm') {
+                        // 厅内清空魅力值
+                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                      } else if (info['type'] == 'clean_public_screen') {
+                        // 清除公屏
+                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                      } else if (info['type'] == 'one_click_gift') {
+                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                      } else {
+                        String nickName = info['nickname'];
+                        String headImg = info['avatar'];
+                        String combineID = '';
+                        if (int.parse(sp.getString('user_id').toString()) >
+                            int.parse(msg.from!)) {
+                          combineID =
+                          '${msg.from}-${sp.getString('user_id').toString()}';
+                        } else {
+                          combineID =
+                          '${sp.getString('user_id').toString()}-${msg.from}';
+                        }
+
+                        // 接收别人发来的消息
+                        Map<String, dynamic> params = <String, dynamic>{
+                          'uid': sp.getString('user_id').toString(),
+                          'otherUid': msg.from,
+                          'whoUid': msg.from,
+                          'combineID': combineID,
+                          'nickName': nickName,
+                          'content': body.content,
+                          'bigImg': '',
+                          'headNetImg': sp.getString('user_headimg').toString(),
+                          'otherHeadNetImg': headImg,
+                          'add_time': msg.serverTime,
+                          'type': 1,
+                          'number': 0,
+                          'status': 1,
+                          'readStatus': 0,
+                          'liveStatus': 0,
+                          'loginStatus': 0,
+                          'weight': info['weight'],
+                          'msgId': msg.msgId,
+                          'msgRead': 2,
+                          'msgJson': jsonEncode(msg.toJson()),
+                        };
+                        // 插入数据
+                        await databaseHelper.insertData('messageSLTable', params);
+                        eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                      }
+                    } else {
+                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                    }
                   }
                 }
               }
