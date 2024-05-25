@@ -13,6 +13,10 @@ import 'package:yuyinting/routes/routes.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:get/get.dart';
 
+import 'utils/background_fetch_manager.dart';
+
+
+
 //定义一个全局的存储对象
 late SharedPreferences sp;
 void main() async {
@@ -52,6 +56,8 @@ void main() async {
 
     runApp(const MyApp());
   });
+
+  backgroundFetchManager.register();
 }
 
 MaterialColor my_green = const MaterialColor(

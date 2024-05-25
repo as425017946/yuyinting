@@ -27,6 +27,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <!--    获取包名-->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <!--    后台保活-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
+    <!-- <uses-permission android:name="android.permission.BATTERY_STATS" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
     <application
         tools:replace="android:label"
         android:label="小柴派对"
