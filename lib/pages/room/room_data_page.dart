@@ -285,7 +285,7 @@ class _RoomDataPageState extends State<RoomDataPage> {
                     Expanded(
                       child: Column(
                         children: [
-                          WidgetUtils.onlyTextCenter('房间留存率', StyleUtils.getCommonTextStyle(
+                          WidgetUtils.onlyTextCenter('房间留存率(观看5分钟)', StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ2,
                               fontSize: ScreenUtil().setSp(28))),
                           WidgetUtils.commonSizedBox(10.w, 0),

@@ -71,10 +71,7 @@ class RoomPage extends StatefulWidget {
 class _RoomPageState extends State<RoomPage>
     with
         TickerProviderStateMixin,
-        AutomaticKeepAliveClientMixin,
         WidgetsBindingObserver {
-  @override
-  bool get wantKeepAlive => true;
 
   // 用户头像
   String avatar = '';
@@ -436,68 +433,32 @@ class _RoomPageState extends State<RoomPage>
     }
   }
 
-  Timer? _timerPK;
-
   void _startTimerPK() {
-    const oneSec = Duration(seconds: 1);
-    _timerPK = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (pkTime == 0) {
-          if (pkTitle == '惩罚时间') {
-            setState(() {
-              blueScore = '0';
-              redScore = '0';
-              whoWin = '';
-              isPK = 0;
-              isPKStar = false;
-            });
-            _cancelTimer();
-          }
-        } else {
+    Future.delayed(const Duration(seconds: 1), () {
+      LogE('pk时间 == $pkTime');
+      if (pkTime == 0) {
+        LogE('pk名称 == $pkTitle');
+        if (pkTitle == '惩罚时间') {
           setState(() {
-            pkTime--;
+            blueScore = '0';
+            redScore = '0';
+            whoWin = '';
+            isPK = 0;
+            isPKStar = false;
           });
         }
-      },
-    );
-  }
-
-  void _cancelTimer() {
-    if (_timerPK != null) {
-      _timerPK?.cancel();
-      // 在倒计时结束后的逻辑处理
-    }
+      } else {
+        setState(() {
+          pkTime--;
+        });
+      }
+      if(pkTime >= 0){
+        _startTimerPK();
+      }
+    });
   }
 
   void _cancelTimerAll() {
-    if (_timerm1 != null) {
-      _timerm1!.cancel();
-    }
-    if (_timerm2 != null) {
-      _timerm2!.cancel();
-    }
-    if (_timerm3 != null) {
-      _timerm3!.cancel();
-    }
-    if (_timerm4 != null) {
-      _timerm4!.cancel();
-    }
-    if (_timerm5 != null) {
-      _timerm5!.cancel();
-    }
-    if (_timerm6 != null) {
-      _timerm6!.cancel();
-    }
-    if (_timerm7 != null) {
-      _timerm7!.cancel();
-    }
-    if (_timerm8 != null) {
-      _timerm8!.cancel();
-    }
-    if (_timerm9 != null) {
-      _timerm9!.cancel();
-    }
     listenSend.cancel();
     listenSendImg.cancel();
   }
@@ -596,215 +557,86 @@ class _RoomPageState extends State<RoomPage>
   List<Map> list2 = [];
 
   // 发言倒计时
-  Timer? _timer;
   int _timeCount = 3;
 
   // 发送爆灯使用 wherePeople在哪个麦序上，0不在麦上  _timer2和_timeCount2是爆灯的倒计时
   List<String> wherePeopleList = ["0", "0", "0", "0", "0", "0", "0", "0", "0"];
-  Timer? _timerm1,
-      _timerm2,
-      _timerm3,
-      _timerm4,
-      _timerm5,
-      _timerm6,
-      _timerm7,
-      _timerm8,
-      _timerm9;
-  int _timeCount1 = 10,
-      _timeCount2 = 10,
-      _timeCount3 = 10,
-      _timeCount4 = 10,
-      _timeCount5 = 10,
-      _timeCount6 = 10,
-      _timeCount7 = 10,
-      _timeCount8 = 10,
-      _timeCount9 = 10;
 
   void _startTimer() {
-    LogE('测试==========');
-    _timer = Timer.periodic(
-        const Duration(seconds: 1),
-        (Timer timer) => {
-              if (mounted)
-                {
-                  if (_timer != null)
-                    {
-                      setState(() {
-                        if (_timeCount <= 0) {
-                          _timer!.cancel();
-                          _timeCount = 3;
-                        } else {
-                          _timeCount -= 1;
-                        }
-                      })
-                    }
-                }
-            });
+    setState(() {
+      _timeCount = 1;
+    });
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _timeCount = 3;
+      });
+    });
   }
 
   void _startTimer2(String maixu) {
     switch (maixu) {
       case "1":
-        _timerm1 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount1 <= 0) {
-                          _timerm1!.cancel();
-                          _timeCount1 = 10;
-                          wherePeopleList[0] = "0";
-                        } else {
-                          _timeCount1 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[0] = "0";
+          });
+        });
         break;
       case "2":
-        _timerm2 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount2 <= 0) {
-                          _timerm2!.cancel();
-                          _timeCount2 = 10;
-                          wherePeopleList[1] = "0";
-                        } else {
-                          _timeCount2 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[1] = "0";
+          });
+        });
         break;
       case "3":
-        _timerm3 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount3 <= 0) {
-                          _timerm3!.cancel();
-                          _timeCount3 = 10;
-                          wherePeopleList[2] = "0";
-                        } else {
-                          _timeCount3 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[2] = "0";
+          });
+        });
         break;
       case "4":
-        _timerm4 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount4 <= 0) {
-                          _timerm4!.cancel();
-                          _timeCount4 = 10;
-                          wherePeopleList[3] = "0";
-                        } else {
-                          _timeCount4 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[3] = "0";
+          });
+        });
         break;
       case "5":
-        _timerm5 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount5 <= 0) {
-                          _timerm5!.cancel();
-                          _timeCount5 = 10;
-                          wherePeopleList[4] = "0";
-                        } else {
-                          _timeCount5 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[4] = "0";
+          });
+        });
         break;
       case "6":
-        _timerm6 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount6 <= 0) {
-                          _timerm6!.cancel();
-                          _timeCount6 = 10;
-                          wherePeopleList[5] = "0";
-                        } else {
-                          _timeCount6 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[5] = "0";
+          });
+        });
         break;
       case "7":
-        _timerm7 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount7 <= 0) {
-                          _timerm7!.cancel();
-                          _timeCount7 = 10;
-                          wherePeopleList[6] = "0";
-                        } else {
-                          _timeCount7 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[6] = "0";
+          });
+        });
         break;
       case "8":
-        _timerm8 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount8 <= 0) {
-                          _timerm8!.cancel();
-                          _timeCount8 = 10;
-                          wherePeopleList[7] = "0";
-                        } else {
-                          _timeCount8 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[7] = "0";
+          });
+        });
         break;
       case "9":
-        _timerm9 = Timer.periodic(
-            const Duration(seconds: 1),
-            (Timer timer) => {
-                  if (mounted)
-                    {
-                      setState(() {
-                        if (_timeCount9 <= 0) {
-                          _timerm9!.cancel();
-                          _timeCount9 = 10;
-                          wherePeopleList[8] = "0";
-                        } else {
-                          _timeCount9 -= 1;
-                        }
-                      })
-                    }
-                });
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            wherePeopleList[8] = "0";
+          });
+        });
         break;
     }
   }
@@ -839,8 +671,6 @@ class _RoomPageState extends State<RoomPage>
   List<Map> listUrl = [];
   var listenSVGA, listenGZOK, listenMessage, listenJoinHF;
 
-  // 每2分钟请求一下热度接口
-  Timer? _timerHot;
 
   // 是否返回了
   bool isBack = false;
@@ -873,9 +703,6 @@ class _RoomPageState extends State<RoomPage>
               // 清空存储信息
               deleteChatInfo();
               deleteGifInfo();
-              if (_timerHot != null) {
-                _timerHot!.cancel();
-              }
               doPostBeforeJoin(listPH[i].id.toString());
             }
           }
@@ -1306,9 +1133,6 @@ class _RoomPageState extends State<RoomPage>
           case 'leave_room':
             // 调用离开房间接口
             doPostLeave();
-            if (_timerHot != null) {
-              _timerHot!.cancel();
-            }
             //离开频道并释放资源
             _dispose();
             // 清空存储信息
@@ -1319,9 +1143,6 @@ class _RoomPageState extends State<RoomPage>
           case '顶号':
             // 调用离开房间接口
             doPostLeave();
-            if (_timerHot != null) {
-              _timerHot!.cancel();
-            }
             // 清空存储信息
             deleteChatInfo();
             deleteGifInfo();
@@ -1632,9 +1453,6 @@ class _RoomPageState extends State<RoomPage>
                 // setState(() {
                 //   isMeUp = false;
                 // });
-                // if (_timerHot != null) {
-                //   _timerHot!.cancel();
-                // }
                 // // 取消发布本地音频流
                 // _engine!.muteLocalAudioStream(true);
                 // // 调用离开房间接口
@@ -1658,9 +1476,6 @@ class _RoomPageState extends State<RoomPage>
                 setState(() {
                   isMeUp = false;
                 });
-                if (_timerHot != null) {
-                  _timerHot!.cancel();
-                }
                 // 取消发布本地音频流
                 _engine!.muteLocalAudioStream(true);
                 // 适用只听声音，不发声音流
@@ -1695,7 +1510,6 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'room_pk_start':
-              _cancelTimer();
               setState(() {
                 blueScore = '0';
                 redScore = '0';
@@ -1711,7 +1525,6 @@ class _RoomPageState extends State<RoomPage>
               _startTimerPK();
               break;
             case 'room_pk_result':
-              _cancelTimer();
               setState(() {
                 if (event.map!['win'].toString() == 'red') {
                   pkTitle = '惩罚时间';
@@ -1737,8 +1550,6 @@ class _RoomPageState extends State<RoomPage>
                 isPKStar = true;
               });
               showStarPK(listUrlPK[0]);
-              //开启房间pk
-              _startTimerPK();
               break;
             case 'room_pk_ahead_punish':
               //提前结束
@@ -1750,7 +1561,6 @@ class _RoomPageState extends State<RoomPage>
                   isPK = 0;
                   isPKStar = false;
                 });
-                _cancelTimer();
               }
               break;
           }
@@ -1824,9 +1634,6 @@ class _RoomPageState extends State<RoomPage>
       listJoin = eventBus.on<JoinRoomYBack>().listen((event) {
         /// 用户长时间断网或者杀死app使用
         if (event.map!['type'] == 'user_leave_room') {
-          if (_timerHot != null) {
-            _timerHot!.cancel();
-          }
           // 清空存储信息
           deleteChatInfo();
           deleteGifInfo();
@@ -3219,9 +3026,7 @@ class _RoomPageState extends State<RoomPage>
       });
 
       // 每隔1分钟请求一次房间热度信息
-      _timerHot = Timer.periodic(const Duration(seconds: 60), (timer) {
-        doPostHotDegree();
-      });
+      doGetHot();
 
       // 水果机播放完成
       listenSGJ = eventBus.on<RoomSGJBack>().listen((event) {
@@ -3247,6 +3052,13 @@ class _RoomPageState extends State<RoomPage>
           }
         }
       });
+    });
+  }
+
+  Future<void> doGetHot() async{
+    Future.delayed(const Duration(seconds: 60), (){
+      doPostHotDegree();
+      doGetHot();
     });
   }
 
@@ -3620,11 +3432,9 @@ class _RoomPageState extends State<RoomPage>
     Screen.keepOn(true);
   }
 
-  Timer? _timerhf;
-
   // 18秒后请求一遍
   void hpTimer() {
-    _timerhf = Timer.periodic(const Duration(seconds: 18), (timer) {
+    Future.delayed(const Duration(seconds: 18), () {
       if (listMP.isNotEmpty) {
         setState(() {
           listMP.removeAt(0);
@@ -3634,7 +3444,6 @@ class _RoomPageState extends State<RoomPage>
             isBig = false;
             isShowHF = false;
           });
-          _timerhf!.cancel();
         } else {
           setState(() {
             isShowHF = true;
@@ -3642,33 +3451,25 @@ class _RoomPageState extends State<RoomPage>
           // 判断数据显示使用
           showInfo(listMP[0]);
         }
-      } else {
-        _timerhf!.cancel();
       }
     });
   }
 
-  Timer? _timerhf2;
-
   // 18秒后请求一遍
   void hpTimer2() {
-    _timerhf2 = Timer.periodic(const Duration(seconds: 4), (timer) {
+    Future.delayed(const Duration(seconds: 4), () {
       if (listCM.isNotEmpty) {
         setState(() {
           listCM.removeAt(0);
           listCMb.removeAt(0);
         });
-        if (listCM.isEmpty) {
-          _timerhf2!.cancel();
-        } else {
+        if (listCM.isNotEmpty) {
           MyUtils.goTransparentPageCom(
               context,
               RoomShowLiWuPage(
                   listPeople: listCMb[0],
                   url: listCM[0].giftInfo![0].giftImg!));
         }
-      } else {
-        _timerhf2!.cancel();
       }
     });
   }
@@ -3896,9 +3697,6 @@ class _RoomPageState extends State<RoomPage>
     listenSVGA.cancel();
     listenGZOK.cancel();
     listenMessage.cancel();
-    if (_timerHot != null) {
-      _timerHot!.cancel();
-    }
     _cancelTimerAll();
     listenSGJ.cancel();
     listenJoinHF.cancel();
@@ -3911,10 +3709,6 @@ class _RoomPageState extends State<RoomPage>
     if (_subscription != null) {
       _subscription!.cancel();
     }
-    if (_timerhf != null) {
-      _timerhf!.cancel();
-    }
-    _cancelTimer();
     // TODO: implement dispose
     super.dispose();
   }
@@ -5067,14 +4861,6 @@ class _RoomPageState extends State<RoomPage>
           //   isBack = true;
           // });
           if (isOK && MyUtils.checkClick()) {
-            if (_timerHot != null) {
-              _timerHot!.cancel();
-            }
-            if (_timer != null) {
-              _timer!.cancel();
-              _timer = null;
-            }
-            _cancelTimer();
             _cancelTimerAll();
             sp.setString('isShouQi', '1');
             sp.setString('sqRoomID', widget.roomId);
@@ -5134,10 +4920,6 @@ class _RoomPageState extends State<RoomPage>
                         // 清空存储信息
                         deleteChatInfo();
                         deleteGifInfo();
-                        if (_timerHot != null) {
-                          _timerHot!.cancel();
-                        }
-                        _cancelTimer();
                         sp.setString('isShouQi', '0');
                         //离开频道并释放资源
                         _dispose();
@@ -5163,14 +4945,6 @@ class _RoomPageState extends State<RoomPage>
                   GestureDetector(
                     onTap: (() {
                       if (MyUtils.checkClick()) {
-                        if (_timerHot != null) {
-                          _timerHot!.cancel();
-                        }
-                        if (_timer != null) {
-                          _timer!.cancel();
-                          _timer = null;
-                        }
-                        _cancelTimer();
                         _cancelTimerAll();
                         sp.setString('isShouQi', '1');
                         sp.setString('sqRoomID', widget.roomId);
@@ -5284,7 +5058,6 @@ class _RoomPageState extends State<RoomPage>
             redScore = bean.data!.roomInfo!.redScore!;
             avatar = bean.data!.userInfo!.avatar!;
             if (pkTime > 0) {
-              _cancelTimer();
               //开启房间pk
               _startTimerPK();
             }
@@ -6405,9 +6178,6 @@ class _RoomPageState extends State<RoomPage>
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if (_timerHot != null) {
-            _timerHot!.cancel();
-          }
           //取消订阅所有远端用户的音频流。
           _engine!.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
