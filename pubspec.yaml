@@ -147,6 +147,8 @@ dependencies:
   focus_detector: ^2.0.1
   # 卡片滑走效果
   appinio_swiper: ^2.0.3
+  # 后台保活
+  background_fetch: ^1.2.2
 
 
 dev_dependencies:
