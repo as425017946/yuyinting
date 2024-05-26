@@ -220,7 +220,7 @@ class _RoomDataPageState extends State<RoomDataPage> {
                                   color: MyColors.dailiTime,
                                   fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                               WidgetUtils.commonSizedBox(0, 5.w),
-                              WidgetUtils.onlyTextCenter('豆', StyleUtils.getCommonTextStyle(
+                              WidgetUtils.onlyTextCenter('金豆', StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomTCWZ2,
                                   fontSize: ScreenUtil().setSp(22))),
                               const Spacer(),
