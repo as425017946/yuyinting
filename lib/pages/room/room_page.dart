@@ -1600,12 +1600,12 @@ class _RoomPageState extends State<RoomPage>
             }
             if (listMP.isEmpty) {
               hengFuBean hf = hengFuBean();
-              setState(() {
+              // setState(() {
                 hf.roomName = event.map!['room_name'];
                 hf.title = '贵族';
                 hf.fromNickname = event.map!['nickname'];
                 hf.nobleId = int.parse(event.map!['noble_id'].toString());
-              });
+              // });
               myhf = hf;
               //显示横幅、map赋值
               setState(() {
@@ -1618,16 +1618,16 @@ class _RoomPageState extends State<RoomPage>
               hpTimer();
             } else {
               hengFuBean hf = hengFuBean();
-              setState(() {
+              // setState(() {
                 hf.roomName = event.map!['room_name'];
                 hf.title = '贵族';
                 hf.fromNickname = event.map!['nickname'];
                 hf.nobleId = int.parse(event.map!['noble_id'].toString());
-              });
+              // });
               myhf = hf;
-              setState(() {
+              // setState(() {
                 listMP.add(hf);
-              });
+              // });
             }
           }
         }
@@ -2530,9 +2530,9 @@ class _RoomPageState extends State<RoomPage>
                 // 厅内出现横幅使用
                 hengFuBean hf = hengFuBean.fromJson(event.map!);
                 myhf = hf;
-                setState(() {
+                // setState(() {
                   listMP.add(hf);
-                });
+                // });
               }
             } else if (event.map!['type'] == 'send_screen_all') {
               // 厅内送礼
@@ -2807,9 +2807,9 @@ class _RoomPageState extends State<RoomPage>
                 // 厅内出现横幅使用
                 hengFuBean hf = hengFuBean.fromJson(event.map!);
                 myhf = hf;
-                setState(() {
+                // setState(() {
                   listMP.add(hf);
-                });
+                // });
               }
             } else if (event.map!['type'] == 'send_screen_gift') {
               // 这个是其他房间收到了在其他房间送出的3w8礼物
@@ -3447,9 +3447,7 @@ class _RoomPageState extends State<RoomPage>
             isShowHF = false;
           });
         } else {
-          setState(() {
-            isShowHF = true;
-          });
+          if (!isShowHF) setState(() { isShowHF = true; });
           // 判断数据显示使用
           showInfo(listMP[0]);
         }
