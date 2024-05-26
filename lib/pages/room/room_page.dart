@@ -3847,9 +3847,7 @@ class _RoomPageState extends State<RoomPage>
                   if (speakers[i].uid == listM[a].uid) {
                     // 并且发声了
                     if (mounted) {
-                      setState(() {
-                        upAudioStatus(listM[a].serialNumber.toString(), true);
-                      });
+                      upAudioStatus(listM[a].serialNumber.toString(), true);
                     }
                   }
                 }
@@ -3862,9 +3860,7 @@ class _RoomPageState extends State<RoomPage>
                   if (sp.getString('user_id').toString() ==
                       listM[a].uid.toString()) {
                     if (mounted) {
-                      setState(() {
-                        upAudioStatus(listM[a].serialNumber.toString(), false);
-                      });
+                      upAudioStatus(listM[a].serialNumber.toString(), false);
                     }
                   }
                 }
@@ -3875,9 +3871,7 @@ class _RoomPageState extends State<RoomPage>
                   if (speakers[i].uid == listM[a].uid) {
                     // 并且发声了
                     if (mounted) {
-                      setState(() {
-                        upAudioStatus(listM[a].serialNumber.toString(), false);
-                      });
+                      upAudioStatus(listM[a].serialNumber.toString(), false);
                     }
                   }
                 }
@@ -4043,14 +4037,10 @@ class _RoomPageState extends State<RoomPage>
         child: isOK
             ? GestureDetector(
                 onTap: (() {
-                  setState(() {
-                    for (int i = 0; i < 9; i++) {
-                      upOrDown[i] = false;
-                    }
-                    for (int i = 0; i < 9; i++) {
-                      isMy[i] = false;
-                    }
-                  });
+                  for (int i = 0; i < 9; i++) {
+                    if (upOrDown[i]) setState(() { upOrDown[i] = false; });
+                    if (isMy[i]) setState(() { isMy[i] = false; });
+                  }
                 }),
                 child: Container(
                   height: double.infinity,
