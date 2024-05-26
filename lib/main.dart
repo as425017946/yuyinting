@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_package_java/flutter_package_java.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yuyinting/pages/login/star_page.dart';
 import 'package:yuyinting/routes/routes.dart';
@@ -58,6 +59,9 @@ void main() async {
   });
 
   backgroundFetchManager.register();
+  
+  final result = await FlutterPackageJava.bgService.start();
+  LogE(result ?? '');
 }
 
 MaterialColor my_green = const MaterialColor(
