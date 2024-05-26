@@ -3450,6 +3450,7 @@ class _RoomPageState extends State<RoomPage>
           if (!isShowHF) setState(() { isShowHF = true; });
           // 判断数据显示使用
           showInfo(listMP[0]);
+          hpTimer();
         }
       }
     });
