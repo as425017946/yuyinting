@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
+import 'package:get/get.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -739,6 +740,7 @@ class _RoomPageState extends State<RoomPage>
 
   @override
   void initState() {
+    Get.log('Room_Page initState 初始化');
     // TODO: implement initState
     super.initState();
     setState(() {
@@ -3670,6 +3672,7 @@ class _RoomPageState extends State<RoomPage>
 
   @override
   void dispose() {
+    Get.log('Room_Page dispose 销毁');
     //3. 页面销毁时，移出监听者
     WidgetsBinding.instance?.removeObserver(this);
     // 在页面销毁时，取消事件监听
@@ -3985,50 +3988,31 @@ class _RoomPageState extends State<RoomPage>
     // LogE('更新麦序  == $ss////$status');
     switch (ss) {
       case "1":
-        setState(() {
-          audio1 = status;
-        });
+        if (status != audio1) setState(() { audio1 = status; });
         break;
       case "2":
-        setState(() {
-          audio2 = status;
-        });
+        if (status != audio2) setState(() { audio2 = status; });
         break;
       case "3":
-        setState(() {
-          audio3 = status;
-        });
+        if (status != audio3) setState(() { audio3 = status; });
         break;
       case "4":
-        setState(() {
-          audio4 = status;
-        });
+        if (status != audio4) setState(() { audio4 = status; });
         break;
       case "5":
-        setState(() {
-          audio5 = status;
-        });
+        if (status != audio5) setState(() { audio5 = status; });
         break;
       case "6":
-        setState(() {
-          audio6 = status;
-        });
+        if (status != audio6) setState(() { audio6 = status; });
         break;
       case "7":
-        setState(() {
-          audio7 = status;
-        });
+        if (status != audio7) setState(() { audio7 = status; });
         break;
       case "8":
-        setState(() {
-          audio8 = status;
-        });
+        if (status != audio8) setState(() { audio8 = status; });
         break;
       case "9":
-        // LogE('更新麦序*******$status');
-        setState(() {
-          audio9 = status;
-        });
+        if (status != audio9) setState(() { audio9 = status; });
         break;
     }
   }
@@ -4052,6 +4036,7 @@ class _RoomPageState extends State<RoomPage>
 
   @override
   Widget build(BuildContext context) {
+    Get.log('Room_Page Build 刷新');
     return Scaffold(
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       body: WillPopScope(
