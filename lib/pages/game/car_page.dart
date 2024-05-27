@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
@@ -949,6 +950,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
   String isDevices = 'android';
   @override
   void initState() {
+    Get.log('Car_Page initState 初始化');
     //2.页面初始化的时候，添加一个状态的监听者
     WidgetsBinding.instance.addObserver(this);
     sp.setString('carShow', '0');
@@ -1140,6 +1142,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
 
   @override
   void dispose() {
+    Get.log('Car_Page dispose 销毁');
     _controller.dispose();
     controller2.dispose();
     controllerGO.dispose();
@@ -1178,6 +1181,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
 
   @override
   Widget build(BuildContext context) {
+    Get.log('Car_Page build 刷新');
     return Scaffold(
       backgroundColor: Colors.black54,
       body: WillPopScope(

@@ -459,6 +459,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_package_java:
+    dependency: "direct main"
+    description:
+      path: "package/flutter_package_java"
+      relative: true
+    source: path
+    version: "0.0.1"
   flutter_page_indicator:
     dependency: transitive
     description:
