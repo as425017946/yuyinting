@@ -45,8 +45,6 @@ class _TixianBiPageState extends State<TixianBiPage> {
     // TODO: implement initState
     super.initState();
     doPostGetRate();
-    listTD.add('支付宝');
-    listTD.add('银行卡');
     appBar = WidgetUtils.getAppBar('提现', true, context, false, 0);
     listenTX = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '申请提现') {
@@ -126,7 +124,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
 
   late List<String> listTD = [];
   // String method = '支付宝', methodID = '2'; //提现方式 2 支付宝 3银行卡
-  String method = '银行卡', methodID = '3';
+  String method = '', methodID = '';
   ///data设置数据源，selectData设置选中下标，type 0代表第一个家长，1代表第二个家长 ，2代表选择性别
   void _onClickItem(var data, var selectData) {
     Pickers.showSinglePicker(
@@ -271,9 +269,9 @@ class _TixianBiPageState extends State<TixianBiPage> {
                                 fontSize: ScreenUtil().setSp(32))),
                         const Expanded(child: Text('')),
                         GestureDetector(
-                            // onTap: (() {
-                            //   _onClickItem(listTD, '支付宝');
-                            // }),
+                            onTap: (() {
+                              _onClickItem(listTD, '支付宝');
+                            }),
                             child: WidgetUtils.onlyText(
                                 method,
                                 StyleUtils.getCommonTextStyle(
@@ -339,7 +337,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       ],
                     ),
                     WidgetUtils.onlyText(
-                        methodID == '2'
+                        methodID == '3'
                             ? '(请填写卡号对应真实姓名，误填将导致提现失败)'
                             : '(请填写账号准确实名全称，误填将导致提现失败)',
                         StyleUtils.getCommonTextStyle(
@@ -702,6 +700,16 @@ class _TixianBiPageState extends State<TixianBiPage> {
           setState(() {
             feilv = bean.data!.rate!;
             isOk = true;
+            if(bean.data!.wdlMethod!.contains('2')){
+              listTD.add('支付宝');
+              method = '支付宝';
+              methodID = '2';
+            }
+            if(bean.data!.wdlMethod!.contains('3')){
+              listTD.add('银行卡');
+              method = '银行卡';
+              methodID = '3';
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:

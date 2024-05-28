@@ -30,6 +30,7 @@ class _StarPageState extends State<StarPage> {
     // TODO: implement initState
     super.initState();
     setState(() {
+      sp.setString('roomAudio', '1');
       sp.setString('isEmulation', '0');
       sp.setString('mic_quren', '0');
       sp.setString('carShow', '0');

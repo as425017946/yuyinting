@@ -24,16 +24,18 @@ class feilvBean {
 
 class Data {
   String? rate;
-
-  Data({this.rate});
+  String? wdlMethod;
+  Data({this.rate, this.wdlMethod});
 
   Data.fromJson(Map<String, dynamic> json) {
     rate = json['rate'];
+    wdlMethod = json['wdl_method'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['rate'] = this.rate;
+    data['wdl_method'] = this.wdlMethod;
     return data;
   }
 }

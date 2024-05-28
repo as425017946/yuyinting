@@ -453,7 +453,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
   late Animation<double> animationGO;
 
   late PageController _controller;
-  Timer? _timer, _timer2, _timer3, _timer4;
+  // Timer? _timer;
+  bool carStop = true, djsStop = false, bgStop = false;
   int _currentPage = 0;
 
   int luck = 0, sum = 20, sumBG = 0, playTime = 46;
@@ -597,98 +598,107 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
 
   // 赛车2秒一换
   void carTimer() {
-    _timer3 = Timer.periodic(const Duration(seconds: 2), (timer) {
-      carSJS();
-    });
+    Future.delayed(const Duration(seconds: 2),((){
+      if(carStop){
+        carSJS();
+        carTimer();
+      }
+    }));
   }
 
   //背景图动画
   void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_controller.hasClients) {
-        setState(() {
-          sumBG++;
-          if (sumBG == 19) {
-            if (beanLuck == null || beanLuck?.code != 200) {
-              _timer?.cancel();
-              MyToastUtils.showToastBottom2("您的网络不佳，游戏即将关闭，稍后请在开奖记录查看！");
-              Navigator.pop(context);
-              return;
+    Future.delayed(const Duration(seconds: 1),((){
+      if(bgStop == false){
+        if (_controller.hasClients) {
+          setState(() {
+            sumBG++;
+            if (sumBG == 19) {
+              if (beanLuck == null || beanLuck?.code != 200) {
+                bgStop = true;
+                MyToastUtils.showToastBottom2("您的网络不佳，游戏即将关闭，稍后请在开奖记录查看！");
+                Navigator.pop(context);
+                return;
+              }
+              MyUtils.goTransparentPageCom(
+                  context,
+                  ZhongJiangPage(
+                    type: luck,
+                    bean: beanLuck!,
+                  ));
             }
-            MyUtils.goTransparentPageCom(
-                context,
-                ZhongJiangPage(
-                  type: luck,
-                  bean: beanLuck!,
-                ));
+            if (sumBG == 15) {
+              doPostCarLuckyUser();
+            }
+          });
+          if (_controller.page!.round() >= imagesa.length - 1) {
+            LogE('********------');
+            _controller.jumpToPage(0);
+          } else {
+            _controller.nextPage(
+              duration: const Duration(seconds: 1),
+              curve: Curves.linear,
+            );
           }
-          if (sumBG == 15) {
-            doPostCarLuckyUser();
-          }
-        });
-        if (_controller.page!.round() >= imagesa.length - 1) {
-          LogE('********------');
-          _controller.jumpToPage(0);
-        } else {
-          _controller.nextPage(
-            duration: const Duration(seconds: 1),
-            curve: Curves.linear,
-          );
         }
+        startTimer();
       }
-    });
+    }));
   }
 
   void pauseTimer() {
-    _timer?.cancel();
-  }
-
-  void restartTimer() {
-    _timer?.cancel();
-    startTimer();
+    setState(() {
+      bgStop = true;
+    });
   }
 
   // 倒计时
   void starTimerDJS() {
-    _timer2 = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        sum--;
-      });
-      LogE('当前秒数 $sum');
-      if (sum == 0) {
-        if (sp.getString('car_audio') == null ||
-            sp.getString('car_audio').toString() == '开启') {
-          playSound3();
-        }
-        _timer2!.cancel();
+    Future.delayed(const Duration(seconds: 1), ((){
+      if(djsStop == false && mounted){
         setState(() {
-          isShow = false;
-          isPlay = true;
+          sum--;
         });
-        // 开始倒计时动画
-        loadAnimation();
+        LogE('当前秒数 $sum');
+        if (sum == 0) {
+          if (sp.getString('car_audio') == null ||
+              sp.getString('car_audio').toString() == '开启') {
+            playSound3();
+          }
+          setState(() {
+            djsStop = true;
+            isShow = false;
+            isPlay = true;
+          });
+          // 开始倒计时动画
+          loadAnimation();
+        }
+        starTimerDJS();
       }
-    });
+    }));
   }
 
   // 游戏进行中游戏的倒计时
   void starTimerPlay() {
-    _timer4 = Timer.periodic(const Duration(seconds: 1), (timer) {
-      //游戏结束了
-      if (playTime == 0) {
-        _timer4!.cancel();
-        setState(() {
-          isShow = true;
-          isStarGame = false;
-        });
-        starTimerDJS();
-      } else {
-        // 游戏进行中的倒计时
-        setState(() {
-          playTime--;
-        });
+    Future.delayed(const Duration(seconds: 1), ((){
+      if(mounted){
+        //游戏结束了
+        if (playTime == 0) {
+          setState(() {
+            isShow = true;
+            isStarGame = false;
+            djsStop = false;
+          });
+          starTimerDJS();
+        } else {
+          // 游戏进行中的倒计时
+          setState(() {
+            playTime--;
+          });
+          starTimerPlay();
+        }
       }
-    });
+    }));
   }
 
   // 赛车动画
@@ -891,6 +901,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
         isGo = true;
         sum = 20;
         sumBG = 0;
+        bgStop = false;
         startTimer();
         controllerGO.forward();
         Future.delayed(const Duration(seconds: 1), () {
@@ -904,7 +915,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
           carTimer();
           controller2.forward();
         });
-        _timer2?.cancel();
+        djsStop = true;
       });
     });
   }
@@ -1085,10 +1096,13 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
         });
       }
       controllerGO.reset();
-      _timer3?.cancel();
+      setState(() {
+        carStop = false;
+      });
       Future.delayed(const Duration(seconds: 2), () {
         setState(() {
           isShow = true;
+          djsStop = false;
         });
         starTimerDJS();
       });
@@ -1146,22 +1160,6 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
     _controller.dispose();
     controller2.dispose();
     controllerGO.dispose();
-    _timer?.cancel();
-    if(_timer != null){
-      _timer = null;
-    }
-    _timer2?.cancel();
-    if(_timer2 != null){
-      _timer2 = null;
-    }
-    _timer3?.cancel();
-    if(_timer3 != null){
-      _timer3 = null;
-    }
-    _timer4?.cancel();
-    if(_timer4 != null){
-      _timer4 = null;
-    }
     listen.cancel();
     listenZDY.cancel();
     // 在页面销毁时停止音频播放并释放资源
@@ -2348,6 +2346,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin,Widgets
             } else {
               sum = 20 - bean.data!;
               LogE('当前秒数 $sum');
+              djsStop = false;
               //开启倒计时
               starTimerDJS();
               isShow = true;
