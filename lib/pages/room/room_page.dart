@@ -3060,7 +3060,9 @@ class _RoomPageState extends State<RoomPage>
   Future<void> doGetHot() async{
     Future.delayed(const Duration(seconds: 60), (){
       doPostHotDegree();
-      doGetHot();
+      if(mounted) {
+        doGetHot();
+      }
     });
   }
 
