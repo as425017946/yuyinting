@@ -54,11 +54,11 @@ RtcEngine? _engine;
 
 /// 厅内
 class RoomPage extends StatefulWidget {
-  String roomId;
-  String beforeId;
-  String roomToken;
+  final String roomId;
+  final String beforeId;
+  final String roomToken;
 
-  RoomPage(
+  const RoomPage(
       {Key? key,
       required this.roomId,
       required this.beforeId,
@@ -69,10 +69,7 @@ class RoomPage extends StatefulWidget {
   State<RoomPage> createState() => _RoomPageState();
 }
 
-class _RoomPageState extends State<RoomPage>
-    with
-        TickerProviderStateMixin,
-        WidgetsBindingObserver {
+class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin, WidgetsBindingObserver {
 
   // 用户头像
   String avatar = '';
@@ -5269,9 +5266,8 @@ class _RoomPageState extends State<RoomPage>
       CommonMyIntBean bean = await DataUtils.postHotDegree(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          setState(() {
-            hot_degree = bean.data.toString();
-          });
+          final value = bean.data.toString();
+          if (value != hot_degree) setState(() { hot_degree = value; });
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
