@@ -1285,6 +1285,15 @@ class _RoomPageState extends State<RoomPage>
               doUpdateInfo(event.map, '开麦');
               // 上下麦操作不是本地才刷新
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
+                setState(() {
+                  for (int i = 0; i < listM.length; i++) {
+                    if (event.map!['uid'].toString() ==
+                        listM[i].uid.toString()) {
+                      listM[i].isClose = 0;
+                      break;
+                    }
+                  }
+                });
               } else {
                 isMeUp = true;
                 mxIndex = event.map!['serial_number'].toString();
@@ -1306,6 +1315,15 @@ class _RoomPageState extends State<RoomPage>
               // 上下麦操作不是本地才刷新
               doUpdateInfo(event.map, '闭麦');
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
+                setState(() {
+                  for (int i = 0; i < listM.length; i++) {
+                    if (event.map!['uid'].toString() ==
+                        listM[i].uid.toString()) {
+                      listM[i].isClose = 1;
+                      break;
+                    }
+                  }
+                });
               } else {
                 setState(() {
                   isJinyiin = true;
