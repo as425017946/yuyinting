@@ -123,6 +123,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
       sp.setString("isFirstDown", '1');
     }
     ceshi();
+    doCheck();
+  }
+
+  /// 版本号
+  String BBH = '';
+  Future<void> doCheck() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    setState(() {
+      BBH = version.toString();
+    });
+    sp.setString('myVersion2', version.toString());
   }
 
   /// 背景图为svga的时候使用
@@ -391,7 +403,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                         _agree(),
                         WidgetUtils.commonSizedBox(10.h, 0),
                         WidgetUtils.onlyTextCenter(
-                            '版本号:${sp.getString('myVersion2').toString()}',
+                            '版本号:$BBH',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.homeTopBG,
                                 fontSize: ScreenUtil().setSp(25))),

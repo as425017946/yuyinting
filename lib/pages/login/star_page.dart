@@ -3,15 +3,11 @@ import 'package:android_package_manager/android_package_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/utils/my_toast_utils.dart';
-import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/Common_bean.dart';
 import '../../config/my_config.dart';
-import '../../config/online_config.dart';
 import '../../http/data_utils.dart';
 import '../../main.dart';
 import '../../utils/log_util.dart';
-import '../../utils/my_ping.dart';
 import '../navigator/tabnavigator.dart';
 
 /// 启动页后展示的页面
