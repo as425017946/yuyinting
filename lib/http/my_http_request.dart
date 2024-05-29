@@ -16,7 +16,7 @@ class MyHttpRequest {
     if (_requestCount == 0) {
       _lastTime = now;
     }
-    if (++_requestCount > 100 || now.difference(_lastTime) > const Duration(minutes: 5)) {
+    if (++_requestCount > 50 || now.difference(_lastTime) > const Duration(minutes: 3)) {
       _requestCount = 0;
       dio.close();
       dio = Dio();
