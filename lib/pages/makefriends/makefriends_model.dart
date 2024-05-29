@@ -467,7 +467,7 @@ class MakefriendsController extends GetxController with GetAntiCombo  {
   void _sendGetPaper(ActivityGetPaperBeanData item) async {
     try {
       final msg = await _getxChat.sendMsg('TA抽到了你的脱单盲盒，珍惜这份缘，脱单在眼前', item.uid.toString(), item.nickname, item.avatar);
-      eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
+      eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId, uid: ''));
     } catch (e) {
       Get.log(e.toString());
     }

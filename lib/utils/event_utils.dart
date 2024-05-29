@@ -86,7 +86,8 @@ class HiBack {
 class SendMessageBack {
   int type;
   String msgID;
-  SendMessageBack({required this.type, required this.msgID});
+  String uid; // uid不等于空，刷新一下
+  SendMessageBack({required this.type, required this.msgID, required this.uid});
 }
 
 ///登录弹窗使用

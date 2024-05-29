@@ -222,7 +222,6 @@ class MyUtils {
 
   ///跳转到登录页面
   static void jumpLogin(BuildContext context) {
-    eventBus.fire(SubmitButtonBack(title: 'im断开链接'));
     sp.setString('user_token', '');
     MyToastUtils.showToastBottom('登录超时，请重新登录！');
     Future.delayed(Duration.zero, () {
@@ -492,8 +491,6 @@ class MyUtils {
         // 由于网络问题导致的断开，sdk会尝试自动重连，连接成功后会回调 "onConnected";
         onDisconnected: (() {
           LogE('IM 断开连接');
-          eventBus.fire(SubmitButtonBack(title: 'im断开链接'));
-          // MyToastUtils.showToastBottom('IM断开连接');
         }),
         // 用户 token 鉴权失败;
         onUserAuthenticationFailed: (() {
@@ -656,7 +653,7 @@ class MyUtils {
                         };
                         // 插入数据
                         await databaseHelper.insertData('messageSLTable', params);
-                        eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                        eventBus.fire(SendMessageBack(type: 1, msgID: '0', uid: '1'));
                       }
                     } else {
                       eventBus.fire(JoinRoomYBack(map: info, type: '0'));
@@ -709,7 +706,7 @@ class MyUtils {
                 };
                 // 插入数据
                 await databaseHelper.insertData('messageSLTable', params);
-                eventBus.fire(SendMessageBack(type: 2, msgID: '2'));
+                eventBus.fire(SendMessageBack(type: 2, msgID: '2', uid: '1'));
               }
               break;
             case MessageType.VIDEO:
@@ -769,7 +766,7 @@ class MyUtils {
                 // 插入数据
                 await databaseHelper.insertData('messageSLTable', params);
 
-                eventBus.fire(SendMessageBack(type: 3, msgID: '3'));
+                eventBus.fire(SendMessageBack(type: 3, msgID: '3', uid: '1'));
               }
               break;
             case MessageType.FILE:
@@ -823,7 +820,7 @@ class MyUtils {
                   };
                   // 插入数据
                   await databaseHelper.insertData('messageSLTable', params);
-                  eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                  eventBus.fire(SendMessageBack(type: 1, msgID: '0', uid: '1'));
                 } else if (body.event == 'game_turntable_luck') {
                   eventBus.fire(ZDYBack(map: body.params, type: body.event));
                 } else if (body.event == 'user_room_black') {
@@ -862,7 +859,7 @@ class MyUtils {
           // eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
           LogE('消息已读回执: from = ${msg.from}, msgId = ${msg.msgId}, db = $count');
         }
-        eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+        eventBus.fire(SendMessageBack(type: 1, msgID: '0', uid: ''));
       }, onMessagesRecalled: (messages) async {
         Database? db = await databaseHelper.database;
         for (EMMessage msg in messages) {
@@ -873,7 +870,7 @@ class MyUtils {
           );
           LogE('消息撤回: from = ${msg.from}, msgId = ${msg.msgId}, db = $count');
         }
-        eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+        eventBus.fire(SendMessageBack(type: 1, msgID: '0', uid: ''));
       }),
     );
     // 添加消息状态变更监听
@@ -893,7 +890,7 @@ class MyUtils {
               case MessageType.TXT:
                 break;
               case MessageType.IMAGE:
-                eventBus.fire(SendMessageBack(type: 2, msgID: msgId));
+                eventBus.fire(SendMessageBack(type: 2, msgID: msgId, uid: ''));
                 break;
               case MessageType.VIDEO:
                 break;
@@ -919,7 +916,7 @@ class MyUtils {
                 whereArgs: [msgId],
                 where: 'msgJson = ?',
               );
-              eventBus.fire(SendMessageBack(type: 1, msgID: msgId));
+              eventBus.fire(SendMessageBack(type: 1, msgID: msgId, uid: ''));
               MyToastUtils.showToastBottom('消息发送失败');
             }
             addLogToConsole(
@@ -1007,7 +1004,7 @@ class MyUtils {
             where: 'msgId = ?',
           );
           eventBus
-              .fire(SendMessageBack(type: params['type'], msgID: msg.msgId));
+              .fire(SendMessageBack(type: params['type'], msgID: msg.msgId, uid: ''));
         }
       } on EMError catch (e) {
         LogE(e.description);
@@ -1034,7 +1031,7 @@ class MyUtils {
         whereArgs: [msgId],
       );
       LogE('消息撤回: to = ${params['otherUid']}, msgId = $msgId');
-      eventBus.fire(SendMessageBack(type: 2, msgID: msgId));
+      eventBus.fire(SendMessageBack(type: 2, msgID: msgId, uid: ''));
     } on EMError catch (e) {
       if (e.code == 504) {
         // 消息撤回超时错误：消息撤回超过时间限制时会提示该错误。

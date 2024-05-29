@@ -364,15 +364,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           }
         }
         doPostCheckToken();
-      } else if (event.title == 'im断开链接') {
-        // if(isJoinRoom){
-        //   setState(() {
-        //     //取消订阅所有远端用户的音频流。
-        //     _engine.muteAllRemoteAudioStreams(true);
-        //     // 取消发布本地音频流
-        //     _engine.muteLocalAudioStream(true);
-        //   });
-        // }
       }
     });
 

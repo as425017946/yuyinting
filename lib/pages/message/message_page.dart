@@ -118,7 +118,9 @@ class _MessagePageState extends State<MessagePage>
       }
     });
     listenMessage = eventBus.on<SendMessageBack>().listen((event) {
-      doPostSystemMsgList();
+      if(event.uid.isNotEmpty){
+        doPostSystemMsgList();
+      }
     });
     _scListener = () {
       setState(() {
@@ -652,7 +654,7 @@ class _MessagePageState extends State<MessagePage>
         }
       }
     });
-    eventBus.fire(SendMessageBack(type: 5, msgID: '0'));
+    eventBus.fire(SendMessageBack(type: 5, msgID: '0', uid: ''));
   }
 
   /// 获取系统消息

@@ -802,7 +802,6 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin, Widg
         list.add(map);
       });
       doPostRoomInfo();
-      doPostSystemMsgList();
       //是否上麦下麦和点击的是否自己
       for (int i = 0; i < 9; i++) {
         upOrDown.add(false);
@@ -813,19 +812,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin, Widg
       }
       // 厅内设置监听
       listen = eventBus.on<SubmitButtonBack>().listen((event) {
-        if (event.title == '清除公屏') {
-          // setState(() {
-          //   list.clear();
-          //   list2.clear();
-          // });
-        } else if (event.title == '清除魅力') {
-          // setState(() {
-          //   for(int i = 0; i < listM.length; i++){
-          //     listM[i].charm = 0;
-          //   }
-          // });
-        } else if (event.title == '清除魅力') {
-        } else if (event.title == '账号已在其他设备登录') {
+        if (event.title == '账号已在其他设备登录') {
           LogE('账号已在其他设备登录');
           //取消订阅所有远端用户的音频流。
           _engine!.muteAllRemoteAudioStreams(true);
@@ -1009,14 +996,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin, Widg
               _engine!.muteLocalAudioStream(false);
             }
           });
-        } else if (event.title == 'im断开链接') {
-          // setState(() {
-          //   //取消订阅所有远端用户的音频流。
-          //   _engine!.muteAllRemoteAudioStreams(true);
-          //   // 取消发布本地音频流
-          //   _engine!.muteLocalAudioStream(true);
-          // });
-        } else if (event.title == '离线模式') {
+        }  else if (event.title == '离线模式') {
           LogE('离线模式 == $roomLixian');
           if (roomLixian == 0) {
             setState(() {
@@ -1436,12 +1416,6 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin, Widg
               setState(() {
                 isRoomBoss = 0;
                 isBoss = false;
-              });
-              break;
-            case 'close_mic': //闭麦
-              setState(() {
-                listM[int.parse(event.map!['serial_number'].toString()) - 1]
-                    .isClose = 1;
               });
               break;
             case 'room_forbation': //禁言
@@ -3055,7 +3029,11 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin, Widg
       });
 
       listenMessage = eventBus.on<SendMessageBack>().listen((event) {
-        doPostSystemMsgList();
+        if(event.uid.isNotEmpty){
+          setState(() {
+            isRed = true;
+          });
+        }
       });
 
       // 侧滑推荐
@@ -5765,78 +5743,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin, Widg
   }
 
   /// 获取系统消息
-  List<Map<String, dynamic>> listMessage = [];
   bool isRed = false;
-
-  Future<void> doPostSystemMsgList() async {
-    DatabaseHelper databaseHelper = DatabaseHelper();
-    Database? db = await databaseHelper.database;
-
-    List<Map<String, dynamic>> allData =
-        await databaseHelper.getAllData('messageSLTable');
-    // 执行查询操作
-    List<Map<String, dynamic>> result = await db.query(
-      'messageSLTable',
-      columns: ['MAX(id) AS id'],
-      groupBy: 'combineID',
-    );
-    // 查询出来后在查询单条信息具体信息
-    List<int> listId = [];
-    String ids = '';
-    for (int i = 0; i < result.length; i++) {
-      listId.add(result[i]['id']);
-      if (ids.isNotEmpty) {
-        ids = '$ids,${result[i]['id'].toString()}';
-      } else {
-        ids = result[i]['id'].toString();
-      }
-    }
-    // 生成占位符字符串，例如: ?,?,?,?
-    String placeholders =
-        List.generate(listId.length, (index) => '?').join(',');
-    // 构建查询语句和参数
-    String query =
-        'SELECT * FROM messageSLTable WHERE id IN ($placeholders) and uid = ${sp.getString('user_id').toString()}  order by add_time desc';
-    List<dynamic> args = listId;
-    // 执行查询
-    List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
-
-    String myIds = '';
-    setState(() {
-      listMessage = result2;
-
-      for (int i = 0; i < listMessage.length; i++) {
-        if (myIds.isNotEmpty) {
-          myIds = '$myIds,${listMessage[i]['otherUid'].toString()}';
-        } else {
-          myIds = listMessage[i]['otherUid'].toString();
-        }
-      }
-    });
-    for (int i = 0; i < listMessage.length; i++) {
-      // 更新头像和昵称
-      await db.update(
-          'messageSLTable',
-          {
-            'headNetImg': sp.getString('user_headimg').toString(),
-          },
-          whereArgs: [listMessage[i]['uid']],
-          where: 'uid = ?');
-      String query =
-          "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0";
-      List<Map<String, dynamic>> result3 = await db.rawQuery(query);
-      if (result3.isNotEmpty) {
-        setState(() {
-          isRed = true;
-        });
-        break;
-      } else {
-        setState(() {
-          isRed = false;
-        });
-      }
-    }
-  }
 
   // 自己头像和他人头像
   String myHeadImg = '', otherHeadImg = '';

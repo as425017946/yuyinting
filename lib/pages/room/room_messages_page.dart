@@ -261,7 +261,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
       body: WillPopScope(
         onWillPop: () async {
           //这里可以响应物理返回键
-          eventBus.fire(SendMessageBack(type: 5, msgID: '0'));
+          eventBus.fire(SendMessageBack(type: 5, msgID: '0', uid: ''));
           Navigator.of(context).pop();
           return true;
         },
@@ -271,7 +271,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
               child: GestureDetector(
                 onTap: (() {
                   if (MyUtils.checkClick()) {
-                    eventBus.fire(SendMessageBack(type: 5, msgID: '0'));
+                    eventBus.fire(SendMessageBack(type: 5, msgID: '0', uid: ''));
                     Navigator.pop(context);
                   }
                 }),
