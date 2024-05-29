@@ -67,15 +67,10 @@ class MyHttpRequest {
           },
         );
       } else {
-        print('数据请求开始 $url : ${DateTime.now()}');
-        CancelToken cancelToken = CancelToken();
         response = await dio.post(
           url,
           data: params,
-          cancelToken: cancelToken,
         );
-        cancelToken.cancel();
-        print('数据请求结束 $url : ${DateTime.now()}');
       }
       return response.data;
     } on DioError catch (e) {
