@@ -7,7 +7,21 @@ import 'OptionInterceptor.dart';
 import 'my_http_config.dart';
 
 class MyHttpRequest {
-  static final Dio dio = Dio();
+  static Dio dio = Dio();
+
+  static late DateTime _lastTime;
+  static int _requestCount = 0;
+  static void _upDio() {
+    final now = DateTime.now();
+    if (_requestCount == 0) {
+      _lastTime = now;
+    }
+    if (++_requestCount > 50 || now.difference(_lastTime) > const Duration(minutes: 3)) {
+      _requestCount = 0;
+      dio.close();
+      dio = Dio();
+    }
+  }
 
   static Future<Map<String, dynamic>?> _request(
     String url, {
@@ -16,6 +30,8 @@ class MyHttpRequest {
     dynamic params,
   }) async {
     try {
+      _upDio();
+
       Response<Map<String, dynamic>> response;
       dio.options.connectTimeout = MyHttpConfig.connectTimeOut;
       dio.options.receiveTimeout = MyHttpConfig.receiveTimeout;
