@@ -108,6 +108,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   // 设备是安卓还是ios
   String isDevices = 'android';
 
+  void imInit() async {
+    await MyUtils.initSDK();
+    MyUtils.addChatListener();
+    //先退出然后在登录
+    MyUtils.signOutLogin();
+  }
   @override
   void initState() {
     if (Platform.isAndroid) {
@@ -122,10 +128,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     // 清空存储信息
     deleteChatInfo();
     doPostSystemMsgList();
-    MyUtils.initSDK();
-    MyUtils.addChatListener();
-    //先退出然后在登录
-    MyUtils.signOutLogin();
+    imInit();
     // //保持屏幕常亮
     // saveLiang();
     doPostIsFirstOrder();

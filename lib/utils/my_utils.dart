@@ -444,7 +444,7 @@ class MyUtils {
   }
 
   //初始化sdk
-  static void initSDK() async {
+  static Future<void> initSDK() async {
     // // 本地测试环境
     // EMOptions options = EMOptions(
     //     appKey: "1199230605161000#demo",
