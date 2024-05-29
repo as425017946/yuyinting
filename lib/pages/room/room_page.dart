@@ -532,7 +532,7 @@ class _RoomPageState extends State<RoomPage> with TickerProviderStateMixin, Widg
   String roomName = '',
       bgImage = '',
       bgSVGA = '',
-      hot_degree = '',
+      hot_degree = '1000',
       notice = '',
       follow_status = '',
       role = '',
