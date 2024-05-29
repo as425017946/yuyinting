@@ -119,7 +119,6 @@ class _TixianBiPageState extends State<TixianBiPage> {
         }
       });
     });
-    updrawalSave();
   }
 
   late List<String> listTD = [];
@@ -145,6 +144,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
             methodID = '3';
           }
         });
+        updrawalSave();
       },
     );
   }
@@ -278,10 +278,10 @@ class _TixianBiPageState extends State<TixianBiPage> {
                                     color: MyColors.g9,
                                     fontSize: ScreenUtil().setSp(32)))),
                         WidgetUtils.commonSizedBox(0, 10.h),
-                        // WidgetUtils.showImages(
-                        //     'assets/images/mine_more.png',
-                        //     ScreenUtil().setHeight(22),
-                        //     ScreenUtil().setHeight(10))
+                        WidgetUtils.showImages(
+                            'assets/images/mine_more.png',
+                            ScreenUtil().setHeight(22),
+                            ScreenUtil().setHeight(10))
                       ],
                     ),
                     WidgetUtils.myLine(),
@@ -610,12 +610,21 @@ class _TixianBiPageState extends State<TixianBiPage> {
 
   
   void updrawalSave() {
-    if (methodID == '3') {
-      final drawal3Save = sp.getStringList('drawal_3_save');
-      if (drawal3Save == null || drawal3Save.length != 3) return;
-      controllerName.text = drawal3Save[0];
-      controllerYHKH.text = drawal3Save[1];
-      controllerYHName.text = drawal3Save[2];
+    switch (methodID) {
+      case '3': // 银行卡
+        final save = sp.getStringList('drawal_3_save');
+        if (save == null || save.length != 3) return;
+        controllerName.text = save[0];
+        controllerYHKH.text = save[1];
+        controllerYHName.text = save[2];
+        break;
+      case '2': // 支付宝
+        final save = sp.getStringList('drawal_2_save');
+        if (save == null || save.length != 2) return;
+        controllerName.text = save[0];
+        controllerAccount.text = save[1];
+        break;
+      default:
     }
   }
   /// 申请提现
@@ -632,8 +641,14 @@ class _TixianBiPageState extends State<TixianBiPage> {
       'bank': controllerYHName.text.trim().toString()
     };
     // 本地记录上次提现的账号信息
-    if (methodID == '3') { // 银行卡
-      sp.setStringList('drawal_3_save', [params['name'], params['account'], params['bank']]);
+    switch (methodID) {
+      case '3': // 银行卡
+        sp.setStringList('drawal_3_save', [params['name'], params['account'], params['bank']]);
+        break;
+      case '2': // 支付宝
+        sp.setStringList('drawal_2_save', [params['name'], params['account']]);
+        break;
+      default:
     }
     try {
       Loading.show();
@@ -711,6 +726,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
               methodID = '3';
             }
           });
+          updrawalSave();
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously
