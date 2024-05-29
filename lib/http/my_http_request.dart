@@ -11,15 +11,17 @@ class MyHttpRequest {
 
   static late DateTime _lastTime;
   static int _requestCount = 0;
-  static void _upDio() {
+  static void _upDio() async {
     final now = DateTime.now();
     if (_requestCount == 0) {
       _lastTime = now;
     }
     if (++_requestCount > 50 || now.difference(_lastTime) > const Duration(minutes: 3)) {
       _requestCount = 0;
-      dio.close();
+      final old = dio;
       dio = Dio();
+      await Future.delayed(const Duration(seconds: 10));
+      old.close();
     }
   }
 
