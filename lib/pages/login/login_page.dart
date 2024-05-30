@@ -1183,7 +1183,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
       // MyToastUtils.showToastBottom('成功连接移动网络~');
     } else if (result == ConnectivityResult.wifi) {
       LogE('/*- 成功连接WIFI');
-      MyToastUtils.showToastBottom('成功连接WIFI~');
+      // MyToastUtils.showToastBottom('成功连接WIFI~');
     } else if (result == ConnectivityResult.ethernet) {
       LogE('/*- 成功连接到以太网');
     } else if (result == ConnectivityResult.vpn) {
