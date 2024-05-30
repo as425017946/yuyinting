@@ -1180,7 +1180,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     LogE('/*- ${_connectivityStatus?.toString()}');
     if (result == ConnectivityResult.mobile) {
       LogE('/*- 成功连接移动网络');
-      MyToastUtils.showToastBottom('成功连接移动网络~');
+      // MyToastUtils.showToastBottom('成功连接移动网络~');
     } else if (result == ConnectivityResult.wifi) {
       LogE('/*- 成功连接WIFI');
       MyToastUtils.showToastBottom('成功连接WIFI~');
