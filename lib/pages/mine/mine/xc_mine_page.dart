@@ -36,7 +36,7 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   late StreamSubscription<dynamic> listen;
-  final c = Get.put(XCMineController(), permanent: true);
+  final c = Get.put(XCMineController());
 
   @override
   void initState() {
