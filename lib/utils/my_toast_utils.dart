@@ -47,4 +47,16 @@ class MyToastUtils{
         fontSize: ScreenUtil().setSp(32)
     );
   }
+
+  static void showToastCenter2(String text) {
+    Fluttertoast.showToast(
+        msg: text,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+        backgroundColor: MyColors.translucence,
+        textColor: Colors.white,
+        fontSize: ScreenUtil().setSp(32)
+    );
+  }
 }

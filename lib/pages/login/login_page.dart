@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,7 +51,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
   String IP = '', IMEI = '';
   /// 播放svga动画使用
   late SVGAAnimationController animationControllerBG;
-
+  String devices = '';
 
   @override
   void initState() {
@@ -61,11 +62,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     animationControllerBG = SVGAAnimationController(vsync: this);
     showStar('assets/svga/login_bg_2.svga');
     if (Platform.isAndroid) {
+      _init();
       setState(() {
+        devices = 'android';
         sp.setString('myDevices', 'android');
       });
     } else if (Platform.isIOS) {
       setState(() {
+        devices = 'ios';
         sp.setString('myDevices', 'ios');
       });
     }
@@ -223,6 +227,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     listen.cancel();
     listen2.cancel();
     animationControllerBG.dispose();
+    if (_subscription != null) {
+      _subscription!.cancel();
+    }
   }
 
   Timer? _timer;
@@ -403,7 +410,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                         _agree(),
                         WidgetUtils.commonSizedBox(10.h, 0),
                         WidgetUtils.onlyTextCenter(
-                            '版本号:$BBH',
+                            isHave.isEmpty ? "版本号:$BBH(无网络)" : "版本号:$BBH(有网络)",
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.homeTopBG,
                                 fontSize: ScreenUtil().setSp(25))),
@@ -539,47 +546,37 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                           GestureDetector(
                             onTap: (() {
                               if (MyUtils.checkClick()) {
-                                // setState(() {
-                                //   type = 1;
-                                // });
-                                // if (_autoCodeText == '发送验证码' ||
-                                //     _autoCodeText == '重新获取') {
-                                //   if (controllerPhone.text.trim().isEmpty) {
-                                //     MyToastUtils.showToastBottom('请输入手机号');
-                                //   } else if (!MyUtils.chinaPhoneNumber(
-                                //       controllerPhone.text.trim())) {
-                                //     MyToastUtils.showToastBottom('输入的手机号码格式错误');
-                                //   } else {
-                                //     //没有ip
-                                //     // if(sp.getString('userIP').toString().isEmpty){
-                                //     //   doPostPdAddress();
-                                //     // }else{
-                                //     //   doPostLoginSms();
-                                //     // }
-                                //     doPostLoginSms();
-                                //   }
-                                // }
                                 if(sp.getString('isEmulation').toString() == '1'){
                                   MyToastUtils.showToastBottom('当前为模拟器设备，禁止注册！');
                                 }else{
                                   setState(() {
                                     type = 1;
                                   });
-                                  if (_autoCodeText == '发送验证码' ||
-                                      _autoCodeText == '重新获取') {
-                                    if (controllerPhone.text.trim().isEmpty) {
-                                      MyToastUtils.showToastBottom('请输入手机号');
-                                    } else if (!MyUtils.chinaPhoneNumber(
-                                        controllerPhone.text.trim())) {
-                                      MyToastUtils.showToastBottom('输入的手机号码格式错误');
-                                    } else {
-                                      //没有ip
-                                      // if(sp.getString('userIP').toString().isEmpty){
-                                      //   doPostPdAddress();
-                                      // }else{
-                                      //   doPostLoginSms();
-                                      // }
-                                      doPostLoginSms();
+                                  if(devices == 'android'){
+                                    if ((_autoCodeText == '发送验证码' ||
+                                        _autoCodeText == '重新获取') && isHave.isNotEmpty) {
+                                      if (controllerPhone.text.trim().isEmpty) {
+                                        MyToastUtils.showToastBottom('请输入手机号');
+                                      } else if (!MyUtils.chinaPhoneNumber(
+                                          controllerPhone.text.trim())) {
+                                        MyToastUtils.showToastBottom('输入的手机号码格式错误');
+                                      } else {
+                                        doPostLoginSms();
+                                      }
+                                    }else{
+                                      MyToastUtils.showToastCenter2('当前没有连接到任何网络~');
+                                    }
+                                  }else{
+                                    if ((_autoCodeText == '发送验证码' ||
+                                        _autoCodeText == '重新获取')) {
+                                      if (controllerPhone.text.trim().isEmpty) {
+                                        MyToastUtils.showToastBottom('请输入手机号');
+                                      } else if (!MyUtils.chinaPhoneNumber(
+                                          controllerPhone.text.trim())) {
+                                        MyToastUtils.showToastBottom('输入的手机号码格式错误');
+                                      } else {
+                                        doPostLoginSms();
+                                      }
                                     }
                                   }
                                 }
@@ -691,17 +688,22 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     final height = ScreenUtil().setHeight(80);
     return GestureDetector(
       onTap: (() {
-        if (MyUtils.checkClick()) {
-          setState(() {
-            type = 2;
-          });
-          //没有ip
-          // if(sp.getString('userIP').toString().isEmpty){
-          //   doPostPdAddress();
-          // }else{
-          //   doLogin();
-          // }
-          doLogin();
+        if(devices == 'android'){
+          if (MyUtils.checkClick() && isHave.isNotEmpty) {
+            setState(() {
+              type = 2;
+            });
+            doLogin();
+          }else{
+            MyToastUtils.showToastCenter2('当前没有连接到任何网络~');
+          }
+        }else{
+          if (MyUtils.checkClick()) {
+            setState(() {
+              type = 2;
+            });
+            doLogin();
+          }
         }
       }),
       child: Container(
@@ -793,10 +795,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
 
   ///登录
   Future<void> doLogin() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String versions = packageInfo.version;
-    sp.setString('myVersion1', versions);
-
     final String userName = controllerAccount.text.trim();
     final String passWord = controllerPass.text.trim();
     final String userPhone = controllerPhone.text.trim();
@@ -857,7 +855,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     }
 
     try {
-      Loading.show("登录中...");
+      Loading.show2("登录中...");
       LoginBean loginBean = await DataUtils.login(params);
       switch (loginBean.code) {
         case MyHttpConfig.successCode:
@@ -1066,7 +1064,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     } catch (e) {
       LogE('登录返回*${e.toString()}');
       Loading.dismiss();
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      MyToastUtils.showToastBottom('网络错误：${e.toString()}');
     }
   }
 
@@ -1144,4 +1142,55 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
   //     // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
   //   }
   // }
+
+
+// Connectivity 对象
+  final Connectivity _connectivity = Connectivity();
+
+  // 消息订阅
+  StreamSubscription<ConnectivityResult>? _subscription;
+
+  // 初始返回的网络状态
+  ConnectivityResult? _connectivityStatus;
+
+  String isHave = '';
+
+  // 初始化
+  Future<void> _init() async {
+    try {
+      // 增加单次请求检测
+      final connectivityResult = await _connectivity.checkConnectivity();
+      _updateConnectionStatus(connectivityResult);
+      //状态订阅
+      _subscription =
+          _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    } on PlatformException catch (e) {
+      LogE('/*- $e');
+      LogE('/*- 连接网络出现了异常');
+    }
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectivityStatus = result;
+      if (result != ConnectivityResult.none) {
+        isHave = '有网络';
+      }
+    });
+    LogE('/*- ${_connectivityStatus?.toString()}');
+    if (result == ConnectivityResult.mobile) {
+      LogE('/*- 成功连接移动网络');
+      MyToastUtils.showToastBottom('成功连接移动网络~');
+    } else if (result == ConnectivityResult.wifi) {
+      LogE('/*- 成功连接WIFI');
+      MyToastUtils.showToastBottom('成功连接WIFI~');
+    } else if (result == ConnectivityResult.ethernet) {
+      LogE('/*- 成功连接到以太网');
+    } else if (result == ConnectivityResult.vpn) {
+      LogE('/*- 成功连接vpn网络');
+    } else if (result == ConnectivityResult.none) {
+      LogE('/*- 没有连接到任何网络');
+      MyToastUtils.showToastCenter2('当前没有连接到任何网络~');
+    }
+  }
 }

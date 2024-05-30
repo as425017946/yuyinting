@@ -6967,6 +6967,7 @@ class RoomItems {
           //消息
           GestureDetector(
             onTap: (() {
+              eventBus.fire(SubmitButtonBack(title: '清空红点'));
               MyUtils.goTransparentPage(context, const RoomMessagesPage());
             }),
             child: Container(
