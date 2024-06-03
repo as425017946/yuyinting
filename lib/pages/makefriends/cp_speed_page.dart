@@ -20,7 +20,6 @@ import '../../utils/my_utils.dart';
 import '../../widget/SwiperPage.dart';
 import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
-import '../room/room_messages_more_page.dart';
 import '../trends/PagePreviewVideo.dart';
 import 'makefriends_model.dart';
 
@@ -316,6 +315,7 @@ class _CPSpeedPageState extends State<CPSpeedPage>
           break;
       }
     } catch (e) {
+      Get.log(e.toString());
     }
   }
 }
@@ -605,31 +605,34 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
 
   @override
   Widget build(BuildContext context) {
-    return content(
-      height: 652.w,
-      bg: 'cp_fangru',
-      btn: '确认放入',
-      action: () => c.action(() async {
-        if (await c.postActivityPutPaper()) {
-          Get.back(result: true);
-        }
-      }),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _textField(),
-          Padding(
-            padding: EdgeInsets.only(left: 21.w, top: 24.w, bottom: 15.w),
-            child: Text(
-              '放张照片更容易吸引Ta',
-              style: TextStyle(
-                color: const Color(0xFFC0BFBF),
-                fontSize: 24.sp,
+    return GestureDetector(
+      onTap: () => c.hideKeyboard(),
+      child: content(
+        height: 652.w,
+        bg: 'cp_fangru',
+        btn: '确认放入',
+        action: () => c.action(() async {
+          if (await c.postActivityPutPaper()) {
+            Get.back(result: true);
+          }
+        }),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _textField(),
+            Padding(
+              padding: EdgeInsets.only(left: 21.w, top: 24.w, bottom: 15.w),
+              child: Text(
+                '放张照片更容易吸引Ta',
+                style: TextStyle(
+                  color: const Color(0xFFC0BFBF),
+                  fontSize: 24.sp,
+                ),
               ),
             ),
-          ),
-          _content(),
-        ],
+            _content(),
+          ],
+        ),
       ),
     );
   }

@@ -40,6 +40,7 @@ class _MinePageState extends State<MinePage> {
 
   @override
   void initState() {
+    c.controller = RefreshController(initialRefresh: false, initialRefreshStatus: RefreshStatus.idle);
     super.initState();
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '审核全部完成') {

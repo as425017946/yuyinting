@@ -14,7 +14,7 @@ import '../wall/happy_wall_page.dart';
 
 class PaiduiController extends GetxController with GetAntiCombo {
 
-  final RefreshController refreshController = RefreshController(initialRefresh: false);
+  late RefreshController refreshController;
   bool get canRefresh {
     final page = roomListData;
     if (page == null) return false;
