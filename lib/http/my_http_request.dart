@@ -80,7 +80,7 @@ class MyHttpRequest {
       Loading.dismiss();
       switch (e.type) {
         case DioErrorType.connectTimeout:
-          // MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
+          MyToastUtils.showToastBottom('网络超时~');
           break;
         case DioErrorType.sendTimeout:
           // MyToastUtils.showToastBottom('发送请求超时');
@@ -96,7 +96,7 @@ class MyHttpRequest {
           // MyToastUtils.showToastBottom('请求取消！');
           break;
         case DioErrorType.other:
-          // MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
+          MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
           break;
       }
     }

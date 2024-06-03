@@ -182,5 +182,9 @@ class MyColors {
   static const Color gz4 = Color(0xFFFB7099);
   static const Color gz5 = Color(0xFFFEA97B);
   static const Color gz6 = Color(0xFFB5325F);
+  /// 银行卡
+  static const Color card1 = Color(0xFF20DCC8);
+  static const Color card2 = Color(0xFF3BDFCD);
+
 
 }

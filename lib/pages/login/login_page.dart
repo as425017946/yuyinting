@@ -410,7 +410,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                         _agree(),
                         WidgetUtils.commonSizedBox(10.h, 0),
                         WidgetUtils.onlyTextCenter(
-                            isHave.isEmpty ? "版本号:$BBH(无网络)" : "版本号:$BBH(有网络)",
+                            isHave.isEmpty ? "版本号:$BBH(无网络)" : "版本号:$BBH",
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.homeTopBG,
                                 fontSize: ScreenUtil().setSp(25))),
@@ -564,7 +564,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                                         doPostLoginSms();
                                       }
                                     }else{
-                                      MyToastUtils.showToastCenter2('当前没有连接到任何网络~');
+                                      MyToastUtils.showToastCenter2('当前无网络连接~');
                                     }
                                   }else{
                                     if ((_autoCodeText == '发送验证码' ||
@@ -695,7 +695,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
             });
             doLogin();
           }else{
-            MyToastUtils.showToastCenter2('当前没有连接到任何网络~');
+            MyToastUtils.showToastCenter2('当前无网络连接~');
           }
         }else{
           if (MyUtils.checkClick()) {
@@ -843,7 +843,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
       }
 
       params = <String, dynamic>{
-        'phone': userPhone,
         'password': passWord,
         'type': type,
         'area_code': quhao,
@@ -1190,7 +1189,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
       LogE('/*- 成功连接vpn网络');
     } else if (result == ConnectivityResult.none) {
       LogE('/*- 没有连接到任何网络');
-      MyToastUtils.showToastCenter2('当前没有连接到任何网络~');
+      MyToastUtils.showToastCenter2('当前无网络连接~');
     }
   }
 }

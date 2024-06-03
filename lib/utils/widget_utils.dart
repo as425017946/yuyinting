@@ -487,6 +487,58 @@ class WidgetUtils {
     );
   }
 
+  ///添加银行卡输入文本
+  static Widget cardTextField(
+      TextEditingController controller, String hintText) {
+    return Container(
+      width: double.infinity,
+      height: 70.h,
+      padding: EdgeInsets.only(left: 10.w, right: 10.w),
+      //边框设置
+      decoration: BoxDecoration(
+        //背景
+        color: Colors.white,
+        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+        borderRadius: BorderRadius.all(
+            Radius.circular(20.w)),
+        border: Border.all(width: 1, color: MyColors.d8),
+      ),
+      child: TextField(
+        controller: controller,
+        style: StyleUtils.loginTextStyle,
+        onChanged: (value) {
+          LogE('长度$value');
+          eventBus.fire(CardBack(info: value));
+        },
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: StyleUtils.loginHintTextStyle,
+
+          contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          disabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+        ),
+      ),
+    );
+  }
+
   ///通用登录大按钮
   static Widget commonSubmitButton(String title) {
     return Container(

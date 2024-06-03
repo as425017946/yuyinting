@@ -58,21 +58,21 @@ class Data {
         this.grLevel});
 
   Data.fromJson(Map<String, dynamic> json) {
-    token = json['token'];
-    nickname = json['nickname'];
-    gender = json['gender'];
-    avatar = json['avatar'];
-    avatarUrl = json['avatar_url'];
-    number = json['number'];
-    isSetPwd = json['is_set_pwd'];
-    phone = json['phone'];
-    areaCode = json['area_code'];
-    uid = json['uid'];
-    emPwd = json['em_pwd'];
-    emToken = json['em_token'];
-    identity = json['identity'];
-    level = json['level'];
-    grLevel = json['gr_level'];
+    token = json['token'] ?? '';
+    nickname = json['nickname'] ?? '';
+    gender = json['gender'] ?? 0;
+    avatar = json['avatar'] ?? 0;
+    avatarUrl = json['avatar_url'] ?? '';
+    number = json['number'] ?? 0;
+    isSetPwd = json['is_set_pwd'] ?? 0;
+    phone = json['phone'] ?? '';
+    areaCode = json['area_code'] ?? '';
+    uid = json['uid'] ?? 0;
+    emPwd = json['em_pwd'] ?? '';
+    emToken = json['em_token'] ?? '';
+    identity = json['identity'] ?? '';
+    level = json['level'] ?? 1;
+    grLevel = json['gr_level'] ?? 1;
   }
 
   Map<String, dynamic> toJson() {

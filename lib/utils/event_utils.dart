@@ -342,3 +342,10 @@ class RoomCallBack {
   String title;
   RoomCallBack({required this.isBack, required this.title});
 }
+
+
+/// 添加银行卡使用
+class CardBack {
+  String info;
+  CardBack({required this.info});
+}

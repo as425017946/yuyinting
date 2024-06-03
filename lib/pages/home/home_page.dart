@@ -61,10 +61,6 @@ class _HomePageState extends State<HomePage>
   // 用户身份
   int level = 0, grLevel = 0;
 
-  // 显示马里奥弹窗次数是否刷新
-  int mla = 0;
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -91,15 +87,6 @@ class _HomePageState extends State<HomePage>
       initialPage: 1,
     );
 
-    if (mla == 0) {
-      // MyToastUtils.showToastBottom('首次加载马里奥 $mla');
-      setState(() {
-        mla++;
-      });
-      // // // 马里奥
-      // MyUtils.goTransparentPageCom(context, const TSCarPage());
-    }
-
     quanxian();
 
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
@@ -119,11 +106,6 @@ class _HomePageState extends State<HomePage>
       }
     });
 
-    // if(sp.getString('isFirstDown').toString() == '1' || sp.getString('isFirstDown').toString() == 'null'){
-    //   MyUtils.goTransparentPageCom(context, const GPDownPage());
-    // }else{
-    //   eventBus.fire(SubmitButtonBack(title: '资源开始下载'));
-    // }
     if (sp.getString("isFirstDownZB").toString() == 'null') {
       sp.setString("isFirstDownZB", '1');
     }
@@ -142,6 +124,7 @@ class _HomePageState extends State<HomePage>
     // }else{
     //   MyToastUtils.showToastBottom('未获取到房间id ${sp.getString('daili_roomid').toString()}');
     // }
+
   }
 
   @override
