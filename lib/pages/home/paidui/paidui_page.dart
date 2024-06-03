@@ -25,7 +25,8 @@ class _PaiduiPageState extends State<PaiduiPage> with AutomaticKeepAliveClientMi
   @override
   void initState() {
     super.initState();
-    Get.lazyPut(() => PaiduiController());
+    final c = Get.put(PaiduiController());
+    c.refreshController = RefreshController(initialRefresh: false, initialRefreshStatus: RefreshStatus.idle);
   }
 
   @override
