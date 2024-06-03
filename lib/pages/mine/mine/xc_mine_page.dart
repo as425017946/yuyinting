@@ -36,11 +36,11 @@ class MinePage extends StatefulWidget {
 
 class _MinePageState extends State<MinePage> {
   late StreamSubscription<dynamic> listen;
-  late final XCMineController c;
+  final c = Get.put(XCMineController(), permanent: true);
 
   @override
   void initState() {
-    c = Get.put(XCMineController());
+    c.controller = RefreshController(initialRefresh: false, initialRefreshStatus: RefreshStatus.idle);
     super.initState();
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '审核全部完成') {
@@ -51,7 +51,6 @@ class _MinePageState extends State<MinePage> {
 
   @override
   void dispose() {
-    Get.delete<XCMineController>();
     super.dispose();
     listen.cancel();
   }
