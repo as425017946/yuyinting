@@ -843,6 +843,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
       }
 
       params = <String, dynamic>{
+        'phone': userPhone,
         'password': passWord,
         'type': type,
         'area_code': quhao,
