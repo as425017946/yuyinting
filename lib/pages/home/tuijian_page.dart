@@ -740,8 +740,8 @@ class _TuijianPageState extends State<TuijianPage>
                           ),
                         )
                       : SizedBox(
-                          height: 280.h,
-                          width: 280.h,
+                          height: 320.h,//280.h,
+                          width: 300.h,//280.h,
                         ),
                   WidgetUtils.commonSizedBox(10.h, 15.w),
                   Expanded(
