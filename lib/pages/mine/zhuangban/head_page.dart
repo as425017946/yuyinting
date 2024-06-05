@@ -26,12 +26,15 @@ class HeadPage extends StatefulWidget {
   State<HeadPage> createState() => _HeadPageState();
 }
 
-class _HeadPageState extends State<HeadPage>{
+class _HeadPageState extends State<HeadPage> with AutomaticKeepAliveClientMixin {
+  /// 刷新一次后不在刷新
+  @override
+  bool get wantKeepAlive => true;
 
   var length = 1;
   List<bool> listB = [];
 
-  List<DataSC> _list = [];
+  final List<DataSC> _list = [];
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int page = 1;
@@ -74,7 +77,6 @@ class _HeadPageState extends State<HeadPage>{
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     doPostMyIfon();
     doPostBalance();
@@ -157,11 +159,15 @@ class _HeadPageState extends State<HeadPage>{
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Expanded(child: length > 0
             ? SmartRefresher(
-          header: MyUtils.myHeader(),
+          header: DefaultTextStyle(
+            style: const TextStyle(color: Colors.white),
+            child: MyUtils.myHeader(),
+          ),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
           enablePullUp: false,
