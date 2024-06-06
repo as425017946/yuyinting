@@ -29,7 +29,7 @@ class _MHPageState extends State<MHPage> {
           children: [
             // WidgetUtils.commonSizedBox(100.h, 0),
             WidgetUtils.showImagesNetRoom(
-                'https://oawawb.cn/image/202405/14/6642f5a14b609.jpg', 5200.w, double.infinity),
+                'http://oawawb.cn/image/202405/14/6642f5a14b609.jpg', 5200.w, double.infinity),
             // WidgetUtils.commonSizedBox(100.h, 0),
           ],
         ),

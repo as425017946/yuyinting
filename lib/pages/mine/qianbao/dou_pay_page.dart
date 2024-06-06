@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:yuyinting/pages/mine/qianbao/pay_ts_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import '../../../bean/balanceBean.dart';
 import '../../../bean/orderPayBean.dart';
 import '../../../bean/payLsitBean.dart';
@@ -670,8 +670,8 @@ class _DouPayPageState extends State<DouPayPage> {
       orderPayBean bean = await DataUtils.postOrderCreate(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          // // // ignore: use_build_context_synchronously
-          // // MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
+          // // ignore: use_build_context_synchronously
+          // MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
           if (bean.data!.payUrl!.isNotEmpty) {
             await launch(bean.data!.payUrl!);
           } else {
@@ -700,6 +700,7 @@ class _DouPayPageState extends State<DouPayPage> {
 
   /// 钱包余额
   Future<void> doPostBalance() async {
+
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {
