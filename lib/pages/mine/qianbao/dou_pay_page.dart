@@ -12,6 +12,7 @@ import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
+import '../../../utils/pay_tool.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -673,7 +674,8 @@ class _DouPayPageState extends State<DouPayPage> {
           // // // ignore: use_build_context_synchronously
           // // MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
           if (bean.data!.payUrl!.isNotEmpty) {
-            await launch(bean.data!.payUrl!);
+            // await launch(bean.data!.payUrl!);
+            await PayTool.launch(payType, bean.data!.payUrl);
           } else {
             throw 'Could not launch $bean.data!.payUrl!';
           }
