@@ -12,6 +12,7 @@ import '../../http/my_http_config.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import '../../utils/pay_tool.dart';
 import '../../utils/style_utils.dart';
 
 /// 首充页面
@@ -849,7 +850,8 @@ class _ShouChongPageState extends State<ShouChongPage> {
           // // ignore: use_build_context_synchronously
           // MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
           if (bean.data!.payUrl!.isNotEmpty) {
-            await launch(bean.data!.payUrl!, forceSafariVC: false);
+            // await launch(bean.data!.payUrl!, forceSafariVC: false);
+            await PayTool.launch(payTypes, bean.data!.payUrl);
           } else {
             throw 'Could not launch $bean.data!.payUrl!';
           }

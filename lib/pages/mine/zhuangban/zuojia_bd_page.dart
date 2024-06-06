@@ -22,14 +22,14 @@ class ZuojiaBBPage extends StatefulWidget {
   State<ZuojiaBBPage> createState() => _ZuojiaBBPageState();
 }
 
-class _ZuojiaBBPageState extends State<ZuojiaBBPage> with AutomaticKeepAliveClientMixin{
+class _ZuojiaBBPageState extends State<ZuojiaBBPage> with AutomaticKeepAliveClientMixin {
   /// 刷新一次后不在刷新
   @override
   bool get wantKeepAlive => true;
 
   var length = 1;
   List<bool> listB = [];
-  List<DataMy> _list2 = [];
+  final List<DataMy> _list2 = [];
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int page = 1;
@@ -69,7 +69,6 @@ class _ZuojiaBBPageState extends State<ZuojiaBBPage> with AutomaticKeepAliveClie
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     doPostMyShopList();
   }
@@ -139,11 +138,15 @@ class _ZuojiaBBPageState extends State<ZuojiaBBPage> with AutomaticKeepAliveClie
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Expanded(child: length > 0
             ? SmartRefresher(
-          header: MyUtils.myHeader(),
+          header: DefaultTextStyle(
+            style: const TextStyle(color: Colors.white),
+            child: MyUtils.myHeader(),
+          ),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
           enablePullUp: false,

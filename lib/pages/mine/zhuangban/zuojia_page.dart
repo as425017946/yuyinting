@@ -27,14 +27,16 @@ class ZuojiaPage extends StatefulWidget {
   State<ZuojiaPage> createState() => _ZuojiaPageState();
 }
 
-class _ZuojiaPageState extends State<ZuojiaPage>{
-
+class _ZuojiaPageState extends State<ZuojiaPage> with AutomaticKeepAliveClientMixin {
+  /// 刷新一次后不在刷新
+  @override
+  bool get wantKeepAlive => true;
+  
   var length = 1;
   List<bool> listB = [];
 
-  List<DataSC> _list = [];
-  final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+  final List<DataSC> _list = [];
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
   int page = 1;
   /// 是否有选中的
   bool isChoose = false;
@@ -74,7 +76,6 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     doPostBalance();
     doPostMyIfon();
@@ -156,11 +157,15 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Expanded(child: length > 0
             ? SmartRefresher(
-          header: MyUtils.myHeader(),
+          header: DefaultTextStyle(
+            style: const TextStyle(color: Colors.white),
+            child: MyUtils.myHeader(),
+          ),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
           enablePullUp: false,

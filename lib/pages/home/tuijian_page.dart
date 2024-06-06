@@ -96,8 +96,7 @@ class _TuijianPageState extends State<TuijianPage>
     }
     doPostHotRoom();
     doPostPushRoom();
-    await doPostPushStreamer();
-    _refreshController.loadComplete();
+    if (!await doPostPushStreamer()) _refreshController.loadComplete();
   }
 
   // 显示推荐房间弹窗次数是否刷新
@@ -156,36 +155,61 @@ class _TuijianPageState extends State<TuijianPage>
   final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
   bool playRecord = false; //音频文件播放状态
   //播放录音
-  void play(String voiceCard) {
+  void play(String voiceCard) async {
     LogE('录音地址**$voiceCard');
-    _mPlayer
-        .startPlayer(
-            fromURI: voiceCard,
-            whenFinished: () {
-              setState(() {
-                for (int i = 0; i < listB.length; i++) {
-                  listB[i] = false;
-                }
-                playRecord = false;
-              });
-            })
-        .then((value) {
-      setState(() {
-        playRecord = true;
-      });
-    });
+    await _mPlayer.startPlayer(
+      fromURI: voiceCard,
+      whenFinished: () {
+        for (int i = 0; i < listB.length; i++) {
+          if (listB[i]) {
+            setState(() {
+              listB[i] = false;
+            });
+          }
+        }
+        playRecord = false;
+      },
+    );
+    playRecord = true;
+
+    // _mPlayer
+    //     .startPlayer(
+    //         fromURI: voiceCard,
+    //         whenFinished: () {
+    //           setState(() {
+    //             for (int i = 0; i < listB.length; i++) {
+    //               listB[i] = false;
+    //             }
+    //             playRecord = false;
+    //           });
+    //         })
+    //     .then((value) {
+    //   setState(() {
+    //     playRecord = true;
+    //   });
+    // });
   }
 
 //停止播放录音
-  void stopPlayer() {
-    _mPlayer!.stopPlayer().then((value) {
-      setState(() {
-        for (int i = 0; i < listB.length; i++) {
+  Future<void> stopPlayer() async {
+    await _mPlayer.stopPlayer();
+    for (int i = 0; i < listB.length; i++) {
+      if (listB[i]) {
+        setState(() {
           listB[i] = false;
-        }
-        playRecord = false;
-      });
-    });
+        });
+      }
+    }
+    playRecord = false;
+
+    // _mPlayer!.stopPlayer().then((value) {
+    //   setState(() {
+    //     for (int i = 0; i < listB.length; i++) {
+    //       listB[i] = false;
+    //     }
+    //     playRecord = false;
+    //   });
+    // });
   }
 
   void _initialize() async {
@@ -294,16 +318,22 @@ class _TuijianPageState extends State<TuijianPage>
                                 WidgetUtils.commonSizedBox(0, 10.w),
                                 listAnchor[i].voiceCardUrl!.isNotEmpty
                                     ? GestureDetector(
-                                        onTap: (() {
+                                        onTap: (() async {
                                           if (MyUtils.checkClick()) {
                                             if (_mPlayer.isPlaying) {
-                                              listB[i] = false;
-                                              stopPlayer();
-                                            } else {
-                                              listB[i] = true;
-                                              play(listAnchor[i].voiceCardUrl!);
+                                              if (listB[i]) {
+                                                setState(() {
+                                                  listB[i] = false;
+                                                });
+                                                stopPlayer();
+                                                return;
+                                              }
+                                              await stopPlayer();
                                             }
-                                            setState(() {});
+                                            setState(() {
+                                              listB[i] = true;
+                                            });
+                                            play(listAnchor[i].voiceCardUrl!);
                                           }
                                         }),
                                         child: Stack(
@@ -513,6 +543,7 @@ class _TuijianPageState extends State<TuijianPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SmartRefresher(
       header: MyUtils.myHeader(),
       footer: MyUtils.myFotter(),
@@ -709,8 +740,8 @@ class _TuijianPageState extends State<TuijianPage>
                           ),
                         )
                       : SizedBox(
-                          height: 280.h,
-                          width: 280.h,
+                          height: 320.h,//280.h,
+                          width: 300.h,//280.h,
                         ),
                   WidgetUtils.commonSizedBox(10.h, 15.w),
                   Expanded(
@@ -828,8 +859,9 @@ class _TuijianPageState extends State<TuijianPage>
   }
 
   /// 推荐主播
-  Future<void> doPostPushStreamer() async {
+  Future<bool> doPostPushStreamer() async {
     LogE('token == ${sp.getString('user_token')}');
+    bool isNoData = false;
     try {
       Map<String, dynamic> params = <String, dynamic>{
         'page': page,
@@ -858,6 +890,7 @@ class _TuijianPageState extends State<TuijianPage>
               } else {
                 if (bean.data!.anchorList!.length < 6) {
                   _refreshController.loadNoData();
+                  isNoData = true;
                 }
               }
             }
@@ -878,6 +911,7 @@ class _TuijianPageState extends State<TuijianPage>
       // Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
+    return isNoData;
   }
 
   /// 加入房间前

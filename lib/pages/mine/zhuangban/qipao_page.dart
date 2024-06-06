@@ -26,7 +26,7 @@ class QipaoPage extends StatefulWidget {
   State<QipaoPage> createState() => _QipaoPageState();
 }
 
-class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMixin{
+class _QipaoPageState extends State<QipaoPage> with AutomaticKeepAliveClientMixin {
   /// 刷新一次后不在刷新
   @override
   bool get wantKeepAlive => true;
@@ -34,8 +34,8 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
   var length = 1;
   List<bool> listB = [];
 
-  List<DataSC> _list = [];
-  List<DataMy> _list2 = [];
+  final List<DataSC> _list = [];
+  final List<DataMy> _list2 = [];
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int page = 1;
@@ -77,7 +77,6 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     doPostBalance();
     doPostMyIfon();
@@ -157,11 +156,15 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Expanded(child: length > 0
             ? SmartRefresher(
-          header: MyUtils.myHeader(),
+          header: DefaultTextStyle(
+            style: const TextStyle(color: Colors.white),
+            child: MyUtils.myHeader(),
+          ),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
           enablePullUp: false,
